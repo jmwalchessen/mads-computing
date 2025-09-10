@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.34">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="sec-data-eng-project" class="level1">
+<h1>Project: Data Pipeline</h1>
+<p>In this project, you will develop a data pipeline for ingesting messy, unstructured data, producing a nice and structured SQL database, and automatically generating reports.</p>
+<p>There are two datasets to choose between. For each, the source data is somewhat messy, so you will work to organize it into a convenient format to facilitate reporting and querying. The project is meant to imitate a common situation you will face in industry: your product or business will be spewing a firehose of messy data, and it’ll be your job to turn it into a sprinkler of insight.</p>
+<p>The two datasets:</p>
+<ol type="1">
+<li>Data from the US Department of Health and Human Services (HHS) about hospitals throughout the US, with weekly updates on how many patients have been admitted with COVID, how many hospital beds are currently available, how many staff are vaccinated, and related factors. You can find the data and descriptions <a href="https://healthdata.gov/d/uqq2-txqb">here on HealthData.gov</a>.</li>
+<li>Data from the Department of Education’s College Scorecard about the performance of colleges and universities throughout the US. This data is updated annually. The Department of Education provides <a href="https://collegescorecard.ed.gov/data/documentation/">detailed data dictionaries</a>.</li>
+</ol>
+<section id="logistics" class="level2">
+<h2 class="anchored" data-anchor-id="logistics">Logistics</h2>
+<p>This project will be completed in assigned groups of 2 or 3 students. Group assignments will be posted on Canvas. There will be several milestones throughout the semester when you will turn in parts of the work; at the end of the semester, you will turn in the completed project.</p>
+<p>The groups will be paired: your group is matched with another group. You must use a different dataset from your matched group.</p>
+<p>While completing the project, you will also be working on a knowledge transfer activity in 36-611 based on this project. Just as in 36-613, I’ll be grading your technical work, and the knowledge transfer activity will be part of your 36-611 grade. The knowledge transfer will be with your paired group.</p>
+</section>
+<section id="part-1-designing-the-database" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-designing-the-database">Part 1: Designing the database</h2>
+<p>This part is due Wednesday, November 6 at 5pm.</p>
+<p>In Part 1 of the project, your team must design a table schema for the data. By “table schema” I mean the <code>CREATE TABLE</code> statements necessary to create database tables that fit the data. You should follow the design principles in <strong>?@sec-schema-design</strong> to build a normalized structure for the database that minimizes redundant information. Include primary keys, foreign keys, column types, and any appropriate constraints. It is up to you to decide how many tables you need, their names, and their contents.</p>
+<p>Write your <code>CREATE TABLE</code> statements in a notebook. Test them out on Azure to ensure they work correctly. <strong>You do not need to load any real data into the database yet.</strong></p>
+<p>In the notebook, write comments explaining the following: What are the basic entities in your schema? (In <strong>?@exm-songs-schema</strong>, entities were things like songs, record labels, and albums, that each had their own database table.) How did you choose them and what did you do to ensure there is not redundant information in your database?</p>
+<p>You may find it useful to make a Git repository to share with your project team, though this is not required. Instead you will turn in your schema and explanation on Gradescope.</p>
+<p>The rest of the instructions are split up by the dataset your group is using:</p>
+<section id="hhs-data" class="level3">
+<h3 class="anchored" data-anchor-id="hhs-data">HHS data</h3>
+<p>The <a href="https://healthdata.gov/d/uqq2-txqb">HHS data files</a> have many columns; we won’t be interested in all of them here. The data contains the following information:</p>
+<ul>
+<li>A unique ID for each hospital (<code>hospital_pk</code>, a string)</li>
+<li>The state the hospital is in (<code>state</code>, as a two-letter abbreviation, like PA)</li>
+<li>The hospital’s name (<code>hospital_name</code>), street address (<code>address</code>), city (<code>city</code>), ZIP code (<code>zip</code>), and FIPS code (<code>fips_code</code>, a unique identifier for counties)</li>
+<li>The latitude and longitude of the hospital (<code>geocoded_hospital_address</code>), formatted as a string like <code>POINT(-91 30)</code>, where the first number is the longitude and the second is the latitude. When you load data, you will need to convert this to a format you can use<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>The week this observation is for (<code>collection_week</code>)</li>
+<li>The total number of hospital beds available each week, broken down into adult and pediatric (children) beds (<code>all_adult_hospital_beds_7_day_avg</code>, <code>all_pediatric_inpatient_beds_7_day_avg</code>). This can change weekly depending on staffing and facilities.</li>
+<li>The number of hospital beds that are in use each week (<code>all_adult_hospital_inpatient_bed_occupied_7_day_avg</code>, <code>all_pediatric_inpatient_bed_occupied_7_day_avg</code>)</li>
+<li>The number of ICU (intensive care unit) beds available and the number in use (<code>total_icu_beds_7_day_avg</code> and <code>icu_beds_used_7_day_avg</code>)</li>
+<li>The number of patients hospitalized who have confirmed COVID (<code>inpatient_beds_used_covid_7_day_avg</code>)</li>
+<li>The number of adult ICU patients who have confirmed COVID (<code>staffed_icu_adult_patients_confirmed_covid_7_day_avg</code>)</li>
+</ul>
+<p>The data is updated weekly. In each weekly file I will provide you, each row will be one hospital, and all of the columns above will be present—so each hospital’s address, location, and so on will appear every week.</p>
+<p>There are several thousand hospitals in the United States, and this data has been updated weekly for much of the pandemic, so the data contains about 580,000 rows. In raw form, with dozens of columns, it is 257 MB.</p>
+<p>You will also be using a <a href="https://data.cms.gov/provider-data/dataset/xubh-q36u">hospital quality dataset</a> from the Centers for Medicare and Medicaid Services (CMS). We are interested in the following information in this data:</p>
+<ul>
+<li>A facility ID, which matches the <code>hospital_pk</code> in the HHS data</li>
+<li>The facility’s name, address, city, state, ZIP code, and county</li>
+<li>The type of hospital and its type of ownership (government, private, non-profit, etc.)</li>
+<li>Whether the hospital provides emergency services</li>
+<li>The hospital’s overall quality rating. This quality rating is updated several times a year, and we want to be able to track each version of the quality rating. For instance, we might ask “What was the quality rating of this hospital in 2020?” and compare it to the rating in 2022.</li>
+</ul>
+</section>
+<section id="college-scorecard" class="level3">
+<h3 class="anchored" data-anchor-id="college-scorecard">College Scorecard</h3>
+<p>The College Scorecard data files cover dozens of variables per institution; we won’t be interested in all of them here. The <a href="https://collegescorecard.ed.gov/assets/CollegeScorecardDataDictionary.xlsx">Data Dictionary</a> lists all variables, their column names (<code>VARIABLE NAME</code>), a human readable description, and the meaning of each value. We care about the following columns:</p>
+<ul>
+<li><code>UNITID</code>, the institution ID</li>
+<li><code>ACCREDAGENCY</code></li>
+<li><code>PREDDEG</code></li>
+<li><code>HIGHDEG</code></li>
+<li><code>CONTROL</code></li>
+<li><code>REGION</code></li>
+<li><code>CCBASIC</code> (TODO: this is missing before 2022; prefer IPEDS version?)</li>
+<li><code>ADM_RATE</code></li>
+<li><code>TUITIONFEE_IN</code>, <code>TUITIONFEE_OUT</code>, and <code>TUITIONFEE_PROG</code></li>
+<li><code>TUITFTE</code></li>
+<li><code>AVGFACSAL</code></li>
+<li><code>CDR2</code> and <code>CDR3</code></li>
+<li>Scroll through the list (there are nearly 3,500 variables!) and pick some additional variables that could be interesting to analyze.</li>
+</ul>
+<p>The data is updated annually. Your database should be able to store each year’s data for each university, so you can quickly look up statistics for a university in any particular year.</p>
+<p>You will also be using supplementary data from the <a href="https://nces.ed.gov/ipeds/">Integrated Postsecondary Education Data System</a> (IPEDS); specifically, the <a href="https://nces.ed.gov/ipeds/datacenter/DataFiles.aspx?gotoReportId=7&amp;fromIpeds=true&amp;sid=1a204f96-105e-42ff-9b70-de4eea967c5e&amp;rtid=7">directory information files</a>. These provide annual directory information and other statistics based on surveys of institutions. Again, since this is updated annually, you must be able to track each version of the data and the dates it applies to.</p>
+<p>From the IPEDS data, obtain:</p>
+<ul>
+<li>All information about the institution’s name, location, address, and similar</li>
+<li>All Carnegie Classification 2021 variables</li>
+<li>The Census identifiers that apply to it: Core Based Statistical Area (CBSA) and its type, the Combined Statistical Area (CSA), and the county FIPS code</li>
+<li>Latitude and longitude of the institution.</li>
+</ul>
+<p>Most of these values will not change from year to year, but they can, since colleges can change names, move, grow, or change.</p>
+<p>The College Scorecard data also includes crosswalk files giving links between OPEIDs (in the College Scorecard data) and UNITIDs (in the IPEDS) data, so you can match between datasets.</p>
+</section>
+</section>
+<section id="part-2-loading-data" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-loading-data">Part 2: Loading data</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This part is due Friday, November 15th at 5pm. Plan ahead so you can use the Tuesday and Friday office hours.</p>
+</div>
+</div>
+<p>Now we need to write Python code to load data each week. This code will handle any conversions, cleaning, and reformatting of the data, and then run the necessary <code>INSERT</code> commands.</p>
+<p>The necessary data files will be posted on Canvas. Do <strong>not</strong> use the original files from the sources; I am providing a few specific subsets to make your task easier.</p>
+<section id="hhs-data-1" class="level3">
+<h3 class="anchored" data-anchor-id="hhs-data-1">HHS data</h3>
+<section id="weekly-updates" class="level4">
+<h4 class="anchored" data-anchor-id="weekly-updates">Weekly updates</h4>
+<p>I will provide the HHS data to you in the form of files containing new data for each week. Each CSV file will cover one week of data. Your first script will load one file into your SQL database.</p>
+<p>The script should be run from the command line like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> load-hhs.py 2022-01-04-hhs-data.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>where the argument is the name of the file to load from. The script should then:</p>
+<ol type="1">
+<li>Load the CSV file.</li>
+<li>Do any necessary processing (such as converting <code>-999</code> to <code>None</code> or <code>NULL</code>, parsing dates into Python <code>date</code> objects, etc.).</li>
+<li>Execute a series of <code>INSERT</code> commands to insert the relevant data into the database.</li>
+</ol>
+</section>
+<section id="cms-quality-data" class="level4">
+<h4 class="anchored" data-anchor-id="cms-quality-data">CMS quality data</h4>
+<p>Similarly, you will write a script to load the quality data whenever it may be updated. I’ll provide you several example files you will load. The script should run from the command line like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> load-quality.py 2021-07-01 Hospital_General_Information-2021-07.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here the first argument is the date of this quality data (<code>YYYY-mm-dd</code>) and the second argument is the CSV file name. Again, your Python script will do any necessary work and then <code>INSERT</code> the data.</p>
+<p>If you chose to have a separate hospitals table, referenced by the tables storing the weekly updates or quality data, it will need to be updated whenever there’s a new hospital. Your scripts should automatically insert new hospitals whenever they appear. If the new quality data changes key hospital metadata (like its location), you should update your hospital data.</p>
+</section>
+</section>
+<section id="college-scorecard-1" class="level3">
+<h3 class="anchored" data-anchor-id="college-scorecard-1">College Scorecard</h3>
+<p>I will provide you College Scorecard and IPEDS data files containing data for each year.</p>
+<p>You should create two Python scripts that can be run from the command line, like so:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> load-scorecard.py TODO-name-of-file.csv</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> load-ipeds.py TODO-name-of-file.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>where the arguments are the names of the files to load from. The scripts should then:</p>
+<ol type="1">
+<li>Load the CSV file.</li>
+<li>Do any necessary processing (such as converting <code>-999</code> to <code>None</code> or <code>NULL</code>, parsing dates into Python <code>date</code> objects, etc.).</li>
+<li>Execute a series of <code>INSERT</code> commands to insert the relevant data into the database.</li>
+</ol>
+</section>
+<section id="data-processing-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="data-processing-requirements">Data processing requirements</h3>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These requirements apply to both project datasets.</p>
+</div>
+</div>
+<p>Your scripts should have the following common features:</p>
+<ul>
+<li>They should print out a summary of how much data has been read from the CSV and how much has been successfully inserted into the database. This should allow the user to determine whether the amount of data loaded matches what they expect.</li>
+<li>If the script gets partway through and crashes with an error, either all the data should be inserted or none of it. You should not be able to insert only half the data, then have to manually remove it before you can run the script again to reload the rest of the data.</li>
+<li>If a row is invalid and rejected by Postgres (because a constraint failed, for instance), your script should print an error message identifying which row failed and giving information about it (such as the hospital or college affected) that helps the user figure out what’s wrong. Then your script should stop so the user can fix the issue in the data before re-running the script.</li>
+</ul>
+</section>
+<section id="formatting-and-style-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="formatting-and-style-requirements">Formatting and style requirements</h3>
+<p>Additionally, this work will be part of your knowledge transfer activity in 611. To facilitate transfer, you should ensure that:</p>
+<ul>
+<li>your code is clearly written, separated into small understandable functions, as discussed in 36-650</li>
+<li>you follow standard <a href="https://peps.python.org/pep-0008/">PEP 8</a> style rules for naming and formatting</li>
+<li>you have docstrings for each function explaining what it does, following <a href="https://peps.python.org/pep-0257/">PEP 257</a> conventions</li>
+<li>your code also includes a <code>README</code> file describing how to use your scripts to load the data</li>
+</ul>
+<p>If you choose, you may create additional Python files containing functions and classes used by your data loading scripts.</p>
+</section>
+<section id="submission-details" class="level3">
+<h3 class="anchored" data-anchor-id="submission-details">Submission details</h3>
+<p>To submit your code, create a private GitHub repository shared with your classmates. We will ask you to add us (capnrefsmmat and aerosengart) as collaborators, and you will submit a link to the repository as your Canvas submission for this part of the project.</p>
+</section>
+</section>
+<section id="part-3-analytics-and-reporting" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-analytics-and-reporting">Part 3: Analytics and reporting</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This part is due Friday, December 6th at 5pm. Plan ahead so you can use the Tuesday and Thursday office hours.</p>
+</div>
+</div>
+<p>Your final task for this semester is to develop an automatic reporting system. A user should be able to run the reporting system, specify a date of interest, and obtain a report or dashboard summarizing the data as of the selected date.</p>
+<section id="report-contents" class="level3">
+<h3 class="anchored" data-anchor-id="report-contents">Report contents</h3>
+<p>Your reports should be graphical dashboards summarizing the data and interesting features it contains. You do <em>not</em> need to do any statistical modeling, although you can if you want. Descriptive tables and graphs are sufficient, since the purpose of this project is to give you experience working with real data in SQL.</p>
+<section id="hhs-data-2" class="level4">
+<h4 class="anchored" data-anchor-id="hhs-data-2">HHS data</h4>
+<p>The HHS report should summarize the COVID situation suggested by the data on hospital beds: how full are hospitals in each state? What states have the fewest open beds? Where are beds filling up the fastest?</p>
+<p>Your report/dashboard should include:</p>
+<ol type="1">
+<li>A summary of how many hospital records were loaded in the week selected by the user, and how that compares to previous weeks.</li>
+<li>A table summarizing the number of adult and pediatric beds available that week, the number used, and the number used by patients with COVID, compared to the 4 most recent weeks.</li>
+<li>A graph or table summarizing the fraction of beds in use by hospital quality rating, so we can compare high-quality and low-quality hospitals.</li>
+<li>A plot of the total number of hospital beds used per week, over all time up to the selected week, split into all cases and COVID cases.</li>
+</ol>
+<p>Additionally, you should include three additional interesting analyses. At least two of these should involve combining multiple tables from your database. These could be anything that can be expressed as a table or graph and that is potentially interesting. Some examples include:</p>
+<ul>
+<li>A map showing the number of COVID cases by state (the first two digits of a hospital FIPS code is its state)</li>
+<li>A table of the states in which the number of cases has increased by the most since last week</li>
+<li>A table of the hospitals (including names and locations) with the largest changes in COVID cases in the last week</li>
+<li>A table of hospitals that did not report any data in the past week, their names, and the date they most recently reported data</li>
+<li>Graphs of hospital utilization (the percent of available beds being used) by state, or by type of hospital (private or public), over time</li>
+</ul>
+<p>You are free to think of other interesting plots, tables, and maps, as long as you think they could be useful to the Department of Health and Human Services for some health-related purpose.</p>
+<p>If it helps, imagine sending this report to the Assistant to the Deputy Director of the Department of Health and Human Services. The Assistant is a doctor, not a statistician or programmer, so make your report accordingly.</p>
+</section>
+<section id="college-scorecard-2" class="level4">
+<h4 class="anchored" data-anchor-id="college-scorecard-2">College Scorecard</h4>
+<p>The College Scorecard report should summarize the current data, highlighting the best- and worst-performing colleges according to financial results, and also summarize how the data has changed since the previous year. The user should be able to select a year of interest and get the report generated for that year.</p>
+<p>Your report/dashboard should include:</p>
+<ol type="1">
+<li>Summaries of how many colleges and universities are included in the data for the selected year, by state and type of institution (private, public, for-profit, and so on).</li>
+<li>Summaries of current college tuition rates, by state and Carnegie Classification of institution.</li>
+<li>A table showing the best- and worst-performing institutions by loan repayment rates.</li>
+<li>Graphs showing how tuition rates and loan repayment rates have changed over time, either in aggregate (such as averages for all institutions by type) or for selected institutions (such as the most expensive).</li>
+</ol>
+<p>Additionally, you should include three additional interesting analyses. At least two of these should involve combining multiple tables from your database. These could be anything that can be expressed as a table or graph and that is potentially interesting. Some examples include:</p>
+<ul>
+<li>Maps of tuition or loan repayment rates across the country</li>
+<li>Graphs comparing tuition, loan repayment rates, and faculty salaries across institution, and demonstrating their correlation</li>
+<li>A table of institutions that did not report data in the selected year but did previously, or that are new this year</li>
+<li>Graphs of total enrollment or total tuition costs over time</li>
+</ul>
+<p>If it helps, imagine sending this report to the Assistant to the Deputy Director of the Department of Education. The Assistant has a degree in educational administration, not in statistics, so make your report accordingly.</p>
+</section>
+</section>
+<section id="report-format" class="level3">
+<h3 class="anchored" data-anchor-id="report-format">Report format</h3>
+<p>The report should be output in the form of a document with graphs, tables, and text. This could be an HTML file, a PDF, a Jupyter notebook (built automatically with the latest data), or even an interactive dashboard made with something like <a href="https://streamlit.io/">Streamlit</a>.</p>
+</section>
+<section id="mechanical-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="mechanical-requirements">Mechanical requirements</h3>
+<p>Your reporting system must be <em>automated</em>. This means it <strong>cannot require the user to manually edit a file or notebook</strong> every week. Ideally, it could be run with a single command:</p>
+<pre class="shell"><code>python weekly-report.py 2022-09-30 # for HHS data
+python education-report.py 2021 # for College Scorecard</code></pre>
+<p>That might produce an output file called <code>report-2022-09-30.pdf</code> or <code>report-2021.html</code>; for an interactive dashboard, it might open up the dashboard for that date.</p>
+<p>If your report is in the form of a notebook, you can produce it from the command line using <a href="https://papermill.readthedocs.io/en/latest/">papermill</a>, which lets you pass command-line arguments to Jupyter notebooks. For example, if you had a <code>week</code> parameter in your code, you could run</p>
+<pre class="shell"><code>papermill weekly-report.ipynb 2022-09-30-report.ipynb -p week 2022-09-30
+jupyter nbconvert --no-input --to html 2022-09-30-report.ipynb </code></pre>
+<p>The first command substitutes <code>week = "2022-09-30"</code> into the parameters of the notebook, and the second executes the notebook and produces the HTML output. The <code>--no-input</code> argument exports only the output, not the code in the notebook. Read the <a href="https://papermill.readthedocs.io/en/latest/usage-workflow.html">papermill usage guide</a> for details on how to accept parameters in a notebook.</p>
+<p>Your reporting system must be built on SQL, using a SQL connection to generate the results. The calculations must be primarily done in SQL, with a minimum of post-processing in Python to format the results for display. You should not, at any point, load the entire database table into Python so you can do your analysis in Python alone.</p>
+<p>Your reporting system should assume the user has already run your data loading scripts from Part 2; it does not need to load all the data.</p>
+</section>
+<section id="format-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="format-requirements">Format requirements</h3>
+<p>The report must be designed for an end-user: to the extent you can, it should hide the code and technical details, and present useful tables and graphs of results. Format the output nicely! Do not simply print out lists of Python output. Make graphs and tables. If you’re printing a data frame, consider the <a href="https://pandas.pydata.org/docs/user_guide/style.html">Pandas data frame formatting options</a> that let you print it as a nice table.</p>
+</section>
+<section id="submission-details-1" class="level3">
+<h3 class="anchored" data-anchor-id="submission-details-1">Submission details</h3>
+<p>Add your code to the GitHub repository you created in previous part. Make sure this code is committed and pushed by the deadline.</p>
+<p>Load all the data files provided on Canvas and then generate a report for the final week of data. Convert this report to a PDF and submit it on Gradescope. This serves as an example of what your code produces.</p>
+
+
+</section>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The coolest option would be to use <a href="http://www.postgis.net/">PostGIS</a>, which extends Postgres to understand geographic coordinate systems. But that is overkill for us here, and is not installed on our server, so you can’t use it. A couple simple columns would be fine.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

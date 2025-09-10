@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.34">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>sql-code</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="using-sql-from-code" class="level1">
+<h1>Using SQL from Code</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Portions of these notes are based on material co-developed with Christopher Genovese for 36-750.</p>
+</div>
+</div>
+<p>It’s nice to be able to type queries into <code>psql</code> and see results, but most often you’d like to do more than that. You’re not just making a database to run handwritten queries – you’re using it to store data for a big project, and that data then needs to be used to fit models, make plots, prepare reports, and all sorts of other useful things. Or perhaps your code is <em>generating</em> data which needs to be stored in a database for later use.</p>
+<p>Regardless, you’d like to run queries inside R, Python, or your preferred programming language, and get the results back in a form that can easily be manipulated and used.</p>
+<p>Fortunately, PostgreSQL – and most other SQL database systems – use the <em>client-server</em> model of database access. The database is a <em>server</em>, accessible to any program on the local machine (like the <code>psql</code> client) and even to programs on other machines, if the firewall allows it.</p>
+<section id="sql-in-python" class="level2">
+<h2 class="anchored" data-anchor-id="sql-in-python">SQL in Python</h2>
+<p><a href="https://www.psycopg.org/">Psycopg</a> is a popular PostgreSQL package for Python. Check out the <a href="https://www.psycopg.org/psycopg3/docs/">reference guide</a> for full documentation of all its functions and features. It can be installed by using</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="st">"psycopg[binary]"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Pyscopg is based on two core concepts: <em>connections</em> and <em>cursors</em>. Both are represented by Python objects. A connection object represents your connection to the database server, and allows you to create transactions and commit them. A cursor object represents one particular interaction with that connection: you can submit a query, then use the cursor to fetch its results.</p>
+<p>To connect:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> psycopg</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> psycopg.<span class="ex">connect</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    host<span class="op">=</span><span class="st">"pinniped.postgres.database.azure.com"</span>, dbname<span class="op">=</span><span class="st">"yourusername"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    user<span class="op">=</span><span class="st">"yourusername"</span>, password<span class="op">=</span><span class="st">"yourpassword"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>conn</code> is now a connection object. (See <a href="#sec-storing-sql-password" class="quarto-xref">Section&nbsp;1.2</a> below on how to store your password securely; including it directly in your Python files is not a good idea.) We can create a cursor and use it to submit (“execute”) a query:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cur <span class="op">=</span> conn.<span class="kw">cursor</span>()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>baz <span class="op">=</span> <span class="ot">"walrus"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>spam <span class="op">=</span> <span class="ot">"penguin"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>cur.<span class="kw">execute</span>(<span class="ot">"INSERT INTO foo (bar, baz, spam) "</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>            <span class="ot">"VALUES (17, %s, %s)"</span>, (baz, spam))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice the use of interpolation to put variables into the query – see <a href="#sec-safe-sql" class="quarto-xref">Section&nbsp;1.3</a> below. <strong>Thou shalt not concatenate values directly into the SQL string.</strong></p>
+<p>If we do a <code>SELECT</code>, we can get the results with a <code>for</code> loop or the <code>fetchone</code> and <code>fetchmany</code> methods:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python concatenates adjacent string literals, which makes it</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># easy to split queries across lines:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"SELECT time, persona, element, score "</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"FROM events"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># iterating over tuples; each tuple is one row:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> row <span class="kw">in</span> cur:</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Destructuring lets us assign each tuple entry to a variable</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    time, persona, element, score <span class="op">=</span> row</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># do something with the results here</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># alternately, one at a time:</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>row <span class="op">=</span> cur.fetchone()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>execute</code> method is used regardless of the type of query.</p>
+<p>If you use <a href="https://pandas.pydata.org/">pandas</a> for your data frames, you can also convert the results of any query directly into a pandas data frame:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.read_sql_query(<span class="st">"SELECT persona, element FROM events WHERE id = </span><span class="sc">%(id)s</span><span class="st">"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                      conn, params <span class="op">=</span> {<span class="st">'id'</span>: <span class="dv">17</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The psycopg3 package automatically starts a SQL transaction (<strong>?@sec-transactions</strong>) when you create a connection with <code>psycopg.connect()</code>. You must explicitly commit the transaction if you are inserting data:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> event <span class="kw">in</span> events:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    cur.execute(<span class="st">"INSERT INTO events (...)"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>conn.commit() <span class="co"># commit transaction</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>conn.close() <span class="co"># close connection</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you do not explicitly commit the transaction, it will be rolled back when your script exits.</p>
+</section>
+<section id="sec-storing-sql-password" class="level2">
+<h2 class="anchored" data-anchor-id="sec-storing-sql-password">Storing your SQL password</h2>
+<p>The code above stores your password right in the source file. This is a <strong>bad idea.</strong> If the code is ever shared with anyone, posted online, or otherwise revealed, anyone who sees it now has your database username and password and can view or modify any of your data. If you commit the file to Git, your password is now in your Git history <strong>forever</strong>. Fortunately, there are ways to work around this.</p>
+<p>A simple approach is to create a file called <code>credentials.py</code> that looks like this:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>DB_USER <span class="op">=</span> <span class="st">"yourusername"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>DB_PASSWORD <span class="op">=</span> <span class="st">"yourpassword"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Then, in other files, you can use <code>import credentials</code> and use <code>credentials.DB_PASSWORD</code> instead of writing in your password. Add <code>credentials.py</code> to your <code>.gitignore</code> to avoid accidentally committing it.</p>
+<p>Large companies often use systems for managing passwords and tokens required by scripts, such as <a href="https://www.vaultproject.io/">Vault</a> or cloud-specific systems like <a href="https://azure.microsoft.com/en-us/products/key-vault/">Azure Key Vault</a> and the <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html">AWS Secrets Manager</a>. These are much better than creating hidden files.</p>
+</section>
+<section id="sec-safe-sql" class="level2">
+<h2 class="anchored" data-anchor-id="sec-safe-sql">Practicing safe SQL</h2>
+<p>Suppose you’ve loaded some data from an external source – a CSV file, input from a user, from a website, another database, wherever. You need to use some of this data to do a SQL query.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"SELECT * FROM users WHERE username = '"</span> <span class="op">+</span> username <span class="op">+</span> <span class="st">"' "</span> <span class="op">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">"AND password = '"</span> <span class="op">+</span> password <span class="op">+</span> <span class="st">"'"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now suppose <code>username</code> is the string <code>'; DROP TABLE users;--</code>. What does the query look like before we send it to Postgres?</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> users</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> username <span class="op">=</span> <span class="st">''</span>; <span class="kw">DROP</span> <span class="kw">TABLE</span> users; <span class="co">-- AND password = 'theirpassword'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We have <em>injected</em> a new SQL statement, which drops the table. Because <code>--</code> represents a comment in SQL, the commands following are not executed.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/xkcd-327.png" class="img-fluid figure-img"></p>
+<figcaption><a href="https://xkcd.com/327/">xkcd #327</a></figcaption>
+</figure>
+</div>
+<p>Less maliciously, the username might contain a single quote, confusing Postgres about where the string ends and causing syntax errors. Or any number of other weird characters which mess up the query. Clever attackers can use SQL injection to do all kinds of things: imagine if the <code>password</code> variable were <code>foo' OR 1=1</code> – we’d be able to log in without knowing the right password!</p>
+<p>(For a time in the early 2000s, SQL injection was incredibly common, and <a href="https://en.wikipedia.org/wiki/SQL_injection#Examples">numerous services were hacked</a> using it. It still crops up when unwary developers don’t think about their queries.)</p>
+<p>We need a better way of writing queries with parameters determined by the code. Fortunately, database systems provide <em>parametrized queries</em>, where the database software is explicitly told “this is an input, with this value” so it knows not to treat it as SQL syntax. For example:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>username <span class="op">=</span> <span class="st">"'; DROP TABLE users;--"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>password <span class="op">=</span> <span class="st">"walruses"</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"SELECT * FROM users "</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"WHERE username = </span><span class="sc">%(user)s</span><span class="st"> AND password = </span><span class="sc">%(pass)s</span><span class="st">"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"user"</span>: username, <span class="st">"pass"</span>: password})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this form, psycopg sends the query (with placeholders) and the values <em>separately</em>, so that the SQL server knows which parts are values and which parts are part of the SQL syntax. It is impossible for anyone to maliciously slip different SQL syntax into your queries.</p>
+<p>Consult the <a href="https://www.psycopg.org/psycopg3/docs/basic/params.html">psycopg documentation on query parameters</a> for more details and options.</p>
+<p>You should <em>always</em> use this approach to insert data into SQL queries. You may think it’s safe with your data, but <a href="https://www.psycopg.org/psycopg3/docs/basic/params.html#danger-sql-injection">as the documentation notes</a>:</p>
+<blockquote class="blockquote">
+<ul>
+<li><p>Don’t manually merge values to a query: hackers from a foreign country will break into your computer and steal not only your disks, but also your cds, leaving you only with the three most embarrassing records you ever bought. On cassette tapes.</p></li>
+<li><p>If you use the <a href="https://docs.python.org/3/library/stdtypes.html#printf-style-string-formatting"><code>%</code> operator</a> [or <a href="https://docs.python.org/3/reference/lexical_analysis.html#f-strings">f-strings</a>] to merge values to a query, con artists will seduce your cat, who will run away taking your credit card and your sunglasses with them.</p></li>
+<li><p>If you use <code>+</code> to merge a textual value to a string, bad guys in balaclava will find their way to your fridge, drink all your beer, and leave your toilet seat up and your toilet paper in the wrong orientation.</p></li>
+</ul>
+</blockquote>
+<p>You may find older code that does not use parametrized queries, but instead concatenates queries together with <em>escapes</em>. In short, before concatenating values into a query, you check that their types match what they should be (e.g. integer values really are integers), and for strings, you replace <code>'</code> with <code>''</code>, the escape for representing <code>'</code> within a string. Then you concatenate.</p>
+<p>psycopg doesn’t actually contain a function for escaping strings, because it’s too easy to mess up and forget to escape something, or to escape something incorrectly—just use a parametrized query, which cannot go wrong. But you may find escaping commonly used in other languages.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> If you’ve ever seen text with apostrophes come out of a website with extra backslashes, you’ve seen a poorly done escaping system (as other SQL databases use <code>\'</code> to escape single quotes).</p>
+<div id="exr-sql-injection" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1 (SQL injection)</strong></span> Suppose we have a <code>users</code> table with <code>username</code>, <code>email</code>, and <code>admin</code> columns. The <code>admin</code> column is a boolean (<code>true</code>/<code>false</code>) that determines whether the user has administrative privileges in the application.</p>
+<p>The application includes a form to update your email address. When you submit the form, it does the following:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cur.execute(<span class="st">"UPDATE users "</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>            <span class="st">"SET email = '"</span> <span class="op">+</span> email_address <span class="st">"' "</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"WHERE username = '"</span> <span class="op">+</span> username <span class="op">+</span> <span class="st">"'"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Suggest an email address and username to submit so that your user account will be given administrative privileges.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>The key is your email address. Set it to something like</p>
+<pre><code>', admin = true, email = 'user@example.com</code></pre>
+<p>This sets the <code>email</code> column twice, but ensures the query still has valid syntax. You could also do, say,</p>
+<pre><code>user@example.com', admin = TRUE, username = 'yourusername</code></pre>
+<p>as well. Notice we’re providing a value so the final closing <code>'</code> in the original query is not a syntax error.</p>
+</div>
+</section>
+<section id="handling-errors" class="level2">
+<h2 class="anchored" data-anchor-id="handling-errors">Handling errors</h2>
+<p>Query errors are converted into Python exceptions. For example, here I’m trying to insert a country that’s already in the countries table, and the country code is defined to be a primary key, so it must be unique:</p>
+<pre><code>In [7]: cur.execute("INSERT INTO countries (country_code, country_name) VALUES ('us', 'Estados Unidos')")
+---------------------------------------------------------------------------
+UniqueViolation                           Traceback (most recent call last)
+&lt;ipython-input-7-5df5a6b218e6&gt; in &lt;module&gt;
+----&gt; 1 cur.execute("INSERT INTO countries (country_code, country_name) VALUES ('us', 'Estados Unidos')");
+
+~/miniconda3/lib/python3.6/site-packages/psycopg/cursor.py in execute(self, query, params, prepare, binary)
+    546                 )
+    547         except e.Error as ex:
+--&gt; 548             raise ex.with_traceback(None)
+    549         return self
+    550
+
+UniqueViolation: duplicate key value violates unique constraint "countries_pkey"
+DETAIL:  Key (country_code)=(us) already exists.</code></pre>
+<p>You can use Python’s exception management features (<code>try</code>, <code>except</code>, <code>finally</code>, etc.) with these exceptions just like with any others:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    cur.execute(<span class="st">"INSERT INTO countries (country_code, country_name) "</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">"VALUES ('us', 'Estados Unidos')"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> psycopg.errors.UniqueViolation <span class="im">as</span> e:</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># do something with the exception here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>See the <a href="https://docs.python.org/3/tutorial/errors.html">Python errors and exceptions tutorial</a> for more information.</p>
+<p>Notice that the exception is a <code>UniqueViolation</code>. Psycopg translates Postgres error codes into distinct Python exceptions, so if you use <code>except</code> to catch them, you can catch different types of Postgres errors and handle them differently. The <a href="https://www.psycopg.org/psycopg3/docs/api/errors.html"><code>psycopg.errors</code> module</a> defines the exception types that are available.</p>
+<p>If an error occurs in any query in your transaction, any subsequent queries will produce errors like:</p>
+<pre><code>InFailedSqlTransaction: current transaction is aborted, commands ignored until end of transaction block</code></pre>
+<p>This means you need to call <code>conn.rollback()</code> to roll back the transaction explicitly so you can start over. Or you can use the transaction features described below.</p>
+<div id="exr-sql-error-handling" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2 (Handling SQL errors)</strong></span> Load the <a href="../data/events.sql">events data</a> into your own database so that you have permission to edit it. (You can open the SQL file in Azure Data Studio to run it in your database, creating the table.)</p>
+<p>Write a short Python script using psycopg to connect to the database. Have the script issue an <code>INSERT</code> query that causes a foreign key constraint violation. Use <code>try</code> and <code>except</code> to catch the exception and print a message about the error.</p>
+<p>Your script should <em>only</em> catch foreign key constraint violations, and not, say, SQL syntax errors or other unrelated problems.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>The psycopg exception for foreign keys is <code>psycopg.errors.ForeignKeyViolation</code>, so there should be a <code>try</code>/<code>except</code> block like this:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    cur.execute(<span class="st">"bad query"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> psycopg.errors.ForeignKeyViolation <span class="im">as</span> e:</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"some message"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="sec-transactions-python" class="level2">
+<h2 class="anchored" data-anchor-id="sec-transactions-python">Transactions in Python</h2>
+<p>Psycopg provides convenient ways to manage transactions (<strong>?@sec-transactions</strong>). (See the <a href="https://www.psycopg.org/psycopg3/docs/basic/transactions.html">psycopg manual chapter</a> for full details.)</p>
+<p>The most convenient method is with <a href="https://www.psycopg.org/psycopg3/docs/basic/transactions.html#transaction-contexts">transaction contexts</a>. Python provides a feature called <em>context managers</em> that allow actions to be automatically run to create and destroy resources, and psycopg reuses these to create and commit (or rollback) transactions. Context managers are created with the <code>with</code> statement.</p>
+<p>For example:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> psycopg.<span class="ex">connect</span>(...)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>cur <span class="op">=</span> conn.cursor()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> conn.transaction():</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># This creates a new transaction</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    cur.execute(<span class="st">"INSERT INTO foo ..."</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    cur.execute(<span class="st">"INSERT INTO bar ..."</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Now the block is done and committed. But if there was an exception raised in</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="co"># the block that was not caught, the context manager would automatically call</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># conn.rollback() for us.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>What’s great is that these can be nested! For instance, suppose you’re loading lots of data by looping through a data file doing <code>INSERT</code>. You want the entire data to be loaded or not loaded; you don’t want it to crash halfway through and only half the data is loaded. But you also want to recover from bad rows and keep inserting the rest. You could do the following:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>num_rows_inserted <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make a new transaction</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> conn.transaction():</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> row <span class="kw">in</span> big_data_set:</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span>:</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>            <span class="co"># make a new SAVEPOINT -- like a save in a video game</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> conn.transaction():</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                <span class="co"># perhaps a bunch of reformatting and data manipulation goes here</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                <span class="co"># now insert the data</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>                cur.execute(<span class="st">"INSERT INTO foo ..."</span>, ...)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>            <span class="co"># if an exception/error happens in this block, Postgres goes back to</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>            <span class="co"># the last savepoint upon exiting the `with` block</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"insert failed"</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>            <span class="co"># add additional logging, error handling here</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>            <span class="co"># no exception happened, so we continue without reverting the savepoint</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>            num_rows_inserted <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="co"># now we commit the entire transaction</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>conn.commit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This lets us handle errors in individual rows without stopping or losing all the data we have inserted, but still ensures that other users see all or none of the data, not part of it.</p>
+</section>
+<section id="batching-many-queries" class="level2">
+<h2 class="anchored" data-anchor-id="batching-many-queries">Batching many queries</h2>
+<p>When the database is on a different machine than your Python script, the delay in sending messages between them can become a problem. Each time you use <code>cur.execute()</code> to run a query, your Python script must send several messages to Postgres with the query and the parametrized data; then it must wait for PostgreSQL to send back the results and indicate it’s ready for the next query.</p>
+<p>From the CMU network to our Azure database server, I measured a 25-millisecond round trip. That means it takes 25 milliseconds to send a message and get a response back, even when the response is sent instantly. The round-trip time to a server in the UK was closer to 100 milliseconds; if you’re on crappier Internet than the CMU connection, you can easily have 200-millisecond round trips to some servers.</p>
+<p>That means every query to our Azure database must take <em>at least</em> 25 milliseconds, plus whatever time it takes Postgres to do the actual work. That imposes a limit of 40 queries per second—lower if your Internet is slower or if the queries take Postgres some time to execute.</p>
+<p>This is a problem if we’re executing large batches of queries, e.g.&nbsp;if we’re sending many <code>INSERT</code> commands to load lots of data. Being limited to 40 rows per second when you have thousands of rows is a big problem.</p>
+<p>Fortunately there is an alternative. PostgreSQL now supports <em>pipeline mode</em>. In this mode, you can send a stream of many queries to Postgres without waiting for their results; Postgres will send the results back to you as they become available. You could send a batch of 100 without having to wait <span class="math inline">\(100 \times 25\)</span> milliseconds (2.5 seconds!), and only wait briefly at the end to receive the final confirmation that they’re done.</p>
+<p>Pipeline mode can be invoked manually (see the <a href="https://www.psycopg.org/psycopg3/docs/advanced/pipeline.html">manual page</a>), but it can also be done with the <code>executemany()</code> method. For example:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cur.executemany(<span class="st">"INSERT INTO tablename (foo, bar, baz) VALUES (</span><span class="sc">%s</span><span class="st">, </span><span class="sc">%s</span><span class="st">, </span><span class="sc">%s</span><span class="st">)"</span>,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                [(<span class="st">"foo for row 1"</span>, <span class="dv">9</span>, <span class="st">"baz1"</span>),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                 (<span class="st">"foo for row 2"</span>, <span class="op">-</span><span class="dv">9</span>, <span class="st">"baz2"</span>),</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                 (<span class="st">"foo for row 3"</span>, <span class="dv">16</span>, <span class="st">"ducks"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As of psycopg version 3.1, this automatically sends the batch of rows in pipeline mode. Each entry in the list is a tuple of values defining one row; the query is hence sent three times.</p>
+<p>This can be used for <code>INSERT</code> queries or any other query where you want to run the same query many times with different values.</p>
+</section>
+<section id="building-automated-workflows" class="level2">
+<h2 class="anchored" data-anchor-id="building-automated-workflows">Building automated workflows</h2>
+<p>There are a few common use-cases for using SQL within Python code (or other languages):</p>
+<ul>
+<li>Supporting an interactive application, like a web site or an app. The program responds to actions by the user by performing SQL queries and displaying the results. Facebook, for instance, originally stored all its posts and comments in a SQL database, so viewing the website or app involves running many SQL queries to fetch content to display.</li>
+<li>Automating tasks that are done occasionally. For example, I might occasionally have to set up accounts for MADS students on a database server, so I could write a Python script that loops over the course roster and runs the necessary commands for each student.</li>
+<li>Automating workflows that run on a schedule, such as a data pipeline that gets the latest data from several sources, processes it, and loads it into a database.</li>
+</ul>
+<p>The integrity and error-handling requirements for these cases can vary, and so part of your design process is to consider how to handle problems. For example:</p>
+<ul>
+<li>In an interactive website, recovering from errors may not be important; if the system isn’t working, you can check your Facebook feed later. Simply catch exceptions and display an error message to the user. It may also be helpful to log detailed information about the error to a file so that the software developer can debug it later.</li>
+<li>In a manually run task, like loading new users, it may be best to present the error to the user, let them fix any issues, and then let them start over. That means not partially loading data or leaving the task half-done, because then redoing it is much harder.</li>
+<li>But a scheduled workflow may be used for many other tasks later: your data pipeline loads data that an automated reporting system uses, and its reports get sent to another system for analysis, and so on. If your job fails, the downstream tasks can’t run at all. If there’s a problem loading one or two rows of data, you may want to load the rest so the other jobs can run on schedule – but record which data failed to load so an analyst can examine it, fix the problem, and manually add it later. But if the integrity of the later analyses depends on loading everything perfectly – as in an accounting system – you may have to catch the error, roll back, and alert someone to investigate.</li>
+</ul>
+<p>In each case, the decision depends on the task requirements. In some tasks, the integrity of data is key, and any error indicates a serious problem that must be fixed before the database can be updated; in others, minor issues can be bypassed for later investigation.</p>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<div id="exr-event-summary" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3 (Automated reporting)</strong></span> Write a Python script called <code>event-report.py</code>. This script should take a command-line argument specifying a date (such as <code>2015-03-23</code>), so it can be invoked like this:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> event-report.py 2015-03-23</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>When it runs, it should connect to the Postgres database and query the <code>events</code> table for all events in the week preceding the given date. It should produce a table of the top 10 students that week, ranked by their cumulative scores on all events during that week. The table should include their name, birthday, score from that week, rank, and overall average score across all weeks.</p>
+<p>Print this table out as a nicely formatted table. The <a href="https://pypi.org/project/tabulate/">tabulate</a> package can help format it, or you can use the pandas <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_string.html"><code>to_string()</code> method</a> if you have a pandas data frame.</p>
+<p>Once your code works, paste it into a notebook cell to submit with your homework. Include a text cell with the formatted output from your script, run with <code>2015-03-23</code> as the date.</p>
+</div>
+<div id="exr-nba-teams" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4 (NBA teams)</strong></span> The <a href="../data/nba-teams.txt"><code>nba-teams.txt</code></a> data file contains information about each team in the NBA.</p>
+<p>Write a table schema to store this data. Provide the <code>CREATE TABLE</code> command with your submission. Include a primary key and appropriate <code>NOT NULL</code> constraints. Consider using <a href="https://www.postgresql.org/docs/current/datatype-enum.html">enumerated types</a> to represent columns that can only take on one of several fixed values (i.e.&nbsp;like a factor in R).</p>
+<p>Write Python code to read the data from <code>nba-teams.txt</code> and run a series of <code>INSERT</code> commands to populate the table. The code should loop through the entire file and repeatedly run <code>INSERT</code>. When it’s done, it should print out a summary of how many rows were successfully inserted.</p>
+<p>Be sure to commit the transaction so the data is saved to the database.</p>
+</div>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>For example, PHP used to have <code>mysql_escape_string()</code> to escape strings being sent to MySQL. Except it didn’t keep track of which character encoding was being used, so it could escape strings incorrectly. It was replaced with <code>mysql_real_escape_string()</code>, and eventually by parametrized queries.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

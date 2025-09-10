@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>regularization</title>
+<title>spark-cloud</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -102,35 +102,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -148,107 +119,113 @@ window.Quarto = {
 
 
 
-<section id="regularization-for-neural-networks" class="level1">
-<h1>Regularization for Neural Networks</h1>
-<div class="hidden">
-<p><span class="math display">\[
-\DeclareMathOperator{\E}{\mathbb{E}}
-\DeclareMathOperator{\R}{\mathbb{R}}
-\DeclareMathOperator*{\argmin}{argmin}
-\newcommand{\T}{^\mathsf{T}}
-\]</span></p>
-</div>
-<p>As we’ve seen, deep neural networks can quickly become large and complicated, with far more parameters (weights, biases, feature maps, and so on) than any statistical model you’ve used before. This makes them vulnerable to overfitting their training data, and can result in models that generalize poorly to new data.</p>
-<p>“Regularization” covers a broad category of methods to reduce this problem; <span class="citation" data-cites="DLB">@DLB</span> define regularization as “any modification we make to a learning algorithm that is intended to reduce its generalization error but not its training error” (section 5.2.2).</p>
-<p>The simplest strategy might just be to make small networks. But real-world problems tend to involve complicated, high-dimensional relationships—or at least the kinds of real-world problems we try to solve with neural networks instead of linear models. It seems reasonable to expect that classifying high-resolution images or understanding written text should involve a highly complicated and nonlinear process, and a small network may be a poor approximation to that.</p>
-<p>But a large network, while it reduces the bias (because it can get closer to the true relationship), has high variance. So we often start with large networks and apply regularization to reduce their variance.</p>
-<section id="penalties" class="level2">
-<h2 class="anchored" data-anchor-id="penalties">Penalties</h2>
-<p>The most familiar form of regularization is penalization. For example, in least-squares regression, you have sometimes used estimators of the form <span class="math display">\[
-\hat \beta = \argmin_\beta \underbrace{\|Y - X \beta\|_2^2}_\text{loss} +
-\underbrace{\lambda \|\beta\|}_\text{penalty},
-\]</span> where <span class="math inline">\(\|\beta\|\)</span> is some norm. When it’s the Euclidean (<span class="math inline">\(L_2\)</span>) norm, this is ridge regression; when it’s the Manhattan (<span class="math inline">\(L_1\)</span>) norm, this is the lasso. The penalty term “shrinks” the coefficients towards 0, meaning that the solution optimizing this objective has a smaller value of <span class="math inline">\(\|\beta\|\)</span> than one that simply minimized the squared-error loss.</p>
-<p>You may also recall that it’s common to apply the penalization to the slopes but not to the intercept <span class="math inline">\(\beta_0\)</span>.</p>
-<p>We can apply a similar sort of penalization to weights in neural networks. In <strong>?@sec-train-net</strong>, we defined the goal of gradient descent to be to minimize some loss function <span class="math inline">\(L\)</span>: <span class="math display">\[
-\hat \theta = \argmin_\theta \frac{1}{n} \sum_{i=1}^n L(f(x_i; \theta), y_i).
-\]</span> If we think of <span class="math inline">\(f\)</span> as the neural network, we could apply a penalty to <span class="math inline">\(\theta\)</span>, the neural network weights and biases: <span class="math display">\[
-\hat \theta = \argmin_\theta \frac{1}{n} \sum_{i=1}^n L(f(x_i; \theta), y_i) +
-\lambda \|\theta\|.
-\]</span> If we choose the <span class="math inline">\(L_2\)</span> norm for the penalty, this is known as <em>weight decay</em>.</p>
-<p>On fully connected layers, weight decay is typically applied to the weights and not the biases—for reasons related to the choice not to penalize intercepts in linear regression.</p>
-<p>We call this “weight decay” because of the effect it has on the parameters. Consider performing gradient descent to minimize the objective function above. When the penalty term is the Euclidean norm, we can write the objective function as <span class="math display">\[
-\tilde J(\theta) = J(\theta) + \lambda \theta\T\theta,
-\]</span> where <span class="math inline">\(J(\theta)\)</span> is the sum of the losses. If we take the gradient with respect to the parameters <span class="math inline">\(\theta\)</span>, we obtain <span class="math display">\[
-\nabla \tilde J(\theta) = \nabla J(\theta) + 2 \lambda \theta,
-\]</span> and so an ordinary gradient step updates the parameters as <span class="math display">\[\begin{align*}
-\theta &amp;\leftarrow \theta - \gamma (\nabla J(\theta) + 2 \lambda \theta) \\
-&amp;\leftarrow \theta - \gamma \nabla J(\theta) - 2 \gamma \lambda \theta \\
-&amp;\leftarrow (1 - 2\gamma \lambda)\theta - \gamma \nabla J(\theta).
-\end{align*}\]</span> This looks like an ordinary gradient step, except that first, we shrink <span class="math inline">\(\theta\)</span> by a factor <span class="math inline">\((1 - 2 \gamma \lambda)\)</span>. In other words, the parameters decay toward the origin, leading to the term “weight decay.”</p>
-<p>This also suggests an easy way to implement weight decay. Instead of adding the penalty to the loss function and tracking its gradient through backpropagation, our optimizer can simply shrink the weights toward zero on every gradient step.</p>
-<p>This is how PyTorch implements gradient descent. Its optimizers include a <code>weight_decay</code> parameter that control the amount of decay (corresponding to <span class="math inline">\(\lambda\)</span> above), and they automatically apply the decay to <em>every</em> parameter in each network. Yes, that includes the biases, and feature maps in CNNs, and everything else, but it’s the easiest way to regularize in PyTorch.</p>
-<p>(Tensorflow lets you separately apply weight decay to weights, biases, and other parameters, so you can decide which get regularized.)</p>
-</section>
-<section id="data-augmentation" class="level2">
-<h2 class="anchored" data-anchor-id="data-augmentation">Data augmentation</h2>
-<p>Another regularization approach is to make fake data.</p>
-<p>Consider a classification task. You have, say, images that need to be labeled with a category. You know that very similar images should be put into the same category, where “similar” means something like “shifted slightly to the left” or “slightly darker” or “with a bit of random noise”. After all, a darker picture of a horse is still a picture of a horse.</p>
-<p>If a classifier cannot generalize to slightly altered versions of its training data, presumably it won’t generalize well at all; at the least, generalizing well to slightly altered training data is better than not doing so.</p>
-<p>Limiting the flexibility of the model is one way to ensure this, so that it is not so flexible that tiny changes to the inputs can dramatically change the outputs. But again, often we are using neural networks because we believe a large, complicated model is necessary.</p>
-<p>An alternate approach is <em>data augmentation</em>. This involves augmenting your training data with additional “fake” data.</p>
-<p>For example, in an image classification task, for every training image you might create new training images (with the same labels):</p>
+<section id="spark-in-the-cloud" class="level1">
+<h1>Spark in the Cloud</h1>
+<p>As we saw previously (<strong>?@sec-spark</strong>), Apache Spark is designed for distributed data analysis: splitting up a data analysis task to operate on chunks of the data that may be hosted on many different machines. In a cloud computing context, that means the data is often hosted on many rented machines, or stored in the cloud provider’s object storage system and analyzed by many machines at a time.</p>
+<p>First, let’s return to <strong>?@sec-spark-architecture</strong> and recall how Spark is set up and runs on multiple machines.</p>
+<p>Now that we recall the details about drivers and executors, let’s talk about how we can write Spark jobs that run in the cloud, instead of just on our laptops.</p>
+<p>Previously we used <code>pyspark</code>, a program that opened an interactive Python shell and let us type commands and see their output. That’s great to test things out, or for a quick interactive data analysis, but it’s not so good for a big data analysis job requiring many hours to run. Let’s see how to submit jobs at the command line.</p>
+<section id="submitting-a-job" class="level2">
+<h2 class="anchored" data-anchor-id="submitting-a-job">Submitting a job</h2>
+<p>When installed on a computer, Spark provides a number of utility programs. Let’s say Spark is installed in the <code>$SPARK_HOME</code> – this is a shell notation for an environment variable, so the actual location is stored in a variable. (If you log in to our Spark server via SSH, this variable should already be defined in your shell; try running <code>echo $SPARK_HOME</code>.) Spark’s programs are stored in <code>$SPARK_HOME/bin</code>.</p>
+<p>In there, you’ll find the <code>pyspark</code> program you used previously. You’ll also find <code>spark-submit</code>, the tool for submitting scripts to a Spark cluster.</p>
+<p>As we described before, Spark can run Python, Java, or Scala programs, but we’ll be working in Python. Here’s a simple usage of <code>spark-submit</code> for a Python script:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="va">$SPARK_HOME</span><span class="ex">/bin/spark-submit</span> <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--master</span> spark://localhost:7077 <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--deploy-mode</span> client <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    some-analysis-script.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This sends <code>some-analysis-script.py</code> to Spark. Specifically:</p>
 <ul>
-<li>one that’s moved a pixel to the left</li>
-<li>one that’s moved a pixel to the right</li>
-<li>one that’s moved a pixel upward</li>
-<li>one that’s moved a pixel downward</li>
-<li>one that’s slightly scaled down toward the center (as if it were zoomed out)</li>
-<li>one that’s slightly scaled up from the center (as if it were zoomed in)</li>
-<li>one where all the pixels are 10% brighter</li>
-<li>one where all the pixels are 10% darker</li>
+<li>We choose the <code>client</code> deployment mode, meaning that our script is run on the local machine and sends Spark operations to the cluster.</li>
+<li>The script becomes the Spark <em>driver</em>. It loads the <code>SparkContext</code> and contains all the code telling Spark what analyses to do (what data to load, what aggregations and calculations to do, etc.)</li>
+<li>The script connects to the specified Spark cluster master. Here we’ve specified <code>spark://localhost:7077</code>, meaning the script will connect to a Spark cluster running on the same machine (<code>localhost</code>) on port 7077. The master is part of the Spark cluster manager, and is responsible for creating Spark executors to actually do the data analysis.</li>
 </ul>
-<p>And so on and so on. The transformations must be chosen so that you can keep the same labels, so you shouldn’t choose transformations that change the classification of the image. But if you choose carefully, you can multiply the “size” of your training data by a large factor and produce a network that is more robust and generalizable.</p>
-<p>For regression (rather than classification) tasks, it may be harder to use dataset augmentation. If you shift <span class="math inline">\(x\)</span>, how do you know what the new “true” <span class="math inline">\(y\)</span> should be?</p>
+<p>There are many other options, but we’ll consider them later if we need them.</p>
 </section>
-<section id="early-stopping" class="level2">
-<h2 class="anchored" data-anchor-id="early-stopping">Early stopping</h2>
-<p>We’ve repeatedly hinted that when training a neural network, we’re not actually trying to attain the global optimum of the loss function. That task is intractable—because there are many modes and gradient descent is not guaranteed to find the global optimizer—and in any case the global optimizer of the loss on the <em>training</em> data is likely to overfit.</p>
-<p>In the homework, we’ve usually created training and test datasets, and tracked the test performance of the model after every epoch. We could use this as an estimate of generalization error and use it to decide when to stop our gradient descent process: if the test error does not improve for some number of iterations, we terminate the gradient descent and use the parameters from the iteration with the best test error.</p>
-<p>This is called <em>early stopping</em> because it involves stopping gradient descent before we hit the specified maximum number of iterations (or epochs). It has the advantage that it requires very little additional computation, and in fact can save computation by letting you stop early.</p>
-<p>Algorithm 7.1 of <span class="citation" data-cites="DLB">@DLB</span> suggests one specific way to do this. It involves specifying how often to check the test set and setting a parameter <span class="math inline">\(p\)</span>, the “patience”, or the number of times we’re willing to see the test set error get worse before terminating the optimization.</p>
-<p>We can implement this in PyTorch by modifying our <code>train()</code> function to (a) store copies of the parameters every time we check the test error, (b) track the test errors to determine when to stop, and (c) return the parameters that attained the best test error, not the final parameters.</p>
-<p>We can think of early stopping as being much like penalization. TODO draw diagram like DLB 7.4</p>
+<section id="an-example-spark-cluster" class="level2">
+<h2 class="anchored" data-anchor-id="an-example-spark-cluster">An example Spark cluster</h2>
+<p>Let’s suppose we have a Spark cluster with five machines:</p>
+<ul>
+<li>spark-users: Has accounts for all the data analysts who need to use Spark, and lets them log in to run <code>spark-submit</code> or <code>pyspark</code>.</li>
+<li>spark-master: Runs the cluster manager.</li>
+<li>spark-worker-1 through spark-worker-3: Members of the cluster that run executors when needed.</li>
+</ul>
+<p>Each of these is a separate machine with its own operating system and files.</p>
 </section>
-<section id="dropout" class="level2">
-<h2 class="anchored" data-anchor-id="dropout">Dropout</h2>
-<p>You may be familiar with <em>bagging</em> from other machine learning contexts. For example, random forests use bagging: multiple separate classification trees are built using different (bootstrapped) versions of the training data, and the random forest makes its predictions by having the individual trees vote on the correct classification. By averaging over many trees, each of which is very flexible, the overall variance of the estimator is reduced.</p>
-<p>We could bag neural networks, but each neural network takes so long to train that this would be very expensive. The idea of averaging over separate models is appealing, though, so can we somehow approximate it?</p>
-<p>Consider a large feed-forward network with fully connected layers. You could make many smaller networks by taking subsets of the nodes. These networks would not be completely independent—they would share the weights and biases for the nodes they have in common—but they’d still be different.</p>
-<p>If there are <span class="math inline">\(n\)</span> nodes, there are <span class="math inline">\(2^n\)</span> subsets of nodes. Clearly we can’t fit all of those. But we <em>could</em> approximate somehow. The standard technique is <em>dropout</em>.</p>
-<p>Suppose the neural network has <span class="math inline">\(m\)</span> hidden units across all its hidden layers. We choose a parameter <span class="math inline">\(p \in [0, 1]\)</span>. In each gradient descent step, we do the following:</p>
-<ol type="1">
-<li>Sample a vector <span class="math inline">\(\mu \in \{0, 1\}^m\)</span>, such that <span class="math inline">\(\mu_i \sim
-\operatorname{Bernoulli}(1 - p)\)</span>.</li>
-<li>Begin forward propagation. For each hidden layer node <span class="math inline">\(i\)</span>, multiply its output by <span class="math inline">\(\mu_i\)</span> before passing it to the next layer. This effectively zeroes the output of nodes where <span class="math inline">\(\mu_i = 0\)</span>. For nonzero outputs, multiply them by <span class="math inline">\(1/(1 - p)\)</span>.</li>
-<li>Perform back-propagation and take a gradient step.</li>
-<li>Return to step 1 for the next minibatch.</li>
-</ol>
-<p>Let’s go through each step.</p>
-<p>First, think of <span class="math inline">\(\mu\)</span> as a mask. It determines which nodes are kept in the network (<span class="math inline">\(\mu_i = 1\)</span>) and which are dropped out (<span class="math inline">\(\mu_i = 0\)</span>). It means that on each minibatch, we only use a fraction <span class="math inline">\((1 - p)\)</span> of the nodes—like we are sampling a subset of nodes and using them for prediction.</p>
-<p>Second, consider what we do once the network is trained and we use it for prediction. In bagging, we’d average over our many models; but we have only one network. Instead, we keep all the nodes in the network when making predictions—which is kind of like averaging over all the subsetted networks we use in training. That’s why we scaled the nodes during training: by scaling outputs by <span class="math inline">\(1/(1 - p)\)</span>, we ensured that when we don’t remove any nodes, the inputs to each node will still be roughly the same size on average.</p>
-<p>I say “kind of like averaging” because it’s obviously not the same. In bagging, we’d train each model fully and then average them. Here, each “model” is just a different subset of the same network, and the subsetting is happening per iteration of training.</p>
-<p>Dropout is a surprisingly powerful form of regularization, and works well in many contexts. It allows you to build a larger-than-necessary network and then essentially scale it down by choosing <span class="math inline">\(p\)</span>. It ensures the network is robust to perturbations, because during training the network must be robust to entire nodes being zeroed.</p>
-<p>PyTorch implements this by making explicit dropout layers. If we specify a network as</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nn.Sequential(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">10</span>, <span class="dv">100</span>),</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    nn.ReLU(),</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    nn.Dropout(p<span class="op">=</span><span class="fl">0.5</span>),</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    nn.Linear(<span class="dv">100</span>, <span class="dv">1</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>we have told PyTorch to take the ReLU output (a vector of 100 numbers) and zero half of them. This is only done during training—the <code>Dropout</code> layer does nothing when the network is not in training mode. This is one reason why our <code>train()</code> and <code>test()</code> functions have been careful to set the network to be in training or evaluation mode; some layers, like dropout, change their behavior depending on the mode.</p>
+<section id="an-example-job" class="level2">
+<h2 class="anchored" data-anchor-id="an-example-job">An example job</h2>
+<p>Now let’s suppose we log in to the spark-users server and use <code>spark-submit</code> to run the following Python file:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> SparkSession</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the SparkSession, which makes this script the driver and</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># connects to the cluster manager to get executors</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> SparkSession <span class="op">\</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    .builder <span class="op">\</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    .appName(<span class="st">"Python Spark SQL basic example"</span>) <span class="op">\</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    .getOrCreate()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data. The path is a location on the *executor* servers, so</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># the data must be available there</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.json(<span class="st">"examples/src/main/resources/people.json"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Do an action</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>df.groupBy(<span class="st">"age"</span>).count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the “client” deploy-mode, this Python script runs on spark-users, so it has access to the Python libraries available on that machine.</p>
+<section id="getting-resources-for-the-job" class="level3">
+<h3 class="anchored" data-anchor-id="getting-resources-for-the-job">Getting resources for the job</h3>
+<p><code>spark-submit</code> will connect to the cluster manager (as specified by the <code>--master</code> command-line argument) and request executors on which to run this application. We can control how many executors it will request from the cluster manager. For example, if we include <code>--total-executor-cores 2</code> when calling <code>spark-submit</code>, our job will only get two CPUs on the cluster to run on; if we do not include the option, it will request all currently available cores, however many that may be.</p>
+<p>We can also request specific amounts of memory, if that should be necessary. By default, each executor gets 1 GB of memory, but we can ask for different amounts with the <code>--executor-memory</code> command-line argument. For example, use <code>--executor-memory 10G</code> to request 10 GB for each executor. This might be necessary if you’re doing enormous joins on large datasets.</p>
+<p>Be careful, though: you’re limited by what is available in your cluster. If you request more cores than are available, you’ll only get what’s available. If someone else is currently using <em>all</em> the cores, you may see a message like this:</p>
+<pre><code>WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources</code></pre>
+<p>This could happen because there are no cores available at all, or because there is insufficient memory available. In standalone cluster mode, <code>spark-submit</code> will simply retry every 15 seconds until sufficient resources are available; other cluster systems, like Mesos or YARN, have queuing systems where jobs queue up to run and are served in order.</p>
 </section>
-<section id="batch-normalization" class="level2">
-<h2 class="anchored" data-anchor-id="batch-normalization">Batch normalization</h2>
+<section id="breaking-the-job-into-pieces" class="level3">
+<h3 class="anchored" data-anchor-id="breaking-the-job-into-pieces">Breaking the job into pieces</h3>
+<p>Recall that in Spark, nothing is actually calculated until we perform an <em>action</em>. Actions include things like printing a data frame or writing it to a file. Until then, all of our operations (<code>groupBy()</code>, <code>filter()</code>, and so on) are collected together.</p>
+<p>When we perform the action, Spark breaks those operations into <em>stages</em>. A stage is a group of operations that can be done simultaneously on many machines. After each stage, data may be shuffled between machines, putting it where it is needed for the next stage of operations.</p>
+<p>However, the output of this action doesn’t go anywhere visible to us: <code>spark-submit</code> provides lots of debugging output, but not the values printed from the script. We’ll need to write output to data files as needed. We’ll discuss files and data management next.</p>
+</section>
+</section>
+<section id="sec-working-with-hdfs" class="level2">
+<h2 class="anchored" data-anchor-id="sec-working-with-hdfs">Working with distributed data</h2>
+<p>Back in <strong>?@sec-distributed-data</strong>, we talked about the idea of <em>distributed data</em>. A distributed file system looks like any other file system from the outside – with files stored in directories inside other directories – but stores its data on multiple machines, often redundantly, and fetches data from machines as needed.</p>
+<p>With Spark, a common choice is the <a href="https://hadoop.apache.org/docs/current1/hdfs_design.html">Hadoop Distributed File System</a>. HDFS is designed to work when spread across thousands of machines for enormous datasets, but it presents a file system that looks much like any other.</p>
+<p>It’s organized by using a single NameNode and multiple DataNodes. The NameNode is a machine that keeps track of which files are stored in the filesystem and which machines they live on; the DataNodes are the machines that actually store the data. A client trying to open a file asks the NameNode which DataNodes have it, and then fetches the contents from the DataNodes. The NameNode periodically checks the status of the DataNodes to find out if any of them has gone down or failed.</p>
+<p>Typically, then, a company using HDFS would have dozens or hundreds of servers, each with as many hard drives as can fit, serving as DataNodes. In a basic setup, there is only one NameNode, so its failure would prevent any user from accessing files; since Hadoop 2.0, it’s been possible to set up a <a href="https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html">“High Availability” cluster</a> that has multiple NameNodes, one serving requests and others waiting in reserve in case the primary fails.</p>
+<p>To access data on HDFS from Spark, we need the address of the HDFS NameNode. We can then provide a path that begins with <code>hdfs://</code>. For example, we could run</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.parquet(<span class="st">"hdfs://10.0.0.4:9000/lending-club.parquet"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>to read a Parquet file called <code>lending-club.parquet</code> from the NameNode at <code>10.0.0.4:9000</code>.</p>
+<p>We can also view and manipulate HDFS files from the command line. The program <code>$HADOOP_HOME/bin/hdfs</code> has a sub-command <code>dfs</code> to manipulate the file system. For example,</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="va">$HADOOP_HOME</span><span class="ex">/bin/hdfs</span> dfs <span class="at">-ls</span> /</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>lists the files in the root directory. Run <code>$HADOOP_HOME/bin/hdfs dfs</code> to see a list of all available commands. The <code>-copyFromLocal</code> and <code>-copyToLocal</code> commands may be particularly useful, as they allow you to copy a file from your local filesystem into HDFS, and to copy a file from HDFS back into your local filesystem.</p>
+</section>
+<section id="sec-using-spark-cluster" class="level2">
+<h2 class="anchored" data-anchor-id="sec-using-spark-cluster">Using our Spark cluster</h2>
+<p>TODO Update to Databricks</p>
+<p>We have a class Spark cluster set up on Azure. It has several machines:</p>
+<ul>
+<li>msp-cool-stuff: Configured as the Spark cluster manager. You’ll log in to this machine to run <code>spark-submit</code> or <code>pyspark</code>. You can log in via SSH following the instructions in the email you received.</li>
+<li>msp-spark-worker-1 through msp-spark-worker-3: Spark workers. Each has 8 cores and 32 GB of RAM.</li>
+</ul>
+<p>This means our cluster has 24 cores and 96 GB available for student use.</p>
+<p>The cluster runs HDFS at <code>hdfs://10.0.0.4:9000/</code>. Each student has a directory in HDFS that matches your username. If your username is <code>jdoe</code>, you have access to a directory <code>/jdoe/</code>, and can write results to that directory. So if you need to write output files, write them to paths beginning with <code>hdfs://10.0.0.4:9000/yourusername/</code>.</p>
+<p>Some basic rules for use:</p>
+<ul>
+<li><p><strong>If you run the PySpark shell,</strong> set <code>--total-executor-cores 2</code>. Otherwise you will get all the available cores; if nobody else is using the cluster at the time, you’ll get the entire cluster, and nobody will be able to use it until you exit PySpark.</p>
+<p>You can hence start PySpark by running:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="va">$SPARK_HOME</span><span class="ex">/bin/pyspark</span> <span class="dt">\</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--master</span> spark://10.0.0.4:7077 <span class="dt">\</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--total-executor-cores</span> 2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>If you’re submitting a job</strong> with <code>spark-submit</code>, you can use the defaults and request all available cores – but do not allow your job to take more than a few minutes, so other students do not have to wait. (You can use Ctrl-C to stop the job.) If other students are using the cluster, you may have to wait for their jobs to finish before your job can start. Just leave <code>spark-submit</code> open until it gets resources and starts running your job.</p>
+<p>You run <code>spark-submit</code> with the command</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="va">$SPARK_HOME</span><span class="ex">/bin/spark-submit</span> <span class="dt">\</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">--master</span> spark://10.0.0.4:7077 <span class="dt">\</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--deploy-mode</span> client <span class="dt">\</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    your-script.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
 <p>TODO</p>
 
 

@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.34">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>spark</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="sec-spark" class="level1">
+<h1>Apache Spark</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A good reference source on Spark is the book by <span class="citation" data-cites="SparkGuide">@SparkGuide</span>, which is available for free online through the CMU Library.</p>
+</div>
+</div>
+<p>Apache Spark builds on MapReduce ideas (<strong>?@sec-distributed-data</strong>) in a more flexible way.</p>
+<p>Here’s the idea. Your dataset (a great big data frame, for example) is <em>immutable</em>. There are many ways you can operate upon it, all of which produce a <em>new</em> dataset. For example, you could</p>
+<ul>
+<li>map: apply a function to every row</li>
+<li>filter: only keep the rows for which a function returns true</li>
+<li>sample: randomly select a subset of rows</li>
+<li>group by: if each row is a key and a value, produce a new dataset of (key, list of all the values) pairs</li>
+</ul>
+<p>and so on. Spark has a bunch of built-in transformation functions, including these and many more.</p>
+<p>When you load a dataset into Spark, different parts of it are loaded into memory on each machine in the cluster. When you apply a transformation to the data, each machine transforms its own chunk of the data.</p>
+<p>Well, hang on. Each machine <em>doesn’t</em> transform its data; Spark just makes a note of the transformation you made. You can do a whole sequence of transformations and Spark will only start the distributed calculations when you perform an <em>action</em>, like</p>
+<ul>
+<li>show: print out a formatted version of the result (kind of like psql’s printed tables of results)</li>
+<li>collect: return the entire result as a big array or data frame</li>
+<li>reduce: apply a reduction function to the data</li>
+<li>take: take the first <span class="math inline">\(n\)</span> rows of data</li>
+<li>save: save the dataset to a file</li>
+</ul>
+<p>and so on.</p>
+<p>You can chain together these operations: you can map, then filter, then sample, then group, then reduce, with whatever operations you want.</p>
+<p>Because the calculation is only actually done when you perform an action, like collecting the results, Spark builds up a representation of the entire operation you want to perform. It knows you’re filtering the data, then grouping, then transforming, then grouping again, and so on—and just like a SQL database, it can figure out the best way to execute those operations. It can figure out how to distribute them onto different nodes, perhaps how to rearrange or combine operations to avoid redundant work, and so on.</p>
+<section id="connecting-to-the-spark-workspace" class="level2">
+<h2 class="anchored" data-anchor-id="connecting-to-the-spark-workspace">Connecting to the Spark workspace</h2>
+<p>Spark is best run on a cluster of multiple machines. The extra work to distribute data and computations is wasted if the computation is done on a single computer—so if your data fits on your laptop, it may be more efficient to do the work in Python than to install Spark. But when the data is huge, Spark becomes necessary.</p>
+<p>We’ve set up a cluster on Microsoft Azure. This uses Azure Databricks, a product that integrates Spark with online notebooks, data management, job scheduling, and many other features designed for teams working with lots of data sources at a large company.</p>
+<p>A link to our Databricks workspace is posted on Canvas.</p>
+<p>Your Workspace contains notebooks, queries, files, and other Databricks-specific features like dashboards. Computation, such as when you run code in a notebook, is run on a cluster of Azure virtual machines that we rent (see <strong>?@sec-cloud</strong>).</p>
+</section>
+<section id="sec-spark-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="sec-spark-architecture">The Spark architecture</h2>
+<section id="base-spark" class="level3">
+<h3 class="anchored" data-anchor-id="base-spark">Base Spark</h3>
+<p>Spark’s architecture is rather different from what we are used to with relational databases (<strong>?@sec-database-fundamentals</strong>). In relational databases, we had a client-server architecture: the server software, such as PostgreSQL, ran on a machine and managed all the data. Clients, such as our Python scripts, could connect to the server and send queries; the server then processed the queries, figured out the appropriate response, and sent it back to the client. Many clients could be connected at once.</p>
+<p>This is <em>not</em> how Spark works. Spark is designed to run on clusters of multiple machines, and it is designed to run <em>applications</em>: programs that run <em>on the cluster</em>, managed by Spark, and do tasks. There are several moving parts:</p>
+<ul>
+<li><strong>A cluster manager.</strong> The cluster manager is software that has control over a collection of servers (nodes) on which Spark can be run. If we want to run a Spark application, we tell the cluster manager how many nodes we need and what resources (such as memory or disk) the application might use, and it will determine the appropriate nodes to run the application on.</li>
+<li><strong>The Spark driver.</strong> The <em>driver</em> is part of your application. It knows the job you are trying to do and determines how to split up the tasks to run on different machines.</li>
+<li><strong>The Spark executors.</strong> The <em>executors</em> run on the nodes assigned by the cluster manager, and do the work assigned to them by the Spark driver. If your application applies some calculation to a huge data frame, the driver will direct the executors to apply their part of the calculation to their assigned part of the data frame.</li>
+</ul>
+<p>Spark is written in Scala, so applications can be written in Scala; but it also can work with Java, Python, and R. In each programming language there are extensive libraries of Spark operations, so when you write an application, it can use the various Spark features. When that application is submitted to a cluster manager to run, it creates a driver, the driver runs your application, and the driver delegates the work to the executors. Every user—every person who wants to run their own calculations—gets their own driver and executors.</p>
+<p>This creates the key contrast. In relational databases, we ran a Python script <em>on our computer</em>—or any computer we liked—and it sent SQL queries to the database, got the results, and did whatever it wanted to do with them. In Spark, we send an application to the cluster, and the application runs <em>on the cluster</em>, not on our own computer.</p>
+<p>Fortunately, Spark does provide a few convenient premade applications: the Spark <em>shells</em>. The PySpark shell, for instance, is an application that accepts Python commands and then runs them on the cluster, so you can interactively run code and see what happens.</p>
+</section>
+<section id="in-databricks" class="level3">
+<h3 class="anchored" data-anchor-id="in-databricks">In Databricks</h3>
+<p>In Databricks, all the Spark cluster details are managed for you. When you configure a Databricks cluster (which I have done for the class), Databricks automatically sets up a cluster manager, driver, and executors. Spark provides applications: their notebooks and other features run on Spark automatically.</p>
+</section>
+</section>
+<section id="spark-in-python" class="level2">
+<h2 class="anchored" data-anchor-id="spark-in-python">Spark in Python</h2>
+<p>One Spark client is PySpark. Let’s start with an example derived from the <a href="https://spark.apache.org/docs/latest/sql-getting-started.html">PySpark documentation</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>PySpark uses method names like <code>appName()</code>, <code>groupBy()</code>, and <code>getOrCreate()</code>, which violate the <a href="https://peps.python.org/pep-0008/#function-and-variable-names">PEP 8 guidelines on function naming</a>. This is because Spark is written in Scala, which often uses mixedCase names. You should always use PEP 8 conventions when writing your own code.</p>
+</div>
+</div>
+<section id="creating-a-spark-application" class="level3">
+<h3 class="anchored" data-anchor-id="creating-a-spark-application">Creating a Spark application</h3>
+<p>From Python, we need an object representing a connection to Spark, much like we had an object representing PostgreSQL connections.</p>
+<p>To do this, first we make a <code>SparkSession</code>. This is how our application communicates with the driver and sends work to the executor.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> SparkSession</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>spark <span class="op">=</span> SparkSession <span class="op">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    .builder <span class="op">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    .appName(<span class="st">"Python Spark SQL basic example"</span>) <span class="op">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    .getOrCreate()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now <code>spark</code> is an object we can use to ask Spark to do things. Then we write the rest of the application code in that Python script. Using a program called <code>spark-submit</code>, we can send the file to the cluster to be run by Spark.</p>
+<p>Alternately, if we’re using a Databricks notebook or the PySpark shell, a <code>SparkSession</code> is automatically created for us and named <code>spark</code>. We do not need to run the code above. We can just type and run our code interactively.</p>
+</section>
+<section id="sec-creating-dataframes" class="level3">
+<h3 class="anchored" data-anchor-id="sec-creating-dataframes">Creating DataFrames</h3>
+<p>A <code>DataFrame</code> object is a table with named columns, much like data frames in R or Pandas. We can create them manually by providing a list of rows (as tuples) and a list of column names:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.createDataFrame([</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Yellow-billed duck"</span>, <span class="st">"Anas"</span>, <span class="st">"Undulata"</span>, <span class="dv">1839</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Laysan duck"</span>, <span class="st">"Anas"</span>, <span class="st">"Laysanensis"</span>, <span class="dv">1892</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Mallard"</span>, <span class="st">"Anas"</span>, <span class="st">"Platyrhynchos"</span>, <span class="dv">1758</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Eurasian wigeon"</span>, <span class="st">"Mareca"</span>, <span class="st">"Penelope"</span>, <span class="dv">1758</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Common name"</span>, <span class="st">"Genus"</span>, <span class="st">"Species"</span>, <span class="st">"Year"</span>]</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="loading-data" class="level3">
+<h3 class="anchored" data-anchor-id="loading-data">Loading data</h3>
+<p>You probably won’t create most of your data frames by manually typing them into a script. Instead, the data already exists somewhere else: a data file, a SQL database, etc. You simply need Spark to load that data.</p>
+<section id="from-files" class="level4">
+<h4 class="anchored" data-anchor-id="from-files">From files</h4>
+<p>We can ask Spark to create a <code>DataFrame</code> object from a data file; it understands a whole bunch of data formats:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ppl <span class="op">=</span> spark.read.load(<span class="st">"dbfs:/databricks-datasets/learning-spark-v2/people/people-10m.delta"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now <code>ppl</code> is a data frame. We can view the first few rows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ppl.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="from-catalogs" class="level4">
+<h4 class="anchored" data-anchor-id="from-catalogs">From catalogs</h4>
+<p>In Databricks, Spark is integrated with a “catalog” of data tables. This catalog is much like a PostgreSQL database, insofar as it contains a bunch of tables, and there can be complex permissions set up to control who has access to which tables.</p>
+<p>In our case, the catalog is built on Apache Hive, and stores its data in distributed fashion on Azure’s cloud storage system.</p>
+<p>There are sample data tables included with Databricks:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.table(<span class="st">"samples.nyctaxi.trips"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We’ll discuss the catalog in more detail in <strong>?@sec-spark-catalog</strong>.</p>
+</section>
+</section>
+<section id="operating-on-data" class="level3">
+<h3 class="anchored" data-anchor-id="operating-on-data">Operating on data</h3>
+<p>Our Python code can do transformations, like <code>filter</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>filtered <span class="op">=</span> df.<span class="bu">filter</span>(df[<span class="st">'fare_amount'</span>] <span class="op">&gt;</span> <span class="dv">21</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This creates a new <code>DataFrame</code> of the results.</p>
+<p>Notice the magic happening here: if the data file were huge, this transformation is automatically distributed to all nodes in the cluster. But not now—later, when we try to use <code>filtered</code>, for example by writing <code>filtered.show()</code>.</p>
+<p>Since every operation returns a new <code>DataFrame</code>, we can write operations like</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df.groupBy(<span class="st">"pickup_zip"</span>).count()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This returns a new <code>DataFrame</code> with columns <code>pickup_zip</code> and <code>count</code>. A lazy <code>DataFrame</code>, which is only calculated when we ask for it.</p>
+<p>You can think of this as a way of building up a MapReduce job. You write the sequence of transformations you need—even <code>for</code> loops and whatever else you want—and at the end, when you request the result, Spark rearranges and distributes the work to the executors so it can be calculated even on a massive dataset.</p>
+<p>You still have to figure out how to structure your operation as a series of transformations and reductions, but it’s a bigger set of transformations and reductions, and you can compose many small ones together instead of cramming the operation into one big Map and Reduce.</p>
+</section>
+<section id="finding-available-operations" class="level3">
+<h3 class="anchored" data-anchor-id="finding-available-operations">Finding available operations</h3>
+<p>Once we have a <code>DataFrame</code>, we can find the operations available to us in a few places:</p>
+<ul>
+<li>The <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrame.html">DataFrame class documentation</a> lists all the methods, such as <code>groupBy</code>, <code>filter</code>, <code>join</code>, and so on.</li>
+<li>The <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html">Spark SQL functions list</a> gives functions that can be imported from <code>pyspark.sql.functions</code> and used in <code>DataFrame</code> operations—things like mathematical operators, date functions, and other functions you might use in data manipulation (much like PostgreSQL’s built-in functions).</li>
+</ul>
+</section>
+</section>
+<section id="manipulating-dataframes" class="level2">
+<h2 class="anchored" data-anchor-id="manipulating-dataframes">Manipulating DataFrames</h2>
+<p>Because we’re telling Spark what operations to perform, rather than performing themselves in our own code, we have to write operations in a way Spark understands. This requires some adjustment from what you’re used to with Pandas and other Python work.</p>
+<p>Many of these operations come from <code>pyspark.sql.functions</code>, so it’s common to import that module, either entirely or just for specific functions:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import entire module</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyspark.sql.functions <span class="im">as</span> F</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># or import just a few functions you need</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.functions <span class="im">import</span> col, desc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the examples below, we’ll use the first approach and import the entire module as <code>F</code>.</p>
+<p>You can find a <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html">full list of functions</a> in the PySpark documentation.</p>
+<section id="referring-to-columns" class="level3">
+<h3 class="anchored" data-anchor-id="referring-to-columns">Referring to columns</h3>
+<p>In Spark operations, we need some way to refer to specific columns. The <code>col()</code> function lets us identify columns by name as a string, e.g.&nbsp;<code>F.col("foo")</code> to refer to the <code>foo</code> column.</p>
+<p>If you have a <code>DataFrame</code> named <code>df</code>, you can also use <code>df.foo</code> or <code>df["foo"]</code> to refer to columns in it. You will often see code using different ways to refer to columns. If you work at a company, they’ll probably have a standard style for Spark code and use one specific way to refer to columns.</p>
+<p>Using any of these methods returns a <code>Column</code> object representing the column. These objects have <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/column.html">some useful methods</a>, such as <code>alias()</code>, for giving a column a new name, much like <code>AS</code> in SQL. For example, <code>F.col("foo").alias("foo2")</code> is like <code>SELECT foo AS foo2</code>.</p>
+</section>
+<section id="sec-spark-expressions" class="level3">
+<h3 class="anchored" data-anchor-id="sec-spark-expressions">Spark expressions</h3>
+<p>In programming languages, <em>expressions</em> are operations that yield a value, such as <code>2 + 2</code> or <code>("foo", "bar")</code> (whose value is a tuple containing two strings). In many Spark operations, we’ll want to write expressions that refer to entire columns, to describe how we’ll be modifying and combining columns.</p>
+<p>The <code>col()</code> function returns a <code>Column</code> object, and <code>Column</code> objects overload many operators to turn them into Spark expressions. For example,</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># represents adding 2 to every value</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>F.col(<span class="st">"foo"</span>) <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># represents adding two columns together</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>F.col(<span class="st">"foo"</span>) <span class="op">+</span> F.col(<span class="st">"bar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Spark achieves this by overloading the basic Python operators like <code>+</code> and <code>*</code>, so instead of doing literal multiplication, they create objects representing the Spark operations being done. This means that you <em>cannot</em> use ordinary Python functions to operate in expressions, but have to use the Spark equivalents:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># doesn't work</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>math.sqrt(F.col(<span class="st">"foo"</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># works</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>F.sqrt(F.col(<span class="st">"foo"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Logical combinations of expressions must be expressed using the <code>|</code>, <code>&amp;</code>, and <code>~</code> operators, not the usual <code>or</code>, <code>and</code>, and <code>not</code> keywords in Python:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(F.col(<span class="st">"foo"</span>) <span class="op">&gt;=</span> <span class="dv">18</span>) <span class="op">&amp;</span> <span class="op">~</span>F.col(<span class="st">"bar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice the extra parentheses in this expression. The <code>|</code>, <code>&amp;</code>, and <code>~</code> operators have <em>higher</em> precedence than <code>&gt;=</code> and other comparison operators, so without parentheses, the expression would be interpreted as <code>F.col("foo") &gt;= (18 &amp; ~F.col("bar"))</code>, which is definitely not what we want. This is an unfortunate consequence of PySpark’s operator overloading approach.</p>
+<p>We can use <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/column.html">other <code>Column</code> methods</a> in expressions to obtain useful results. For example, maybe we want to make a new column whose value depends on the value of another:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>F.when(F.col(<span class="st">"trip_distance"</span>) <span class="op">&gt;=</span> <span class="dv">10</span>, <span class="st">"Long"</span>).otherwise(<span class="st">"Short"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Many PySpark functions accept a string column name as well as a column expression. (The type is listed as <code>ColumnOrName</code> in the documentation.) For example, we can write this both ways:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>F.sqrt(F.col(<span class="st">"foo"</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>F.sqrt(<span class="st">"foo"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>But to take the square root of the sum of two columns, we should use an expression:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>F.sqrt(F.col(<span class="st">"foo"</span>) <span class="op">+</span> F.col(<span class="st">"bar"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can also use the <code>expr()</code> function to write expressions as strings that Spark will parse and convert into equivalent form. These are identical to the earlier examples:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>F.expr(<span class="st">"foo + 2"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>F.expr(<span class="st">"foo + bar"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>F.expr(<span class="st">"sqrt(foo)"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>F.expr(<span class="st">"sqrt(foo + bar)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>These functions all return <code>Column</code> objects, so you can do any of the <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/column.html"><code>Column</code> operations</a> on them, such as setting an alias.</p>
+</section>
+<section id="selecting-and-adding-columns" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-and-adding-columns">Selecting and adding columns</h3>
+<p>Much of what you do with Spark <code>DataFrame</code>s will be selecting specific columns and doing calculations with them to make new <code>DataFrame</code>s. In SQL, that’s the role of <code>SELECT</code>, which can select columns but also make new ones by combining existing ones; in dplyr, that’s the role of <code>select()</code> and <code>mutate()</code>.</p>
+<p>The <code>select()</code> method on <code>DataFrame</code> objects is similar. It takes multiple arguments, one for each column, and the columns can be expressions giving calculations. For example, building on our examples so far, we can write:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df.select(F.col(<span class="st">"foo"</span>), F.col(<span class="st">"bar"</span>), F.col(<span class="st">"foo"</span>) <span class="op">+</span> F.col(<span class="st">"bar"</span>),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>          F.sqrt(F.col(<span class="st">"foo"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>selectExpr()</code> method does the same, but with expression strings:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df.selectExpr(<span class="st">"foo"</span>, <span class="st">"bar"</span>, <span class="st">"foo + bar"</span>, <span class="st">"sqrt(foo)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can also create new columns using the <code>withColumn()</code> method, in which we provide the column name and value:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>df.withColumn(<span class="st">"fooBarSum"</span>, F.col(<span class="st">"foo"</span>) <span class="op">+</span> F.col(<span class="st">"bar"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This returns a new data frame with the additional column. If you need to calculate and add many new columns, use <code>withColumns()</code>, which takes a dictionary mapping column names to values.</p>
+</section>
+<section id="filtering" class="level3">
+<h3 class="anchored" data-anchor-id="filtering">Filtering</h3>
+<p>To filter a <code>DataFrame</code>’s rows, we need an expression whose result has as many rows as the <code>DataFrame</code>, and whose values are either true or false. Rows with a <code>True</code> value will be kept.</p>
+<p><code>DataFrame</code>s have <code>filter()</code> and <code>where()</code> methods to do the filtering; these are identical, and the two names are provided just because both names are commonly used in different languages. Both take an argument that is the expression to use for filtering. For example:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">filter</span>(F.col(<span class="st">"foo"</span>) <span class="op">&gt;</span> <span class="dv">10</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># equivalently:</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">filter</span>(<span class="st">"foo &gt; 10"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Part of Spark’s optimization process is to analyze the filters in an operation and group them together, so the data is filtered before any more expensive operations are done. This means that chaining multiple filters is fine, since Spark will do them at once:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">filter</span>(<span class="st">"foo &gt; 10"</span>) <span class="op">\</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(<span class="st">"bar &lt; 4"</span>) <span class="op">\</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(<span class="st">"sqrt(score) != 7"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sorting" class="level3">
+<h3 class="anchored" data-anchor-id="sorting">Sorting</h3>
+<p>To order a <code>DataFrame</code>’s rows, we use its <code>orderBy()</code> method. This accepts one or more column names to sort by. As with every Spark feature so far, there’s more than one way to do it:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using desc() to specify the direction</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df.orderBy(F.desc(<span class="st">"trip_distance"</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># referring to bare column name</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>df.orderBy(<span class="st">"trip_distance"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># using a Column object</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>df.orderBy(df.trip_distance, ascending<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can specify multiple columns to sort on, so later columns will be used to break ties in the earlier columns:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df.orderBy(F.desc(<span class="st">"trip_distance"</span>), F.asc(<span class="st">"fare_amount"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="exr-taxi-filter" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 1 (Simple selections and filters)</strong></span> Load the sample taxi data in a Databricks notebook:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.table(<span class="st">"samples.nyctaxi.trips"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Using this data frame,</p>
+<ol type="1">
+<li>Select all the rows with a distance greater than 15 in with pickup in ZIP code 11422.</li>
+<li>Calculate a new column representing the fare amount per unit distance. Call this column <code>fare_rate</code>.</li>
+<li>Output (with <code>show()</code>) a data frame containing only the trip distance, fare rate, and dropoff ZIP. Sort it by fare rate in descending order.</li>
+</ol>
+<p>Your answers will build on each other to produce one expression that does the whole thing.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">filter</span>(<span class="st">"trip_distance &gt; 15"</span>).<span class="bu">filter</span>(<span class="st">"pickup_zip = 11422"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">filter</span>(<span class="st">"trip_distance &gt; 15"</span>) <span class="op">\</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>(<span class="st">"pickup_zip = 11422"</span>) <span class="op">\</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  .withColumn(<span class="st">"fare_rate"</span>, F.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> F.col(<span class="st">"trip_distance"</span>))</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 3</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">filter</span>(<span class="st">"trip_distance &gt; 15"</span>) <span class="op">\</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  .<span class="bu">filter</span>(<span class="st">"pickup_zip = 11422"</span>) <span class="op">\</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  .withColumn(<span class="st">"fare_rate"</span>, F.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> F.col(<span class="st">"trip_distance"</span>)) <span class="op">\</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  .select(<span class="st">"trip_distance"</span>, <span class="st">"fare_rate"</span>, <span class="st">"dropoff_zip"</span>) <span class="op">\</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  .orderBy(F.desc(<span class="st">"fare_rate"</span>)) <span class="op">\</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  .show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="grouping-and-aggregating" class="level3">
+<h3 class="anchored" data-anchor-id="grouping-and-aggregating">Grouping and aggregating</h3>
+<section id="ordinary-grouping" class="level4">
+<h4 class="anchored" data-anchor-id="ordinary-grouping">Ordinary grouping</h4>
+<p>The <code>DataFrame</code> class has a <code>groupBy()</code> method to group data frames, much like <code>GROUP BY</code> in SQL or <code>group_by()</code> in dplyr. This takes the columns to group by as arguments:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df.groupBy(<span class="st">"foo"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># group by both columns, so there is one group per combination</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>df.groupBy(<span class="st">"foo"</span>, <span class="st">"bar"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(Notice here we have used string column names, since <code>groupBy()</code> says it accepts arguments of type <code>ColumnOrName</code>. We could also use <code>col()</code>.)</p>
+<p>The result of <code>groupBy()</code> is a <code>GroupedData</code> object. This is a different object with different methods. The method you’re most likely to want is <code>agg()</code>, which does aggregation. Just like <code>select()</code>, it takes as many arguments as you want columns, each argument can be a different column expression. The expressions can use any of Spark’s <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html#aggregate-functions">built-in aggregate functions</a>.</p>
+<p>For example:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df.groupBy(<span class="st">"foo"</span>) <span class="op">\</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    .agg(F.<span class="bu">min</span>(F.col(<span class="st">"score"</span>)).alias(<span class="st">"min_score"</span>),</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>         F.<span class="bu">max</span>(F.col(<span class="st">"score"</span>)).alias(<span class="st">"max_score"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It also takes a dictionary argument. If given a dictionary, the keys should be column names, and the values should be strings naming the aggregate function to use:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df.groupBy(<span class="st">"foo"</span>) <span class="op">\</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    .agg({<span class="st">"score"</span>: <span class="st">"min"</span>, <span class="st">"latency"</span>: <span class="st">"max"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this form, you can only do one aggregate function per column, since dictionaries can only contain each key once.</p>
+<div id="exm-spark-events" class="theorem example">
+<p><span class="theorem-title"><strong>Example 1 (Operating on the events data)</strong></span> We’ve loaded our events data (from <strong>?@sec-example-db</strong>) into Databricks. Let’s load it:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>events <span class="op">=</span> spark.read.table(<span class="st">"hive_metastore.default.events"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now we can begin Spark operations. For example, to get the average score per student:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a Spark GroupedData object</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>persona_scores <span class="op">=</span> events.groupBy(<span class="st">"persona"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>persona_scores.avg(<span class="st">"score"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(<code>GroupedData</code> objects have several methods for common aggregate functions, like <code>avg()</code>.)</p>
+<p>Notice that Spark does not display the data frame—that’s because it hasn’t done the calculation yet! We can use <code>.show()</code> to have it print it out, or <code>.collect()</code> to return the results as a Python variable we can work with.</p>
+<p>Each operation returns a <code>DataFrame</code> that we can conduct further operations on, by chaining operations in sequence. For example, let’s try reproducing a query from <strong>?@sec-grouping-aggregate</strong>:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> persona, <span class="fu">avg</span>(score) <span class="kw">as</span> mean_score</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="kw">from</span> <span class="kw">events</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">where</span> moment <span class="op">&gt;</span> <span class="fu">cast</span>(<span class="st">'2014-10-01 11:00:00'</span> <span class="kw">as</span> <span class="dt">timestamp</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="kw">group</span> <span class="kw">by</span> persona</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">having</span> <span class="fu">avg</span>(score) <span class="op">&gt;</span> <span class="dv">300</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="kw">order</span> <span class="kw">by</span> mean_score <span class="kw">desc</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In Spark, we write the same operations in logical order:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyspark.sql.functions <span class="im">as</span> F</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>top_scores <span class="op">=</span> events <span class="op">\</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(F.col(<span class="st">"moment"</span>) <span class="op">&gt;</span> datetime(<span class="dv">2014</span>, <span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">11</span>)) <span class="op">\</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    .groupBy(<span class="st">"persona"</span>) <span class="op">\</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    .agg(F.avg(F.col(<span class="st">"score"</span>)).alias(<span class="st">"mean_score"</span>)) <span class="op">\</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(F.col(<span class="st">"mean_score"</span>) <span class="op">&gt;</span> <span class="dv">300</span>) <span class="op">\</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>    .orderBy(F.desc(<span class="st">"mean_score"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>But when we ask for the results (with <code>.show()</code>, <code>.take()</code>, <code>.collect()</code>, or similar), it analyzes the operations to determine the most efficient way to execute them, and only then does it perform the calculations.</p>
+<p>Just like in SQL, we can also ask Spark to explain how it will run these operations on the cluster:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>top_scores.explain()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="exr-spark-events" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 2 (Querying the events table)</strong></span> Load the events table into a Spark <code>DataFrame</code> as shown in <a href="#exm-spark-events" class="quarto-xref">Example&nbsp;1</a>. Write <code>DataFrame</code> operations to do the operations in <strong>?@exr-basic-grouping</strong>. (By “<code>DataFrame</code> operations” I mean you should use Python methods like in <a href="#exm-spark-events" class="quarto-xref">Example&nbsp;1</a>, and <em>not</em> Spark SQL.)</p>
+<p>For #4, see the <a href="https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html#datetime-functions">datetime functions</a> provided in <code>pyspark.sql.functions</code>.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>We can write the following Spark operations:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql <span class="im">import</span> functions <span class="im">as</span> F</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>events.groupBy(<span class="st">"persona"</span>) <span class="op">\</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    .agg({<span class="st">"latency"</span>: <span class="st">"max"</span>, <span class="st">"score"</span>: <span class="st">"avg"</span>}) <span class="op">\</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(F.col(<span class="st">"max(latency)"</span>) <span class="op">&gt;</span> <span class="dv">565</span>) <span class="op">\</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>    .orderBy(F.col(<span class="st">"avg(score)"</span>)) <span class="op">\</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    .show()</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 2</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>events.groupBy(<span class="st">"persona"</span>) <span class="op">\</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    .avg(<span class="st">"score"</span>) <span class="op">\</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(F.col(<span class="st">"avg(score)"</span>) <span class="op">&gt;</span> <span class="dv">600</span>) <span class="op">\</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    .show()</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co"># 3</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>events.groupBy(<span class="st">"element"</span>) <span class="op">\</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>    .count() <span class="op">\</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>    .show()</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. note that .min() only works on numeric columns, while .agg can apply min()</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="co"># to other column types</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>events.groupBy(<span class="st">"persona"</span>) <span class="op">\</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    .agg({<span class="st">"moment"</span>: <span class="st">"min"</span>}) <span class="op">\</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    .select([F.col(<span class="st">"persona"</span>), F.date_format(F.col(<span class="st">"min(moment)"</span>), <span class="st">"MMMM d"</span>)]) <span class="op">\</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    .show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="exr-taxi-statistics" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 3 (Taxi aggregates)</strong></span> Using the taxi data from <a href="#exr-taxi-filter" class="quarto-xref">Exercise&nbsp;1</a>, produce a data frame giving the following summary statistics for each pickup ZIP code:</p>
+<ol type="1">
+<li>The average fare rate (as defined in <a href="#exr-taxi-filter" class="quarto-xref">Exercise&nbsp;1</a>)</li>
+<li>The total number of trips from that ZIP (see the <code>count()</code> aggregate function)</li>
+<li>The minimum and maximum distance traveled</li>
+</ol>
+<p>Give each column an appropriate name. Order the result by descending number of trips.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.table(<span class="st">"samples.nyctaxi.trips"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>df.withColumn(<span class="st">"fare_rate"</span>, F.col(<span class="st">"fare_amount"</span>) <span class="op">/</span> F.col(<span class="st">"trip_distance"</span>)) <span class="op">\</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    .groupBy(<span class="st">"pickup_zip"</span>) <span class="op">\</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    .agg(F.avg(<span class="st">"fare_rate"</span>).alias(<span class="st">"avg_fare_rate"</span>),</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>         F.<span class="bu">min</span>(<span class="st">"trip_distance"</span>).alias(<span class="st">"min_distance"</span>),</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>         F.<span class="bu">max</span>(<span class="st">"trip_distance"</span>).alias(<span class="st">"max_distance"</span>),</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>         F.count(<span class="st">"fare_rate"</span>).alias(<span class="st">"num_trips"</span>)) <span class="op">\</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    .orderBy(F.desc(<span class="st">"num_trips"</span>)) <span class="op">\</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>    .show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="rollups" class="level4">
+<h4 class="anchored" data-anchor-id="rollups">Rollups</h4>
+<p>Grouping is conceptually simple: If you group by the columns <code>(a, b, c)</code>, the groups are defined by all unique combinations of those three columns.</p>
+<p>But sometimes we’d like to calculate aggregates for groups, while also providing overall totals. The output table would hence have one row per unique combination, plus one or more summary rows. This is a <em>rollup</em>.</p>
+<p>Rollups can be defined with the <code>rollup()</code> method on <code>DataFrame</code>s. This creates a <code>GroupedData</code> object that supports all the same aggregation you can do after <code>groupBy()</code>.</p>
+<div id="exm-event-rollup" class="theorem example">
+<p><span class="theorem-title"><strong>Example 2 (Score rollup)</strong></span> Returning to the events data loaded in <a href="#exm-spark-events" class="quarto-xref">Example&nbsp;1</a>, let’s get the average score per element, but with a rollup:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>events <span class="op">\</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    .rollup(<span class="st">"element"</span>) <span class="op">\</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    .agg(F.avg(F.col(<span class="st">"score"</span>)).alias(<span class="st">"mean_score"</span>)) <span class="op">\</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    .orderBy(<span class="st">"element"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice the row with a <code>NULL</code> for <code>element</code>. This row represents the mean score for <em>all</em> rows in the <code>events</code> table.</p>
+</div>
+<p>Just as you can group by multiple columns, you can rollup across multiple columns. The result is hierarchical: If you rollup by <code>(a, b, c)</code> and aggregate, you get</p>
+<ul>
+<li>one row per unique combination of <code>(a, b, c)</code>,</li>
+<li>one row per unique combination of <code>(a, b)</code>, averaging over all <code>c</code>,</li>
+<li>one row per unique value of <code>a</code>, averaging over all <code>b</code> and <code>c</code>,</li>
+<li>one row averaging over all data.</li>
+</ul>
+<p>The columns being averaged over are always represented with <code>NULL</code>. To prevent confusing problems, ensure that the columns you rollup over do not already contain <code>NULL</code> values, or filter them out first.</p>
+<div id="exr-taxi-rollup" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 4 (Roll up the taxis)</strong></span> Return to the taxi data from <a href="#exr-taxi-filter" class="quarto-xref">Exercise&nbsp;1</a>. Produce a table calculating average fares for every (pickup, dropoff) ZIP code pair, for every pickup ZIP code, and overall.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> spark.read.table(<span class="st">"samples.nyctaxi.trips"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">\</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    .rollup(<span class="st">"pickup_zip"</span>, <span class="st">"dropoff_zip"</span>) <span class="op">\</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    .agg(F.avg(<span class="st">"fare_amount"</span>).alias(<span class="st">"mean_fare"</span>)) <span class="op">\</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>    .orderBy(<span class="st">"pickup_zip"</span>, <span class="st">"dropoff_zip"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="cubes" class="level4">
+<h4 class="anchored" data-anchor-id="cubes">Cubes</h4>
+<p>We can take rollups a step further with cubes. Cubes are not hierarchical: if you make a cube of <code>(a, b, c)</code>, you get aggregates over every subset:</p>
+<ul>
+<li><code>(a, b, c)</code></li>
+<li><code>(a, b)</code></li>
+<li><code>(b, c)</code></li>
+<li><code>(a, c)</code></li>
+<li><code>a</code></li>
+<li><code>b</code></li>
+<li><code>c</code></li>
+<li>overall</li>
+</ul>
+<p>The <code>cube()</code> method of <code>DataFrame</code> objects does this, and you can use aggregate functions as usual.</p>
+<div id="exr-taxi-cube" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 5 (Cube the taxis)</strong></span> Repeat <a href="#exr-taxi-rollup" class="quarto-xref">Exercise&nbsp;4</a>, but obtain average fares for every pickup ZIP, every dropoff ZIP, and every combination of them. Order by average fare in descending order. Which ZIPs or combinations have the highest average fares?</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">\</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    .cube(<span class="st">"pickup_zip"</span>, <span class="st">"dropoff_zip"</span>) <span class="op">\</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    .agg(F.avg(<span class="st">"fare_amount"</span>).alias(<span class="st">"mean_fare"</span>)) <span class="op">\</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    .orderBy(F.desc(<span class="st">"mean_fare"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that all the highest fares come from ZIPs or combinations with only one trip.</p>
+</div>
+</section>
+</section>
+<section id="joining" class="level3">
+<h3 class="anchored" data-anchor-id="joining">Joining</h3>
+<p><code>DataFrame</code> objects have a <code>join()</code> method that supports the usual joins from SQL (<strong>?@sec-joins</strong>). For example, if we have two data frames <code>df1</code> and <code>df2</code>, we can write a join like so:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>df1.join(df2, df1.event_id <span class="op">==</span> df2.<span class="bu">id</span>, how<span class="op">=</span><span class="st">"left"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Recall that <code>df1.event_id</code> is a way to refer to the <code>event_id</code> column on the <code>df1</code> <code>DataFrame</code>, so it is a <code>Column</code> object; setting two <code>Column</code> objects equal to each other produces an object representing the join condition we are requiring. This is similar to <code>ON</code> in a SQL query. We can get left joins, right joins, inner joins, outer joins, and other combinations with the <code>how</code> argument.</p>
+<p>The <code>join()</code> method returns a <code>DataFrame</code> representing the joined tables, so doing multiple joins simply requires calling the <code>join()</code> method repeatedly.</p>
+<div id="exm-tpch-join" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3 (Joining in TPC-H)</strong></span> The <a href="https://www.tpc.org/">Transaction Processing Performance Council</a> builds benchmarks to measure how fast different database systems are. One of their sample datasets is <a href="https://www.tpc.org/tpch/">TPC-H</a>, which simulates an order and inventory management system. The database contains a number of parts that can be provided by various suppliers; there are many customers who can submit orders, each order consisting of multiple parts, potentially from several suppliers. This data is split across eight tables in the <code>samples.tpch</code> schema:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/tpc-h-schema.png" class="img-fluid figure-img"></p>
+<figcaption>The TPC-H table schema, from the TPC Benchmark H Standard Specification, revision 3.0.1. Column names are prefixed by the value given in parentheses, so for example all <code>lineitem</code> columns begin with <code>l_</code>. Arrows represent foreign keys. Here SF = 5, so there are 30 million line items and 50,000 suppliers.</figcaption>
+</figure>
+</div>
+<p>Suppose we’d like to find all the suppliers for parts in order #13710944. We need to find all the line items in that order (<code>lineitem</code>), join them with part suppliers (<code>partsupp</code>), and join those with suppliers (<code>supplier</code>). Then let’s pull out the part identifier (<code>partkey</code>), name of the supplier (<code>s_name</code>), and the available quantity (<code>ps_availqty</code>) for that part.</p>
+<p>We begin by getting all the tables:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>lineitem <span class="op">=</span> spark.read.table(<span class="st">"samples.tpch.lineitem"</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>partsupp <span class="op">=</span> spark.read.table(<span class="st">"samples.tpch.partsupp"</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>supplier <span class="op">=</span> spark.read.table(<span class="st">"samples.tpch.supplier"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>First we must filter <code>lineitem</code> to get the order we want. Then we must do the joins. Notice how we can set multiple join conditions by providing them as a list.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>lineitem <span class="op">\</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(F.col(<span class="st">"l_orderkey"</span>) <span class="op">==</span> <span class="dv">13710944</span>) <span class="op">\</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    .join(partsupp, [lineitem.l_partkey <span class="op">==</span> partsupp.ps_partkey,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>                     lineitem.l_suppkey <span class="op">==</span> partsupp.ps_suppkey],</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>          how<span class="op">=</span><span class="st">"left"</span>) <span class="op">\</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    .join(supplier, supplier.s_suppkey <span class="op">==</span> partsupp.ps_suppkey) <span class="op">\</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    .select(<span class="st">"l_partkey"</span>, <span class="st">"s_name"</span>, <span class="st">"ps_availqty"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="exr-tpch-join" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 6 (Joining harder in TPC-H)</strong></span> &nbsp;</p>
+<ol type="1">
+<li>Produce a table with one row per customer. For each customer, calculate their total expenditure (sum of the price of all orders they have submitted), the total number of line items ordered, and the total number of orders. Ensure the table includes customers who have never made any orders.</li>
+<li>Produce a table with one row per supplier. For each supplier, report their name and the total number of parts they have supplied to meet orders (meaning the sum of the <code>quantity</code> of their parts across all orders).</li>
+<li>Produce a summary table giving pricing information for all items shipped up to June 1, 1998 (<code>l_shipdate</code>). There should be one row per return flag and line status (<code>l_returnflag</code> and <code>l_linestatus</code>); each row should give:
+<ul>
+<li>the number of line items with this status/return flag</li>
+<li>the total quantity of line items shipped</li>
+<li>the average quantity of items per order</li>
+<li>their total base price (<code>l_extendedprice</code>)</li>
+<li>their total discounted price (<code>l_extendedprice * (1 - l_discount)</code>)</li>
+</ul></li>
+</ol>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>orders <span class="op">=</span> spark.read.table(<span class="st">"samples.tpch.orders"</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>lineitem <span class="op">=</span> spark.read.table(<span class="st">"samples.tpch.lineitem"</span>)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">TODO</span><span class="co"> Fix to include customers who haven't made orders</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>orders <span class="op">\</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    .join(lineitem, orders.o_orderkey <span class="op">==</span> lineitem.l_orderkey) <span class="op">\</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    .groupBy(<span class="st">"o_custkey"</span>) <span class="op">\</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    .agg(F.<span class="bu">sum</span>(<span class="st">"o_totalprice"</span>).alias(<span class="st">"total_spend"</span>),</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>         F.count(<span class="st">"l_linenumber"</span>).alias(<span class="st">"total_num_items"</span>),</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>         F.count_distinct(<span class="st">"o_orderkey"</span>).alias(<span class="st">"num_orders"</span>)) <span class="op">\</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    .orderBy(<span class="st">"o_custkey"</span>) <span class="op">\</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    .show()</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 2</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>partsupp <span class="op">=</span> spark.read.table(<span class="st">"samples.tpch.partsupp"</span>)</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>lineitem <span class="op">\</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    .join(partsupp, [partsupp.ps_partkey <span class="op">==</span> lineitem.l_partkey,</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>                     partsupp.ps_suppkey <span class="op">==</span> lineitem.l_suppkey],</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>          how<span class="op">=</span><span class="st">"left"</span>) <span class="op">\</span></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>    .groupBy(<span class="st">"l_suppkey"</span>) <span class="op">\</span></span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>    .agg(F.<span class="bu">sum</span>(<span class="st">"l_quantity"</span>).alias(<span class="st">"total_quantity"</span>)) <span class="op">\</span></span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>    .join(supplier, lineitem.l_suppkey <span class="op">==</span> supplier.s_suppkey) <span class="op">\</span></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>    .select(<span class="st">"s_suppkey"</span>, <span class="st">"s_name"</span>, <span class="st">"total_quantity"</span>) <span class="op">\</span></span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>    .show()</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 3</span></span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspired by https://www.tpc.org/TPC_Documents_Current_Versions/pdf/TPC-H_v3.0.1.pdf</span></span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a><span class="co"># section 2.4.1</span></span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> date</span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a>lineitem <span class="op">\</span></span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">filter</span>(F.col(<span class="st">"l_shipdate"</span>) <span class="op">&lt;</span> date(<span class="dv">1998</span>, <span class="dv">6</span>, <span class="dv">1</span>)) <span class="op">\</span></span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true" tabindex="-1"></a>    .groupBy(<span class="st">"l_returnflag"</span>, <span class="st">"l_linestatus"</span>) <span class="op">\</span></span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true" tabindex="-1"></a>    .agg(F.count(<span class="st">"l_linenumber"</span>).alias(<span class="st">"total_items"</span>),</span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true" tabindex="-1"></a>         F.<span class="bu">sum</span>(<span class="st">"l_quantity"</span>).alias(<span class="st">"quantity_shipped"</span>),</span>
+<span id="cb41-37"><a href="#cb41-37" aria-hidden="true" tabindex="-1"></a>         (F.<span class="bu">sum</span>(<span class="st">"l_quantity"</span>) <span class="op">/</span> F.count_distinct(<span class="st">"l_orderkey"</span>)).alias(<span class="st">"avg_per_order"</span>),</span>
+<span id="cb41-38"><a href="#cb41-38" aria-hidden="true" tabindex="-1"></a>         F.<span class="bu">sum</span>(<span class="st">"l_extendedprice"</span>).alias(<span class="st">"total_base_price"</span>),</span>
+<span id="cb41-39"><a href="#cb41-39" aria-hidden="true" tabindex="-1"></a>         F.<span class="bu">sum</span>(F.expr(<span class="st">"l_extendedprice * (1 - l_discount)"</span>)).alias(<span class="st">"total_discounted_price"</span>)) <span class="op">\</span></span>
+<span id="cb41-40"><a href="#cb41-40" aria-hidden="true" tabindex="-1"></a>    .show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="window-functions" class="level3">
+<h3 class="anchored" data-anchor-id="window-functions">Window functions</h3>
+<p>In SQL, we learned about window functions (<strong>?@sec-sql-window</strong>), which allow us to perform aggregation without summarizing the data to get one row per group. Instead, we can select data and augment it with columns that calculate aggregates or relate the row to others in a group.</p>
+<p>In grouping, we use <code>groupBy</code> to define the groups. In windowing, we have to define which rows will be included in the window for any particular row. For example, in <strong>?@sec-sql-window</strong> we wrote the following query of the <code>events</code> table:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span>, persona, element, score, moment,</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  ((score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)) <span class="op">/</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stddev_samp</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)) <span class="kw">AS</span> z_score</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here, the window “around” each row consists of all rows with the same persona (<code>PARTITION BY persona</code>). But the window only considers those rows occurring <em>before</em> this one (<code>ORDER BY moment</code>).</p>
+<p>In Spark, we need a way to specify this. A special <code>Window</code> class lets us configure the window to use:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyspark.sql.window <span class="im">import</span> Window</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>window_spec <span class="op">=</span> Window <span class="op">\</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    .partitionBy(<span class="st">"persona"</span>) <span class="op">\</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    .orderBy(F.asc(<span class="st">"moment"</span>)) <span class="op">\</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    .rowsBetween(Window.unboundedPreceding, Window.currentRow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here <code>rowsBetween()</code> specifies which rows of the window count: here, from the first row in the window to the current row. We can also use <code>rangeBetween</code>, which specifies the <em>values</em> to include in the window: <code>.rangeBetween(-120, -1)</code> means to include all rows whose ordering column value is between 120 and 1 unit less than this row. If <code>moment</code> were measured in seconds, this would give us a window of all events between 120 and 1 second before this row’s event, regardless of how many events that is. Meanwhile, <code>rowsBetween(-120, -1)</code> would give us all rows from 120 before to 1 before this one (in time), regardless of their absolute times.</p>
+<p>Now, any <code>Column</code> object—such as the output of any aggregate function—has an <code>over()</code> method that lets us specify the window to use. So to replicate the SQL query above, we write:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>events <span class="op">=</span> spark.read.table(<span class="st">"hive_metastore.default.events"</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>events.select(</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    F.col(<span class="st">"id"</span>), F.col(<span class="st">"persona"</span>), F.col(<span class="st">"element"</span>), F.col(<span class="st">"score"</span>), F.col(<span class="st">"moment"</span>),</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    ((F.col(<span class="st">"score"</span>) <span class="op">-</span> F.avg(<span class="st">"score"</span>).over(window_spec)) <span class="op">/</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>     F.stddev_samp(<span class="st">"score"</span>).over(window_spec)).alias(<span class="st">"z_score"</span>)</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="exr-window-inclusive" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 7 (Are windows inclusive?)</strong></span> The <code>rowsBetween()</code> method of the <code>Window</code> class lets us specify which rows are included in the window. Above, we chose the range <code>(Window.unboundedPreceding, Window.currentRow)</code>.</p>
+<p>Is this inclusive or exclusive? That is, is the current row included in the window?</p>
+<p>Create a test data frame (using <code>spark.createDataFrame()</code>) that would let you test this, define a window, and query the data frame. Interpret your result: is it inclusive or exclusive?</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>TODO Yes, they’re inclusive.</p>
+</div>
+</section>
+</section>
+<section id="spark-sql" class="level2">
+<h2 class="anchored" data-anchor-id="spark-sql">Spark SQL</h2>
+<p>You might have noticed that the basic Spark operations, like maps, grouping, and aggregation, sound a lot like the kinds of things you can do in SQL. That’s not a coincidence: the relational model of operations on tables still holds up after all these years.</p>
+<p>As a bonus, <a href="https://spark.apache.org/docs/latest/sql-getting-started.html#running-sql-queries-programmatically">Spark understands SQL syntax</a>. You can run operations on data stored in catalogs:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>sqlDF <span class="op">=</span> spark.sql(<span class="st">"""</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT persona, avg(score)</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="st">FROM hive_metastore.default.events</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="st">GROUP BY persona"""</span>)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>sqlDF.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>sqlDF</code> is just another <code>DataFrame</code>, and so <code>.show()</code> prints it out. Because it’s just a <code>DataFrame</code>, we could also do additional operations on it in Python (like <code>filter()</code>, <code>avg()</code>, or any of the other methods we’ve used), and the entire sequence of operations will only be done when we perform an action like <code>show()</code>.</p>
+<p>There are Spark SQL functions for math, logic, dates, and other common needs (just like SQL), as well as aggregate functions and window functions. You can <code>JOIN</code> multiple tables just as in SQL. There are also Spark-specific extensions to give Spark hints about the most efficient way to execute a query. To find the syntax definition and list of built-in functions, see the <a href="https://spark.apache.org/docs/latest/sql-ref.html">Spark SQL reference</a>.</p>
+<p>If you have a <code>DataFrame</code> in Python and want to access it using SQL, regardless of whether it’s already in a catalog, you can do that too:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Register the DataFrame as a SQL temporary view</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>some_dataframe.createOrReplaceTempView(<span class="st">"some_data"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>createOrReplaceTempView()</code> method we used above creates what Spark calls a <em>temporary view</em>: it lets us see the data already in a <code>DataFrame</code>. (And remember, a <code>DataFrame</code> might represent various transformations of the original data that have not been executed yet; when you write a SQL query on such a <code>DataFrame</code>, Spark will work out how to calculate the original transformations and the SQL operations together, in one large operation.) This view only lasts as long as our Spark session, and goes away when our application exits.</p>
+<p>We can also create permanent tables, much like in Postgres. While Postgres (just like most relational databases) uses specialized file formats that support indexing, transactions, atomic updates, and the other ACID features of relational databases, Spark can use any file that it knows how to read. This is done with a specialized <code>CREATE TABLE</code> command that includes options specifying the file format and file location; the file could be stored on a distributed filesystem like HDFS, making Spark SQL suitable for enormous datasets.</p>
+<div id="exm-spark-events-sql" class="theorem example">
+<p><span class="theorem-title"><strong>Example 4 (Operating on the events data in Spark SQL)</strong></span> Continuing <a href="#exm-spark-events" class="quarto-xref">Example&nbsp;1</a>, we can run the same query in Spark SQL.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>top_scores <span class="op">=</span> spark.sql(<span class="st">"""</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="st">select persona, avg(score) as mean_score</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="st">from hive_metastore.default.events</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="st">where moment &gt; cast('2014-10-01 11:00:00' as timestamp)</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="st">group by persona</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="st">having avg(score) &gt; 300</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="st">order by mean_score desc</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>top_scores.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This is rather anticlimactic, since it’s exactly the same query we ran before, and it runs just fine.</p>
+</div>
+<div id="exm-tpch-sql" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5 (TPC-H data in Spark SQL)</strong></span> Returning to the TPC-H data from <a href="#exm-tpch-join" class="quarto-xref">Example&nbsp;3</a>, we can conduct the same join with Spark SQL.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>spark.sql(<span class="st">"""</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="st">SELECT l_partkey, s_name, ps_availqty</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="st">FROM samples.tpch.lineitem</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="st">LEFT JOIN samples.tpch.partsupp ON l_partkey = ps_partkey AND l_suppkey = ps_suppkey</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="st">LEFT JOIN samples.tpch.supplier ON s_suppkey = ps_suppkey</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="st">WHERE l_orderkey = 13710944</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice we have to refer to the tables by their fully qualified names, so Spark knows where to find them.</p>
+</div>
+<p>It’s even possible to <a href="https://spark.apache.org/docs/latest/sql-distributed-sql-engine.html">have Spark to behave like a SQL server</a> so that any language that supports SQL can connect and send SQL queries. Note, however, that while Spark is good at doing large calculations on huge datasets quickly, it is <em>not</em> designed to do small operations with low latency—so it is not a replacement for a standard relational database to, say, run a website that needs to respond to requests in 100 milliseconds. It is better suited for backend analysis tasks that run periodically.</p>
+<div id="exr-tpch-sql" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 8 (TPC-H data in Spark SQL)</strong></span> Repeat <a href="#exr-tpch-join" class="quarto-xref">Exercise&nbsp;6</a> in Spark SQL.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>TODO</p>
+</div>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<div id="exr-tpch-schema" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 9 (Reading tea leaves in the TPC-H schema)</strong></span> Refer to the TPC-H schema above, and reflect back on our schema design principles (<strong>?@sec-schema-design</strong>).</p>
+<ol type="1">
+<li>Why should <code>partsupp</code> (part suppliers) be separate from <code>part</code> and <code>supplier</code>? Couldn’t every part just have a supplier? What does this allow extra?</li>
+<li>Name three features of the business that are implied by the schema. For example: The business can ship your order in multiple parts, because shipping information is given separately for each <code>lineitem</code>, rather than once per <code>order</code>.</li>
+</ol>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span></p>
+<ol type="1">
+<li>This allows parts to be supplied by more than one suppler. There is a many-to-many relationship between parts and suppliers encoded in the <code>partsupp</code> table. Maybe some items are generic and made by many different companies.</li>
+<li>Here are some examples:
+<ul>
+<li>The company keeps separate inventory for parts supplied by each supplier, rather than inventory for the part regardless of supplier. It must care who supplies parts. (Available quantity is in <code>partsupp</code>, not in <code>part</code>.)</li>
+<li>Each item can be returned separately, rather than returning the entire order.</li>
+<li>The company groups nations by regions, so it must aggregate its reporting by region.</li>
+<li>Customers only exist in one country each—they’re not multinational.</li>
+</ul></li>
+</ol>
+</div>
+<div id="exr-spark-lendingclub" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 10 (LendingClub and Spark)</strong></span> <a href="https://www.lendingclub.com/">LendingClub</a> offers various types of loans to consumers and businesses. From 2007 to 2018, they offered “peer-to-peer” loans: customers could request personal loans, and individual investors could decide how to allocate their money to fund those loans. LendingClub handled payments, while the investors got a share of the loan interest.</p>
+<p>To allow investors to make informed decisions, LendingClub released a large dataset of loans, including loan amounts, credit scores of borrowers, payment history, and various other financial and payment information. The data for all accepted loans is at <code>abfss://sampledata@lsd2025storage.dfs.core.windows.net/lending-club.parquet</code>, available from the Class Shared Cluster. A data dictionary spreadsheet describing all the variables is in the <code>hive_metastore.default.lc_data_dictionary</code> table.</p>
+<p>Use <code>spark.read.parquet()</code> to load the data into the variable <code>df</code>. Print out <code>df</code> to see a list of all the available columns.</p>
+<p>Use <code>df.count()</code> to get the number of rows of data.</p>
+<p>Now you’ll do a series of analysis tasks as if you were a data analyst at LendingClub. Your notebook should use Spark do its calculations; you cannot load the entire dataset into Python, and you cannot use Pandas.</p>
+<p>Your notebook should calculate, for each month (according to <code>issue_d</code>), the following summaries:</p>
+<ul>
+<li>The total number of loans issued and, separately, the number of 36-month and 60-month loans issued (see <code>term</code>)</li>
+<li>The total funded amount of those loans (<code>funded_amnt</code>) and the total remaining principal to be paid (<code>out_prncp</code>)</li>
+<li>The percentage of loans with interest rates (<code>int_rate</code>) greater than 10%</li>
+<li>The percentage of loans that have been fully paid by now (see <code>loan_status</code>): overall, for grade A loans, and for grade F loans (see <code>grade</code>), as separate columns</li>
+<li>The percentage of loans on a hardship payment plan (<code>hardship_flag</code>)</li>
+</ul>
+<p>The result should be a data frame with one row per month and one column per summary statistic. Ensure the columns have meaningful names. Print the first few rows of this table in your notebook so I can grade your work.</p>
+</div>
+<div class="proof solution">
+<p><span class="proof-title"><em>Solution</em>. </span>TODO</p>
+</div>
+<div id="exr-tpch-advanced" class="theorem exercise">
+<p><span class="theorem-title"><strong>Exercise 11</strong></span> TODO exercise using TPC-H with rollups, cubes, windows</p>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
