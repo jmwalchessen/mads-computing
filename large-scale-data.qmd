@@ -1,0 +1,204 @@
+# Software for Large-Scale Data
+
+## Basic information
+
+- Spring 2025, mini 3
+- Monday and Wednesday, 9:30-10:50am
+- Wean 4708
+- Instructor: [Alex Reinhart](https://www.refsmmat.com)
+- TAs: Elizabeth Cucuzzella
+- Office hours:
+  - Alex: Mondays 11am-noon, Baker 232K (except occasionally for travel to NYC)
+  - Elizabeth: Tuesdays 12:30-1:30pm, Wean 3711
+
+## Course description
+
+In the prior course, [36-614 Data Engineering and Distributed
+Environments](data-engineering.qmd), we learned how to manage large volumes of
+data by using relational databases and distributed systems like Spark. In this
+course, we'll return to Apache Spark, learn to build distributed applications,
+and use its machine learning library to fit various ML models to distributed
+datasets. We'll then learn about distributed computation through web APIs and
+see how to make and serve data requests through HTTP. All examples and
+assignments will be written in Python.
+
+This course is primarily for students in the [Master of Science in Applied Data
+Science](https://www.cmu.edu/dietrich/statistics-datascience/academics/mads/index.html)
+program. Students in this course should have prior experience programming in
+Python (such as through 36-650), using Git, and working from the command-line
+shell.
+
+## Learning objectives
+
+By the end of this course, students will be able to:
+
+* Load large quantities of data into Spark.
+* Use Spark to do analytics and reporting on large distributed datasets.
+* Use Spark's machine learning features to fit models on large distributed
+  datasets.
+* Fit machine learning models on a cloud platforms such as Azure.
+
+## Books and references
+
+There is no required book for this course. We recommend the following reference
+resources:
+
+* Chambers and Zaharia, *Spark: The Definitive Guide*, O'Reilly. Available free
+  through the CMU library.
+
+## Homework and project
+
+This course features regular homework assignments, due Wednesday afternoons.
+Many of these will involve writing code to complete particular data tasks.
+Homework assignments will be posted on Canvas. Homework must be submitted as a
+PDF on Gradescope, and should be produced either with a Jupyter Notebook or the
+Azure workspace notebook system.
+
+It's your responsibility to ensure the PDF file is legible in Gradescope. This
+includes ensuring the pages are a reasonable size, and also using headings,
+formatting, and text to make it easy to find your answers. You should not
+include extraneous code or output not relevant to the problems.
+
+You are expected to follow consistent style in your code. For Python code, the
+style we will use is [PEP 8](https://peps.python.org/pep-0008/), the standard
+Python style guide. Style will be part of the homework grade.
+
+Along with the homework, there will be a semester-long project, completed in
+groups of 2-3 students. The project will be completed in several parts
+throughout the semester. The project will culminate with a final submission at
+the end of the semester in the form of a GitHub repository containing working
+code.
+
+### Late work
+
+For homework submissions, you will have three "grace days" you can use
+throughout the semester. Each time you use a grace day for an assignment, you
+get 24 hours extra to submit the assignment. You do not need any excuse to use
+grace days. Once you have used all three grace days, late work will not be
+accepted.
+
+This system is meant to allow you flexibility, so that ordinary problems (minor
+illness, forgot a deadline, had to finish another class’s big assignment,
+traveled to an event) don’t harm you, and so you do not need my permission to
+handle unexpected problems. If you experience a serious emergency that prevents
+you from completing work for a longer time, contact me so we can make
+arrangements.
+
+## Attendance and participation
+
+Class attendance and participation is essential. If there’s any one message to
+be learned from pedagogical research, it’s that listening passively to a lecture
+is not a good way to learn how to think about complicated problems. I will often
+ask class questions or ask you to complete short activities in small groups.
+**You are expected to attend class and participate in these activities.**
+
+When attending class, you are expected to follow all COVID-19 precautions
+required by the University.
+
+## Grading
+
+The homework and project will be the basis of course grades: 60% homework, 40%
+project.
+
+Final grades will be based on this scale: A = [93, 100]; A- = [90, 93); B+ =
+[87, 90); B = [83, 87); B- = [80, 83); C+ = [77, 80); C = [73, 77); C- = [70,
+73); D = [60, 70); R = [0, 60).
+
+## Academic integrity
+
+Discussing homework and projects with your classmates is allowed and encouraged,
+and helping explain ideas to each other is a core part of the academic
+experience. But it is important that every student get practice working on their
+own. This means that **all the work you turn in must be your own**. You must
+devise and write your own code, generate your own graphics, and write your own
+solutions and reports.
+
+You may use external sources (books, websites, papers) to
+
+* Look up Python documentation, find useful packages, find explanations for
+  error messages, or remind yourself about the functions to do some task,
+* Find reference materials on statistical methods,
+* Clarify material from the course notes or examples.
+
+But external sources must be used to **support** your work, not to **obtain**
+your work. You may **not** use them to copy code, text, or graphics without
+attribution. You may **not** use any prior course’s or textbook’s homework
+solutions in any way. This prohibition applies even to students who are
+re-taking the course. Do not copy old solutions (in whole or in part), and do
+not “consult” or read them. Doing any of that is cheating, making any feedback
+you get meaningless and any evaluation based on that assignment unfair.
+
+If you *do* use any material from other sources, you **must** clearly mark its
+source. Text taken from other sources must be in quotation marks with citations;
+figures from other sources need a caption indicating the source; and code from
+other sources must have a comment indicating the source. We must be able to
+determine who wrote any material you submit, and you must not falsely imply that
+you completed work actually done by others.
+
+Please talk to me if you have any questions about this policy. Any form of
+cheating or plagiarism is grounds for sanctions to be determined by the
+instructor, including grade penalties or course failure. Students taking the
+course pass/fail may have this status revoked. I am also obliged in these
+situations to report the incident to your academic program and the appropriate
+University authorities. Please refer to the [University Policy on Academic
+Integrity](https://www.cmu.edu/policies/student-and-student-life/academic-integrity.html).
+
+## Accommodations for students with disabilities
+
+If you have a disability and have an accommodations letter from the Disability
+Resources office, I encourage you to discuss your accommodations and needs with
+me as early in the semester as possible. I will work with you to ensure that
+accommodations are provided as appropriate. If you suspect that you may have a
+disability and would benefit from accommodations but are not yet registered with
+the [Office of Disability
+Resources](https://www.cmu.edu/disability-resources/index.html), I encourage you
+to contact them at <access@andrew.cmu.edu>.
+
+## Diversity and inclusion
+
+We must treat every individual with respect. We are diverse in many ways, and
+this diversity is fundamental to building and maintaining an equitable and
+inclusive campus community. Diversity can refer to multiple ways that we
+identify ourselves, including but not limited to race, color, national origin,
+language, sex, disability, age, sexual orientation, gender identity, religion,
+creed, ancestry, belief, veteran status, or genetic information. Each of these
+diverse identities, along with many others not mentioned here, shape the
+perspectives our students, faculty, and staff bring to our campus. We, at CMU,
+will work to promote diversity, equity and inclusion not only because diversity
+fuels excellence and innovation, but because we want to pursue justice. We
+acknowledge our imperfections while we also fully commit to the work, inside and
+outside of our classrooms, of building and sustaining a campus community that
+increasingly embraces these core values.
+
+Each of us is responsible for creating a safer, more inclusive environment.
+
+Unfortunately, incidents of bias or discrimination do occur, whether intentional
+or unintentional. They contribute to creating an unwelcoming environment for
+individuals and groups at the university. Therefore, the university encourages
+anyone who experiences or observes unfair or hostile treatment on the basis of
+identity to speak out for justice and support, within the moment of the incident
+or after the incident has passed. Anyone can share these experiences using the
+following resources:
+
+* Center for Student Diversity and Inclusion: csdi@andrew.cmu.edu, (412) 268-2150
+* [Report-It online anonymous reporting platform](http://www.reportit.net/).
+  username: `tartans` password: `plaid`
+
+All reports will be documented and deliberated to determine if there should be
+any following actions. Regardless of incident type, the university will use all
+shared experiences to transform our campus climate to be more equitable and
+just.
+
+## Wellness
+
+All of us benefit from support during times of struggle. There are many helpful
+resources available on campus and an important part of the college experience is
+learning how to ask for help. Asking for support sooner rather than later is
+almost always helpful.
+
+If you or anyone you know experiences any academic stress, difficult life
+events, or feelings like anxiety or depression, we strongly encourage you to
+seek support. Counseling and Psychological Services (CaPS) is here to help: call
+412-268-2922 or visit [their website](https://www.cmu.edu/counseling/). Consider
+reaching out to a friend, faculty or family member you trust for help getting
+connected to the support that can help.

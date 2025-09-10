@@ -1,0 +1,758 @@
+# Advanced SQL
+
+::: {.callout-note}
+
+Portions of these notes are based on material co-developed with Christopher
+Genovese for 36-750.
+
+:::
+
+## Schema design principles {#sec-schema-design}
+
+The key design principle for database schema is to keep the design DRY -- that
+is, *eliminate data redundancy*. The process of making a design DRY is called
+*normalization*, and a DRY database is said to be in "normal form."
+
+The basic modeling process:
+
+1. Identify and model the entities in your problem
+2. Model the relationships between entities
+3. Include relevant attributes
+4. Normalize by the steps below
+
+::: {#exm-songs-schema}
+
+#### Managing songs
+
+Consider a database to manage songs:
+
+Album         Artist              Label     Songs
+------------- ------------------- --------- ----------------------------------
+Talking Book  Stevie Wonder       Motown    You are the sunshine of my life, Maybe your baby, Superstition, ...
+Miles Smiles  Miles Davis Quintet Columbia  Orbits, Circle, ...
+Speak No Evil Wayne Shorter       Blue Note Witch Hunt, Fee-Fi-Fo-Fum, ...
+Headhunters   Herbie Hancock      Columbia  Chameleon, Watermelon Man, ...
+Maiden Voyage Herbie Hancock      Blue Note Maiden Voyage
+American Fool John Couger         Riva      Hurts so good, Jack & Diane, ...
+
+
+This seems fine at first, but why might this format be problematic or
+inconvenient?
+
+- It's difficult to get individual songs from a long list in one column
+- If we want to store additional information about each artist or label, where
+  do we put it?
+- Artists often have "Best Of" albums that repeat many songs from previous
+  albums; if we store information about each song, does it get duplicated?
+- A few thoughts:
+  - What happens if an artist changes names partway through his
+    or her career (e.g., John Cougar)?
+  - Suppose we want mis-spelled "Herbie Hancock" and wanted to update it. We
+    would have to change every row corresponding to a Herbie Hancock album.
+  - Suppose we want to search for albums with a particular song;
+    we have to search specially within the list for each album.
+
+
+Let's write this schema as `Album (artist, name, record_label, song_list)`,
+where `Album` is the entity and the labels in parentheses are its attributes. To
+normalize this design, we will add new entities and define their attributes so
+**each piece of data has a single authoritative copy**.
+
+:::
+
+### Give entities unique identifiers
+
+First, we give entities unique identifiers. This will be their primary key.
+
+Key features of a primary key are that it is unique, non-null, and it never
+changes for the lifetime of the entity.
+
+Some entities already have unique identifiers attached to them -- but you should
+consider whether those identifiers can ever change. Social Security numbers are
+often used to uniquely identify people, but they can be changed in rare
+circumstances; books can be uniquely identified by ISBNs, but these change for
+new editions or formats; and sometimes supposedly unique numbers get
+accidentally reused by other people you can't control.
+
+### Give each attribute a single value
+
+What does each attribute describe? What attributes are repeated in `Albums`,
+either implicitly or explicitly?
+
+Consider the relationship between albums and songs. An album can have one or
+more songs; in other words, the attribute `song_list` is non-atomic (it is
+composed of other types, in this case a list of text strings). The attribute
+describes a collection of another entity -- `Song`.
+
+So, we now have two entities, `Album` and `Song`. How do we express these
+entities in our design? It depends on our model. Let's look at two
+ways this could play out.
+
+1. Assume (at least hypothetically) that each song can only appear on _one_
+   album. Then `Album` and `Song` would have a *one-to-many* relationship.
+
+   - `Album(id, title, label, artist)`
+   - `Song(id, name, duration, album_id)`
+
+   Question: What do our `CREATE TABLE` commands look like under this model?
+
+2. Alternatively, suppose our model recognizes that while an album can have one
+   or more songs, a song can also appear on one or more albums (e.g., a greatest
+   hits album). Then, these two entities have a *many-to-many* relationship.
+
+   This gives us two entities that look like:
+
+   - `Album(id, title, label, artist)`
+   - `Song(id, name, duration)`
+
+   This is fine, but it doesn't seem to capture that many-to-many relationship.
+   How should we capture that?
+
+   - An answer: This model actually describes a _new_ entity -- `Track`. The
+     schema looks like:
+     - `Album(id, title, label, artist)`
+     - `Song(id, name, duration)`
+     - `Track(id, song_id, album_id, index)`
+
+### Make non-key attributes depend only on the primary key
+
+This step is satisfied if each non-key column in the table serves to _describe_
+what the primary key _identifies_.
+
+Any attributes that do not satisfy this condition should be moved to another
+table.
+
+In our schema of the last step (and in the example table), both the `artist` and
+`label` field contain data that describes something else. We should move these
+to new tables, which leads to two new entities:
+
+- `Artist(id, name)`
+- `RecordLabel(id, name, street_address, city, state_name, state_abbrev, zip)`
+
+Each of these may have additional attributes. For instance, producer
+in the latter case, and in the former, we may have additional
+entities describing members in the band.
+
+We could then update our `Album` schema to use these as foreign keys: `Album(id,
+title, label_id, artist_id)`.
+
+### Make non-key attributes independent of each other
+
+Consider `RecordLabel`. The `state_name`, `state_abbrev`, and `zip` code are all
+non-key fields that depend on each other. (If you know the zip code, you know
+the state name and thus the abbreviation.)
+
+This suggests to another entity `State`, with name and abbreviation as
+attributes. And so on.
+
+### Use your judgment to decide when to stop
+
+If we take this process to the extreme, we could end up with dozens of tables,
+each describing a unique entity and linked to dozens of other tables. Indeed, if
+you look up "database normalization", you will find there are extensive and
+detailed definitions of different degrees of normalization and the properties
+required of tables in each.
+
+We can exercise our judgment to determine the amount of normalization required;
+real-world applications rarely have perfectly normalized tables. For example, if
+you're building a database of songs for your own use to track your record
+collection, you probably don't care too much that `RecordLabel` has both a
+`state_name` and a `state_abbrev`; you don't care too much about the label, and
+for the queries you're doing, it's not important that these could be moved to
+their own `State` table. It's convenient to just have them in `RecordLabel` and
+be able to get them without a join.
+
+But if you were building an authoritative song database for a music streaming
+service, you may need your database schema to be much more robust and detailed:
+you need to track enough information to know where to send royalty checks, you
+have millions of songs, you deal with thousands of record labels with
+similar-sounding names that change owners and locations, and the cost of messing
+up is high; so you'd like your database to be as accurate and consistent as
+possible at all times. Structuring the database in normal form lets the RDB
+software help you ensure it is consistent.
+
+::: {#exr-songs-schema}
+
+#### Schema for songs
+
+Based on the discussion above, write a series of `CREATE TABLE` commands to
+create a set of tables for tracking songs. Your schema should support songs that
+appear on multiple albums, basic information about artists (such as their name
+and year of birth), information about record labels, song titles and duration,
+and other things from the discussion above.
+
+:::
+
+::: {.solution}
+
+Here's one example schema; names and details may vary:
+
+```sql
+CREATE TABLE artist (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    birthdate DATE
+);
+
+CREATE TABLE record_label (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    street_address TEXT,
+    state_abbrev CHAR(2),
+    zip CHAR(5) -- ZIPs aren't integers; they can begin with 0
+);
+
+CREATE TABLE album (
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    label_id INTEGER REFERENCES record_label (id),
+    artist_id INTEGER REFERENCES artist (id)
+);
+
+CREATE TABLE song (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    duration INTERVAL -- represents time interval
+);
+
+CREATE TABLE track (
+    id SERIAL PRIMARY KEY,
+    song_id INTEGER REFERENCES song (id),
+    album_id INTEGER REFERENCES album (id)
+);
+```
+
+The important parts are that songs, tracks, and albums are separate entities;
+that reasonable types (like text and char) are used; and that `REFERENCES` is
+used to enforce foreign key relationships.
+
+:::
+
+::: {#exr-sport-schema}
+
+#### Schema for sports
+
+Pick your favorite sport (or, at least, a sport you know something about).
+Consider designing a database to track players, teams, and games. Write a schema
+(as a series of `CREATE TABLE` statements) to store information about them. Your
+schema should support queries that:
+
+* Identify which players were on a team at a particular time (as players can
+  move between teams)
+* Identify which team won a particular game, and where that game was played
+* Find all the games a particular player was involved in. (You don't have to
+  track if they sat out particular games, just which games their team played
+  in.)
+* Find all games played in a particular place.
+
+
+You can support additional query types, but start with a schema that can handle
+these.
+
+:::
+
+## Transactions {#sec-transactions}
+
+*Transactions* are the fundamental mechanism relational databases use to manage
+both atomicity and concurrency. How do we ensure multiple queries run atomically
+(either all succeed or all fail), and how do we allow multiple people to be
+changing the database at the same time? To see the problem, consider an example.
+
+::: {#exm-transaction-needed}
+
+#### The need for transactions
+
+Suppose we're working with an R data frame, except it is shared: multiple people
+can edit it at once, and their edits instantaneously change the data frame.
+(There's no easy way to do this in base R; we're just using R syntax to
+illustrate the problem a SQL database faces.)
+
+User 1 and user 2 are both working with the `bank_accounts` data frame, which
+stores bank balances and information. User 1 needs to record that account 777
+transferred $500 to account 778; user 2 needs to record that account 777
+withdrew $50 in cash.
+
+Each column shows one user's operations; each line is one time point, so two
+side-by-side lines occur at the same time:
+
+::: {layout-ncol=2}
+
+```r
+# User 1:
+
+a777 <- bank_accounts |>
+  filter(account_id = 777)
+start <- a777$balance
+
+a778 <- bank_accounts |>
+  filter(account_id = 778)
+
+a777$balance <- start - 500
+a778$balance <- a778$balance + 500
+```
+
+```r
+# User 2:
+
+a777 <- bank_accounts |>
+  filter(account_id = 777)
+amount <- a777$balance
+
+a777$balance <- amount - 50
+```
+
+:::
+
+Suppose both accounts start with $1000. The desired outcome is that account 777
+ends with $450 ($500 sent to 778 and $50 withdrawn) and 778 ends with $1500. But
+instead:
+
+1. User 1 stores $1000 in `start`.
+2. User 2 stores $1000 in `amount`.
+3. User 2 updates account 777's balance to be `amount - 50`, or $950.
+4. User 1 updates account 777's balance to be `start - 500`, or $500.
+5. User 1 updates account 778's balance to be $500 higher, or $1500.
+
+At the end, 777's balance is $500, not $450! All because of the timing of the
+operations. If user 1's work was guaranteed to happen first, without user 2
+interfering, this wouldn't happen.
+
+:::
+
+PostgreSQL uses Multiversion Concurrency Control, which means that each database
+user sees a snapshot of the database as it was at some specific point in time.
+If someone else is changing the database at the same time, this does not affect
+queries that are currently running, so the data they see remains
+self-consistent.
+
+The basic mechanism is straightforward, though the implementation is
+complicated. Queries are grouped into transactions using `BEGIN` and `COMMIT`
+statements. The queries within a transaction do not update the data seen by
+other users until `COMMIT` "commits" the changes. An error in any query in the
+transaction halts the entire transaction and "rolls back" its changes, so it is
+as if it never happened.
+
+::: {#exm-transaction-fixed}
+
+#### Concurrency with transactions
+
+Suppose we're implementing @exm-transaction-needed using PostgreSQL and its
+default concurrency settings. Each user submits a transaction:
+
+```sql
+-- User 1:
+BEGIN;
+
+UPDATE bank_accounts
+SET balance = balance - 500::money
+WHERE account_id = 777;
+
+UPDATE bank_accounts
+SET balance = balance + 500::money
+WHERE account_id = 778;
+
+COMMIT;
+
+-- User 2
+BEGIN;
+
+UPDATE bank_accounts
+SET balance = balance - 50::money
+WHERE account_id = 777;
+
+COMMIT;
+```
+
+Internally, PostgreSQL must do the same work as in @exm-transaction-needed---but
+it prevents any problems from occurring:
+
+1. User 1 begins by changing account 777. This locks the row, preventing other
+   changes until user 1's transaction is complete.
+2. User 2 then attempts to change it. The `UPDATE` query must wait for the lock
+   to be released, so their query is stalled.
+3. User 1 commits their transaction with the updated balances, releasing the
+   lock on account 777.
+4. User 2's query can now go ahead, subtracting $50 from the account's balance.
+
+This avoids the problem entirely, at the cost of sometimes requiring queries to
+wait for others to complete.
+
+:::
+
+PostgreSQL's locking system automatically locks individual rows or entire tables
+when `UPDATE`, `INSERT`, or other commands make it necessary. The locks are
+released when the transaction is committed, allowing other changes to be made to
+the same row or table. `SELECT` does not lock anything, but PostgreSQL does
+ensure that a `SELECT` only sees the version of the database as it was when the
+query began: if a `SELECT` involves complicated joins and aggregations that take
+some time to execute, and the database is changed by another user while those
+happen, the `SELECT`'s results will not be affected by those changes. This
+prevents strange inconsistencies where rows change while they're being sorted
+and joined.
+
+Transactions also provide the atomicity required by the ACID guarantees:
+PostgreSQL ensures that either all queries in a transaction succeed or none of
+them do.
+
+For example, suppose a transaction involves 10 queries doing various updates,
+but the 6th query causes an error. The entire transaction will be aborted and
+PostgreSQL will refuse to execute any further queries until you send a
+`ROLLBACK` command, which reverts the database back to its state before the
+transaction started.
+
+In @exm-transaction-fixed, atomicity is important for user 1: if an error occurs
+between the two `UPDATE` queries, we would have subtracted $500 from one account
+but not added it to the other, and the $500 would be lost. Grouping the queries
+into a transaction makes this impossible.
+
+PostgreSQL also supports "savepoints", which are like checkpoints inside a
+transaction. (Or quicksaves, if you play video games.) Within one transaction,
+we can make multiple savepoints, and revert back to a specific changepoint
+instead of rolling back the entire transaction. Again, the changes only become
+visible to other users when the entire transaction is committed, but this gives
+us flexibility in dealing with errors and selectively undoing changes. See the
+[SAVEPOINT
+reference](https://www.postgresql.org/docs/current/sql-savepoint.html) for
+examples.
+
+## Subqueries
+
+SQL allows *subqueries*, where part of a query is itself defined by another
+query.
+
+The simplest case is in `FROM` clauses. Normally a `FROM` clause specifies a
+table, or multiple tables combined with joins. But we can also select from the
+table of results of another query. Here's a trivial example using the tables
+defined in @sec-example-db:
+
+```sql
+SELECT * FROM
+(SELECT moment, persona, score
+ FROM events) AS e
+INNER JOIN
+(SELECT id, firstname, lastname
+ FROM personae) AS p
+ON e.persona = p.id;
+```
+
+The subqueries are given in parentheses. Note they can't refer to things outside of
+the subqueries; essentially, Postgres runs the subqueries first, gets the tables of
+results, and then uses them like it would use any other table in the outer query.
+
+This query, of course, could be written easily without the subequeries. But often in
+complicated queries with `WHERE`, `GROUP BY`, and `HAVING` clauses, it can be
+easier to understand when written with subqueries than when written as one large
+query.
+
+You can also use subqueries within a `WHERE` clause. These are called [subquery
+expressions](https://www.postgresql.org/docs/current/functions-subquery.html).
+
+```sql
+SELECT moment, persona, score FROM events
+WHERE persona IN (SELECT id FROM personae
+                  WHERE account_balance < 0::money);
+```
+
+Here the subquery returns exactly one column (`id`), and so `IN` checks if each
+event's `persona` is contained in that column. This query could be written
+equivalently as a join, but sometimes it's easier to work with subqueries to put
+together a larger query out of pieces, instead of writing one large query to do
+everything.
+
+There are various other functions/operators that can be used on subqueries as
+well, such as `IN`, `NOT IN`, `EXISTS`, `ANY`, `ALL`, and `SOME`.
+
+For example, this looks like an inner join:
+
+```sql
+SELECT moment, persona, score FROM events
+WHERE EXISTS (SELECT 1 FROM personae WHERE id = events.persona);
+```
+
+Here `EXISTS` is an operator that looks for there to be at least one row in the
+subquery. The subquery *does* refer to the outer tables and variables, so you
+can think of this subquery as being run once per row in `events`, to determine
+if there is a matching persona. If the subquery does not return any rows, that
+event is not included in the final results.
+
+::: {#exr-translate-subqueries}
+
+#### Translating subqueries
+
+Translate the following queries to `JOIN` queries without any subqueries.
+
+1. ```sql
+   SELECT moment, persona, score FROM events
+   WHERE persona IN (SELECT id FROM personae
+                     WHERE account_balance < 0::money);
+   ```
+2. ```sql
+   SELECT moment, persona, score FROM events
+   WHERE EXISTS (SELECT 1 FROM personae
+                 WHERE id = events.persona);
+   ```
+
+:::
+
+::: {.solution}
+
+These examples don't really illustrate the power of subqueries, but
+nevertheless.
+
+```sql
+SELECT moment, persona, score
+FROM events
+INNER JOIN personae ON events.persona = personae.id
+WHERE personae.account_balance < 0;
+
+SELECT moment, persona, score
+FROM events
+INNER JOIN personae ON events.persona = personae.id;
+```
+
+:::
+
+## More advanced grouping
+
+@sec-grouping-aggregate introduced aggregate functions and the `GROUP BY`
+clause, which allowed us to split data into groups and summarize the groups with
+aggregates. `GROUP BY` is fairly restrictive, however: we can only split the
+data into disjoint groups by unique values of a column, or unique combinations
+of several columns.
+
+Sometimes we want grouping and aggregation over overlapping groups. For example,
+if I have data on students at CMU, I might want averages by their department, by
+college, and overall averages for the university. With `GROUP BY` that requires
+running three different queries.
+
+Instead, we can provide *grouping sets*, where we provide multiple sets of
+variables to group by and aggregate over. For example:
+
+```sql
+SELECT element, persona, AVG(score), COUNT(*)
+FROM events
+GROUP BY GROUPING SETS ((element), (persona), ());
+```
+
+This query asks Postgres to group by three different sets of grouping variables:
+`element`, `persona`, and `()`, which represents no grouping (aggregate all the
+data). The result looks like this:
+
+```
+ element | persona |         avg          | count
+---------+---------+----------------------+-------
+         |         | 507.6059701492537313 |  1005
+   29409 |         | 335.8750000000000000 |     8
+   29406 |         | 588.1764705882352941 |    17
+   29408 |         | 572.2666666666666667 |    15
+   29395 |         | 623.5454545454545455 |    11
+   29430 |         | 588.0000000000000000 |    10
+[...]
+         |    1162 | 567.5384615384615385 |    13
+         |    1233 | 437.6666666666666667 |     3
+         |    1157 | 333.5000000000000000 |    12
+         |    1247 | 508.4117647058823529 |    17
+         |    1189 | 546.6666666666666667 |     6
+[...]
+```
+
+The blanks here represent `NULL`s. The first row is the overall average score of
+all events. The next rows are averages for specific elements, followed by
+averages for specific personas. Rows grouped by `element` have a `NULL` for
+`persona` and vice versa.
+
+Notice the `SELECT` could list both the `element` and `persona` columns. If we
+simply did `GROUP BY element`, we couldn't list `persona` in the `SELECT` column
+list because it's not the grouping column or an aggregate---but here, Postgres
+is smart enough to understand that it's in some of the grouping sets, so it will
+fill it in for those rows and leave it `NULL` otherwise.
+
+There are other shortcuts. Often we do hierarchical aggregates, like the CMU
+example above. If we had a `students` table with columns for `department` and
+`college`, we could write
+
+```sql
+SELECT department, college, COUNT(*)
+FROM students
+GROUP BY ROLLUP (college, department);
+```
+
+This will first group by `(college, department)`, producing one row per
+department in each college, then group by `college`, then group by `()`,
+producing (hypothetical) results like
+
+```
+ college | department | count
+---------+------------+-------
+         |            | 16335
+Dietrich | Statistics |   632
+Dietrich |    History |   127
+[...]
+Dietrich |            |  2310
+     MCS |            |  6847
+[...]
+```
+
+Finally, we can group by every combination of a set of variables. `GROUP BY CUBE
+(a, b, c)` will group by `(a, b, c)`; then by `(a, b)`, `(a, c)`, and `(b, c)`;
+then by `a`, and so on, all the way up to `()`.
+
+## Window functions {#sec-sql-window}
+
+In @sec-grouping-aggregate, we saw how `GROUP BY` and aggregate functions
+allowed us to calculate aggregate values across many rows. We could, for
+instance, get the average score per student, or the maximum latency per student,
+or the earliest event, or...
+
+In each of those uses, we were limited to getting one row per group. We had to
+write our `SELECT` clauses to ensure each column we requested had one result per
+group.
+
+But sometimes I want to get individual rows of data, with additional information
+attached about the group. For example, using the `events` table from
+@sec-example-db, how could we get the score for every individual event, compared
+to that student's average score for all events?
+
+We could do this with a clever subquery (@exr-window-subquery), but an
+alternative is a *window function*. While an aggregate function takes a group
+and produces a single row for that group, a window function can calculate an
+aggregate for *every* row.
+
+For example, let's get each event's score, and the z-score of that event
+relative to the student's average:
+
+```sql
+SELECT
+  id, persona, element, score,
+  ((score - avg(score) OVER (PARTITION BY persona)) /
+   stddev_samp(score) OVER (PARTITION BY persona)) AS z_score
+FROM events
+LIMIT 10;
+```
+
+`avg()` and `stddev_samp()` are aggregate functions, but `OVER` turns them into
+a window function. The `OVER` clause tells Postgres which rows to calculate the
+aggregate for. Here we've told it to `PARTITION BY` persona, so each row gets
+the average and standard deviation calculated from rows with the same persona.
+
+Window functions don't have to operate on the entire partition. For instance, if
+we specify `ORDER BY` in the `OVER` clause, the window is (by default) the first
+row in the partition up to the current row, but not the following rows. For
+instance, this query gets the z score relative to all *previous* events by the
+user, but not future ones:
+
+```sql
+SELECT
+  id, persona, element, score, moment,
+  ((score - avg(score) OVER (PARTITION BY persona ORDER BY moment)) /
+   stddev_samp(score) OVER (PARTITION BY persona ORDER BY moment)) AS z_score
+FROM events
+LIMIT 10;
+```
+
+Instead of repeating the `PARTITION BY` clause, we can name a window:
+
+```sql
+SELECT
+  id, persona, element, score, moment,
+  ((score - avg(score) OVER p) /
+   stddev_samp(score) OVER p) AS z_score
+FROM events
+WINDOW p AS (PARTITION BY persona ORDER BY moment)
+LIMIT 10;
+```
+
+Naturally, there are many additional options to customize this; you could have
+the window be the following rows, exclude the current row (like a studentized z
+score), be only some of the rows in the partition (by including a `FILTER`
+before `OVER`), or many other complicated variations.
+
+Window functions can only be used in the `SELECT` column list and in `ORDER BY`,
+but not in `GROUP BY`, `HAVING`, or `WHERE` clauses, because they're calculated
+after these are run.
+
+There are also [specific window
+functions](https://www.postgresql.org/docs/current/functions-window.html#FUNCTIONS-WINDOW-TABLE)
+that are not aggregate functions. For example, `rank()` gives the rank of each
+row within the partition.
+
+See the [window function
+tutorial](https://www.postgresql.org/docs/current/tutorial-window.html) and
+[reference manual
+page](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS)
+for details.
+
+::: {#exr-window-subquery}
+
+#### Writing window functions with a subquery
+
+Write a query to get the z-score for every event score, relative to the
+student's overall average score. Write this using a join and a subquery, rather
+than by using a window function.
+
+The result should have the same columns as the first version in the window
+function example above.
+
+*Note:* Once you write the query, it's worth thinking about how much more
+difficult it would be to do the second window function example above, where we
+included `ORDER BY`. The simple aggregation approach that worked here would not
+work for that query.
+
+:::
+
+::: {.solution}
+
+Here's one way:
+
+```sql
+SELECT e.id, e.persona, e.score, (e.score - z.avg_score) / z.sd_score AS z_score
+FROM events AS e
+LEFT JOIN
+(SELECT persona, avg(score) AS avg_score, stddev_samp(score) AS sd_score
+ FROM events
+ GROUP BY persona) AS z
+ON e.persona = z.persona;
+```
+
+Notice we're using a `LEFT JOIN` so we get one row per event, rather than one
+row per persona (as in a `RIGHT JOIN`).
+
+:::
+
+::: {#exr-window-fns}
+
+
+#### Window functions
+
+Write each of the following queries using window functions.
+
+1. For each event, report the difference between the student's score and the
+   average score of all students who did that element. (`element` identifies the
+   specific quiz question or instructional item being scored.) Report columns
+   for the student ID, element ID, score, and difference from average.
+2. For each event, give the rank of the student's score out of all students who
+   completed that element, where 1 means they got the highest score. Report
+   columns for the student, element, score, and rank.
+
+   *Hint:* The `rank()` function, described in [table 9.63 of the
+   manual](https://www.postgresql.org/docs/current/functions-window.html#FUNCTIONS-WINDOW-TABLE),
+   will be useful here. There are examples in the [official
+   tutorial](https://www.postgresql.org/docs/current/tutorial-window.html).
+
+:::
+
+::: {.solution}
+
+Here's one way:
+
+```sql
+SELECT persona, element, score,
+       score - avg(score) OVER (PARTITION BY element) AS score_diff
+FROM events;
+
+SELECT persona, element, score,
+       rank() OVER (PARTITION BY element ORDER BY score DESC)
+FROM events;
+```
+
+:::

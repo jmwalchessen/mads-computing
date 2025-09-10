@@ -1,0 +1,42 @@
+# Working with Servers
+
+## Connecting to a server with SSH
+
+TODO
+
+## Moving files with SCP
+
+The `scp` command, for "secure copy", uses the SSH protocol to move files from
+one computer to another.
+
+For example, suppose you have a file `foo.txt` in your current directory.
+
+```sh
+scp foo.txt yourusername@server.name.example.com:~/some-directory/
+```
+
+This takes `foo.txt` and puts it into `some-directory/` in your home directory
+on the server. In the argument
+`yourusername@server.name.example.com:~/some-directory/`, everything before the
+colon is the server information, matching what you'd provide to `ssh` to log in;
+everything after the colon is the path you'd like the file to be uploaded to.
+
+Symmetrically,
+
+```sh
+scp yourusername@server.name.example.com:~/some-directory/data.txt .
+```
+
+copies `some-directory/data.txt` to your current directory (signified by `.`).
+
+You can also use wildcards:
+
+```sh
+scp "yourusername@server.name.example.com:~/data/*.csv" data/
+```
+
+This copies all CSV files in the given directory into the `data/` directory on
+your computer. Notice the quotation marks: without them, your local shell will
+try to match the wildcard `*` against files in your current directory. By
+quoting the argument, your shell won't touch it, and it'll be passed to the
+server, where the server can match `*` against the files present there.

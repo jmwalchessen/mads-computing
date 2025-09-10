@@ -1,0 +1,229 @@
+# Database Fundamentals {#sec-database-fundamentals}
+
+::: {.callout-note}
+
+Portions of these notes are based on material co-developed with Christopher
+Genovese for 36-750.
+
+:::
+
+In statistics and data science classes, you often work with data provided to you
+as files. Your homework or project requires you to analyze some data, so the
+professor gives you a CSV file to download and open in R or Python. This is also
+standard practice in scientific data analysis: a scientist collects some data
+and sends you a CSV or spreadsheet to analyze.
+
+But in businesses, data is constantly being updated and changed. You might be
+asked to do things like:
+
+* Build a system to analyze sales records and produce reports every quarter.
+* Develop a model that identifies fraudulent credit card transactions so they
+  can be rejected.
+* Analyze supply and demand data to automatically tweak product pricing.
+
+All of these would involve building a system that runs constantly and gets
+updated with the latest data. That data may come from many sources at once: in a
+large company, you might have sales data from in-person stores, billing data
+from the online store, analytics data tracking visitors to the website,
+marketing data from ad campaigns, product inventory data from the company
+logistics system, visitor data from a company that uses cell phones to track how
+many people visit your stores, and many other things besides.
+
+Worse, all of that data comes from systems run by entirely different parts of
+the company, all using different software sold by different companies. And all
+of that data is being constantly changed by many people at the same time. Using
+a CSV file would be impossible: how do you let hundreds of people work on the
+same CSV at once, ensuring their work is always using the latest version of the
+file even as other people edit it?
+
+This is why we use databases.
+
+## Relational databases
+
+A *database* is a system for organizing information so it can be efficiently
+accessed, updated, and managed, even when the data is large and the updates are
+frequent. Relational databases (RDBs) have been the most common type of database
+since the 1970s and are still very important. They are organized around data
+tables with fixed columns and rows for each record or observation.
+
+Relational databases tend to be design-first systems. First, you specify a
+*schema* for your data---giving the tables, the columns they contain, and the
+types of data stored in each column---and then you enter data that conforms to
+that schema. A properly designed schema can provide very flexible and powerful
+queries.
+
+Once you have a schema and data, RDBs make it easy to select, filter, and order
+data, and are particularly suited for combining data from multiple
+tables---their explicit modeling of the relationships between tables is the
+source of their name. This is commonly done using a (mostly) standardized
+language called *SQL*, which stands for Structured Query Language. Requests
+written in SQL are called *queries*.
+
+Many of the fundamental relational query operations will be familiar to you,
+since they are supported in many packages for working with data. For example, in
+R, the [dplyr package](https://dplyr.tidyverse.org/) provides a set of functions
+for querying, modifying, and joining data frames, and these are very similar to
+the operations supported by relational databases.
+
+### Tables
+
+The basic unit of data storage in an RDB is the *table*. Tables are also
+sometimes called *relations*, *schemas*, and *entities* in an RDB context. There
+may be many tables in a single database, so a database is a collection of
+related tables. A table is defined by its *attributes*, or *columns*, each of
+which has a *name* and a *type*.
+
+You can think of tables as being much like data frames in R or Python, since
+each row defines a mapping from attribute names (the columns) to values (stored
+in that column). Unlike data frames in R or Python, the rows *do not have an
+order*; there is no notion of row indices unless you create a column for that
+purpose.
+
+Also unlike data frames in R or Python, tables in relational databases are
+designed in advance: the columns and their types are specified first, before
+creating data. While it is possible to modify a table, one does not add and
+delete columns from tables nearly as often as you do in R or Python.
+
+### Data types
+
+The *type* of a piece of data describes the set of possible values that data can
+have and the operations that can apply to it.
+
+In an RDB, we specify the type of each column in advance. PostgreSQL, for
+instance, supports a [wide variety of data
+types](https://www.postgresql.org/docs/current/datatype.html), including:
+
++ Numeric types, such as integers, fixed-precision floating point numbers,
+  arbitrary precision real numbers, and auto-incrementing integers (`serial`).
++ Text, including fixed-length and arbitrary character strings.
++ Monetary values
++ Dates and times
++ Boolean values
++ Geometric types, such as points, lines, shapes
++ Elements in sets
++ JSON structures
+
+Database systems understand how to operate on these types, allowing you to
+search for all dates that are on a Wednesday, or all text containing particular
+substrings, and so on.
+
+### Relationships between tables
+
+We can think of tables as representing some entity that we are modeling in our
+problem. For example, a `students` table might contain enrollment information
+for a university, where each row represents a single student. Each row in the
+`courses` table might represent a single course offered in a specific semester.
+
+We link tables to define *relationships among entities*.
+
+For example, each course is linked to multiple students who are enrolled in it.
+A separate `enrollment` table may have one row per student per course,
+identifying the student and the course they are enrolled in.
+
+A good *design* of the database tables can make it more efficient to query these
+relationships, such as to list the students enrolled in a class.
+
+## The client-server model
+
+So far, relational databases sound much like using a collection of data frames
+in Python or R. But there is a key difference. Most (but not all!) SQL database
+systems are based on a client-server model.
+
+- Server: A program running continuously on some server. Accepts requests
+  (potentially from many users at the same time) to update and query data, and
+  stores the canonical version of the database.
+- Client: Any program that can connect to the server, send queries, and receive
+  results from it.
+
+The client and server need not be on the same computer, or even on the same
+continent. Often, companies with large databases will have a central database
+server with huge hard drives and lots of memory; business systems (like an
+inventory tracker or logistics system) will send their queries to this database
+to keep it up-to-date, while analysts will sit on their laptops and send queries
+to produce reports for their bosses.
+
+A key feature of the client-server model is that the server can serve *multiple
+clients at the same time.* The server goes to extraordinary efforts to ensure
+that it can process the analyst's queries while simultaneously recording every
+new sale on the company's website---and while keeping all results consistent and
+complete.
+
+And because the server is separate from the client, the server need not be
+written in the same programming language, and clients implemented in many
+different languages can access the same server. You can connect to database
+servers using code written in Python, R, C, Java, Ruby, PHP, or any one of
+dozens of languages that have the right packages. Because relational databases
+are so popular, almost any reasonable language you might use will have packages
+for connecting to popular relational database systems.
+
+The client-server model also means that the server can enforce rules about who
+is allowed to access, update, or delete any particular data. Each client has a
+username and password, and every table has a set of permissions defining which
+users are permitted to see it and what operations they are allowed to perform.
+These permissions can get very detailed, allowing only very specific types of
+queries for specific users. Companies commonly use this for internal security,
+and to ensure nobody accidentally deletes important data they did not intend to.
+
+## Querying databases
+
+To *query* a database means to send a request to the database server for data
+matching specific criteria, to send new data to add to the database, or to
+request deletions or updates. If a query alters the database by adding or
+changing data, the server automatically stores the updated data---you do not
+have to explicitly "save" the new data.
+
+Most relational databases use a (mostly) standardized language called SQL, or
+Structured Query Language. Your query is written in SQL and submitted directly
+to the database, which returns a table of matching results (or information about
+which records have been updated or deleted).
+
+Because the language is standardized, you can use SQL regardless of the database
+system your company has chosen to use. Many different relational database
+systems (PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, Firebird,
+...) exist, and while they all have unique features and quirks that mean SQL for
+one won't work perfectly with another, the basic ideas translate between them
+all.
+
+## ACID guarantees {#sec-acid-guarantees}
+
+An RDB stores our data, and we read and operate on that data through requests
+sent to the database. These requests can be grouped into *transactions*. A
+transaction may be a group of multiple queries (insertions, updates, and so on)
+that complete a particular task.
+
+Modern RDBs may receive many transactions at once, often operating on the same
+pieces of data. Particular care is needed to ensure that transactions are
+performed reliably and consistently.
+
+For example, consider what would happen in the following cases:
+
+- A transaction for a commercial payment is transferring money from your bank
+  account and to another account. But the process ends after the money is
+  deducted from one account but before adding it to the other.
+
+- A similar transaction completes _just_ before the power goes out in the server
+  room
+
+- A similar transaction completes even though you don't have enough money in
+  your account to make the payment.
+
+These are all boundary cases, but they can happen. And if they
+do, the viability of the entire system can be compromised.
+
+So, RDBs are designed to make several strong guarantees about their performance,
+the so-called *ACID* guarantees:
+
+-   **Atomic:** A transaction either succeeds entirely or fails leaving the
+    database unchanged.
+
+-   **Consistent:** A transaction must change the database in a way that
+    maintains all defined rules and constraints.
+
+-   **Isolated:** Concurrent execution of transactions (by multiple users
+    accessing the database at the same time) results in a transformation that
+    would be obtained if the transactions were executed serially.
+
+-   **Durable:** Once a transaction is committed, it remains so even in the face
+    of crashes, power loss, and other errors.
+
+This is another advantage of RDBs over ad hoc data storage.

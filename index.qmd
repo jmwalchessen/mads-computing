@@ -1,0 +1,12 @@
+# Preface {.unnumbered}
+
+This site contains lecture notes and materials for the data engineering and
+computing sequence of the Master of Science in Applied Data Science program,
+including the courses:
+
+- 36-614 Data Engineering and Distributed Environments
+- 36-615 Software for Large-Scale Data
+- 36-616 Computational Methods for Statistics
+
+These courses are primarily for students in the MADS program. Other students will
+only be admitted with the instructor's permission.

@@ -1,0 +1,597 @@
+# Machine Learning in Spark {#sec-spark-ml}
+
+Besides managing large datasets and applying SQL-style operations to them, we
+data scientists often want to use large datasets to fit statistical models.
+Sometimes you will use Spark to extract features from a huge dataset, then fit
+models to the features on your own computer---the hard part is extracting the
+relevant features from the enormous dataset, not fitting the model. But
+sometimes the model is to be fit to too much data, and you'd like to fit it
+within Spark as well. That's where MLlib comes in.
+
+MLlib is a collection of regression, classification, clustering, and related
+methods implemented within Spark and accessible within Spark applications.
+Within one Spark application, you can write all the necessary steps:
+
+1. Load the data
+2. Extract features from the data
+3. Transform the features, scale them, recode them, etc.
+4. Split the data into training, test, and evaluation sets, as needed
+5. Specify models to fit
+6. Fit the models
+7. Evaluate the model performance
+
+To automate much of this, we can create a Spark *pipeline*, which represents the
+sequence of operations. The pipeline system makes it easy to fit multiple
+models, with different tuning parameters and settings, to the same data so you
+can compare their results.
+
+## Basic setup
+
+There are two versions of MLlib:
+
+- the old version using Resilient Distributed Datasets (RDDs), which Spark used
+  before it added the `DataFrame` system
+- the new version using `DataFrame`s
+
+We will discuss the new version, which you can get by importing from `spark.ml`.
+The old version is under `spark.mllib`. The new version supports nearly all the
+features of the old one, and will get all the new features and updates; but you
+will still find examples and code using the old one, which can be confusing.
+
+Let's do a simple example to illustrate the new system, following @SparkGuide,
+chapter 24. (Their [sample
+data](https://github.com/databricks/Spark-The-Definitive-Guide/tree/master/data)
+and
+[code](https://github.com/databricks/Spark-The-Definitive-Guide/blob/master/code/Advanced_Analytics_and_Machine_Learning-Chapter_24_Advanced_Analytics_and_Machine_Learning.py)
+is available.) We'll start by loading the data:
+
+```python
+from pyspark import SparkFiles
+
+data_url = "https://www.refsmmat.com/courses/msp-computing/data/simple-ml.json"
+sc.addFile(data_url)
+
+df = spark.read.json(SparkFiles.get("simple-ml.json"))
+```
+
+Spark's ML pipelines are based around two core concepts: `Transformer`s and
+`Estimator`s. These are Python classes with certain basic methods; all the
+operations for transforming data, fitting models, and evaluating error metrics
+are based on classes that inherit from either `Transformer` or `Estimator`. They
+implement certain basic operations:
+
+* `Transformer`:
+  * `.transform(dataset)`: Takes a dataset, transforms it in some way, and
+    returns a new dataset.
+* `Estimator`:
+  * `.fit(dataset)`: Fits this estimator to a dataset and returns one or more
+    `Transformer` objects.
+
+We will see how an entire pipeline can be built from these two basic methods.
+
+## Transforming data
+
+### Arbitrary transformations on `DataFrame`s
+
+Often we must transform our source data before using it to fit models. Perhaps
+we need to aggregate data to produce new features, or do transformations, or
+rename columns, or whatever.
+
+The most direct way to do this in Spark is with a `SQLTransformer`, which lets
+you use arbitrary SQL to transform a data frame. A `Transformer` object can take
+any dataset and return a new one, so our SQL query must take a data frame and
+return a new one. That implies we must use a `SELECT`.
+
+```python
+from pyspark.ml.feature import SQLTransformer
+
+transformation = SQLTransformer(
+    statement="SELECT persona, SUM(score) FROM __THIS__ GROUP BY persona"
+)
+```
+
+Notice we refer to the table as `__THIS__`, which always refers to the data
+frame passed to `transformation.transform()`.
+
+This may seem redundant: why use a `SQLTransformer` when you can just use
+`spark.sql()` to do any data manipulation you need? But as we'll see, Spark has
+convenient features for working for pipelines composed exclusively of
+`Transformer` and `Estimator` objects, so expressing this task as a
+`Transformer` will have benefits.
+
+### Producing a column of features
+
+A typical Spark `DataFrame` has various columns for different features. Most of
+Spark's ML methods, however, expect to have one numerical column for the
+response variable and one numerical column containing a *vector* of features,
+not multiple separate columns of features.
+
+Also, unlike in R, Spark's ML systems won't do automatic coding of design
+matrices for you. That is, if you have several categorical (factor) variables,
+R's `lm()` would automatically produce the necessary dummy variables (contrasts)
+based on your model formula. If your formula is `y ~ x + some_factor`, R will
+create a design matrix $X$ containing columns for the intercept, `x`, and the
+levels of the factor. Similarly, if we specify interactions, R will add columns
+with the correct products.
+
+In Spark, we need to do this step manually. Fortunately Spark provides
+[RFormula](https://spark.apache.org/docs/3.3.1/api/python/reference/api/pyspark.ml.feature.RFormula.html),
+which understands the basics of R's formula syntax.
+
+```python
+from pyspark.ml.feature import RFormula
+
+supervised = RFormula(formula="lab ~ . + color:value1 + color:value2")
+```
+
+The `supervised` object is an `Estimator`: it must be fit to data before it can
+be used, since it must examine the data to see how many factor levels there are
+before it can create the right columns. Once it's fit, we get a `Transformer`,
+and this can transform the data to produce the new columns.
+
+```python
+fittedRF = supervised.fit(df)
+preparedDF = fittedRF.transform(df)
+```
+
+Now the prepared data frame contains a `features` column with the transformed
+data. The `label` column contains the response (`lab`) coded as 0 or 1. We could
+control the names of these columns with the `featuresCol` and `labelCol`
+arguments to `RFormula()`, if we needed to.
+
+Sometimes your data has missing values for some rows. In R, when you use `lm()`
+or `glm()` to fit a model to data with `NA` values for some predictors, it
+simply skips the affected rows. By default, however, Spark's modeling functions
+throw an error when they encounter `null`, Spark's equivalent of `NA`. With the
+`handleInvalid` argument to `RFormula`, we can set a different option. For
+example, by setting `handleInvalid="skip"`, we can tell `RFormula` that when it
+transforms the data, it should throw away (skip) rows with `null` values for any
+of the variables in the formula.
+
+### Making train/test splits
+
+If we're using a train/test split for model evaluation, we can do that now:
+
+```python
+train, test = preparedDF.randomSplit([0.7, 0.3])
+```
+
+### Transforming and rescaling features
+
+The [`pyspark.ml.feature`
+module](https://spark.apache.org/docs/latest/api/python/reference/pyspark.ml.html#feature)
+contains a number of tools for manipulating and rescaling features.
+
+Some machine learning methods require us to rescale features first. (For
+example, when using the lasso or ridge regression, it's good to put all features
+on the same scale so the penalty applies to all features equally.) Using
+[`MaxAbsScaler`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.MaxAbsScaler.html#pyspark.ml.feature.MaxAbsScaler),
+[`MinMaxScaler`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.MinMaxScaler.html#pyspark.ml.feature.MinMaxScaler),
+[`RobustScaler`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.RobustScaler.html#pyspark.ml.feature.RobustScaler),
+or
+[`StandardScaler`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.StandardScaler.html#pyspark.ml.feature.StandardScaler),
+we can rescale all our features.
+
+For example, `StandardScaler` makes all features have mean 0 and variance 1. It
+expects the features to already be prepared as a vector of features in a single
+column, like `RFormula` creates for us. `StandardScaler` is an `Estimator`, so
+it must be fit on data (to calculate the means and variances) before it is used
+to transform (standardize) the data. It takes an `inputCol` argument naming the
+column to standardize and `outputCol` naming the new, standardized column to
+create; the other scalers all work in a similar way.
+
+To use it, we first create the scaler and then fit it:
+
+```python
+from pyspark.ml.feature import StandardScaler
+
+# by default, StandardScaler does not center the data; set withMean=True to
+# center (subtract the mean)
+scaler = StandardScaler(inputCol="features", outputCol="scaledFeatures",
+                        withMean=True)
+
+fitted_scaler = scaler.fit(train)
+
+train = fitted_scaler.transform(train)
+```
+
+Now `train` contains a `scaledFeatures` column where each feature has mean 0 and
+variance 1.
+
+Notice that we are training the scaler using the *training* data, not the entire
+dataset. This is important because it ensures that we do not use the test data
+in any way, even for scaling, when fitting models. We can later use the
+`fitted_scaler` to rescale the test data.
+
+## Fitting models
+
+Once the data is prepared, we can fit a model. Spark has a whole range of
+supported models for
+[classification](https://spark.apache.org/docs/3.3.1/api/python/reference/pyspark.ml.html#classification),
+[clustering](https://spark.apache.org/docs/3.3.1/api/python/reference/pyspark.ml.html#clustering),
+and
+[regression](https://spark.apache.org/docs/3.3.1/api/python/reference/pyspark.ml.html#regression).
+In this toy example, we'd like to do logistic regression to predict the binary
+response.
+
+```python
+from pyspark.ml.classification import LogisticRegression
+
+lr = LogisticRegression(labelCol="label", featuresCol="scaledFeatures")
+```
+
+This `lr` object represents an abstract logistic regression with particular
+columns for features and labels (responses). We must tell it where to find the
+true labels (`labelCol`) and where to find the features (`featuresCol`); by
+default, it looks in columns named `label` and `features`, matching the default
+column names created by `RFormula`.
+
+`lr` is again an `Estimator` object. To fit this to the data, we must run
+
+```python
+fittedLR = lr.fit(train)
+```
+
+Now Spark has fit the model. We can get its coefficients with
+`fittedLR.coefficients`.
+
+Note that logistic regression in Spark is not just ordinary logistic regression:
+it supports lasso and ridge penalization through the elastic net, and it can
+support various other constraints on the coefficients. Using
+`lr.explainParams()` you can have Spark explain all the available options.
+
+Fitted models in Spark all have a common interface: they are `Transformer`
+objects that can transform a dataset to a new dataset. In models, the
+transformation is adding a column of predictions; in `RFormula`, as we saw, the
+transformation is adding a column of features.
+
+## Making pipelines
+
+Often you will want to try multiple models with multiple parameter settings,
+fitting them all to the same data and evaluating them using common metrics.
+Instead of writing code to do this manually, we can use Spark's *pipeline*
+system, which lets us specify a pipeline of tasks to complete with a range of
+parameter settings.
+
+Let's start with a random split of the original dataset (not the prepared data).
+
+```python
+train, test = df.randomSplit([0.7, 0.3])
+```
+
+Now let's specify our pipeline. We will first prepare the data with a model
+formula, as before, and then we will fit a logistic regression. Notice here we
+have not specified the actual formula or regression options:
+
+```python
+from pyspark.ml import Pipeline
+
+rForm = RFormula()
+lr = LogisticRegression(labelCol="label", featuresCol="features")
+
+pipeline = Pipeline().setStages([rForm, lr])
+```
+
+Each stage in the pipeline can be any kind of `Estimator` or `Transformer`. The
+pipeline itself is an `Estimator`. We use it in two steps:
+
+- `pipeline.fit(dataset)`: Provides the dataset to the first stage. If it's an
+  `Estimator`, call the `fit(dataset)` method, then call `transform(dataset)` on
+  the fitted object. If it's a `Transformer`, call `transform(dataset)`. Take
+  the output and repeat on the next stage of the pipeline. This returns a
+  `PipelineModel`, which is a `Transformer` containing all the fitted stages.
+- `pipelinemodel.transform(dataset)`: Each stage of the pipeline is now a
+  `Transformer`, because it was previously fit to data. Call `transform(dataset)
+  on each stage in turn to produce the pipeline output.
+
+To set the options for each pipeline stage, we can use `ParamGridBuilder`. This
+lets us specify a grid of options---a grid because when we use this in our
+pipeline, it will try every combination of the options.
+
+```python
+from pyspark.ml.tuning import ParamGridBuilder
+
+params = ParamGridBuilder() \
+  .addGrid(rForm.formula, [
+    "lab ~ . + color:value1",
+    "lab ~ . + color:value1 + color:value2"]) \
+  .addGrid(lr.elasticNetParam, [0.0, 0.5, 1.0]) \
+  .addGrid(lr.regParam, [0.1, 2.0]) \
+  .build()
+```
+
+This grid represents $2 \times 3 \times 2 = 12$ different models to try.
+
+## Evaluating models
+
+Now that we have specified the pipeline and the range of parameter options, we
+must tell Spark how we plan to evaluate our models. There is a basic `Evaluator`
+class to support evaluation, with [several specific kinds of evaluator
+available](https://spark.apache.org/docs/latest/api/python/reference/pyspark.ml.html#evaluation).
+The `BinaryClassificationEvaluator` lets us choose from a variety of
+classification metrics; here we will use the AUC:
+
+```python
+from pyspark.ml.evaluation import BinaryClassificationEvaluator
+
+evaluator = BinaryClassificationEvaluator() \
+  .setMetricName("areaUnderROC") \
+  .setRawPredictionCol("prediction") \
+  .setLabelCol("label")
+```
+
+Notice we have also told it which column the predictions will be in and where
+the true labels are, so it can compare prediction to truth.
+
+Now we need a strategy for Spark to evaluate each model. One way is a
+train/validation split: split the data into two pieces, train on the training
+piece, and evaluate on the test piece. This is all on the original test set
+created with `df.randomSplit()`, since we are saving the original test set for
+final evaluation.
+
+```python
+from pyspark.ml.tuning import TrainValidationSplit
+
+tvs = TrainValidationSplit() \
+  .setTrainRatio(0.75) \
+  .setEstimatorParamMaps(params) \
+  .setEstimator(pipeline) \
+  .setEvaluator(evaluator)
+```
+
+`tvs` is now an object that can be fit to data, and will produce a model object
+representing the fitted model:
+
+```python
+tvsFitted = tvs.fit(train)
+```
+
+This sets the parameters in the pipeline object, calls `fit()` on it, gets the
+predictions via `transform()`, evaluates them, and repeats for all parameter
+combinations. `tvsFitted` is now a `TrainValidationSplitModel` object, which is
+a `Transformer`. We use its `transform()` method to make predictions with the
+best model (as evaluated by our `evaluator`) on our final held-out test set,
+then get the final AUC:
+
+```python
+evaluator.evaluate(tvsFitted.transform(test))
+```
+
+We might also want to get the tuning parameters of the best model. We had
+`TrainValidationSplit` estimate an entire pipeline, and so the "best model" is
+actually a `PipelineModel` from fitting our `pipeline`. This is stored in
+`tvsFitted.bestModel`.
+
+This object contains a `.stages` attribute giving all the stages; in our case,
+this is a list of the fitted `RFormula` (`rform`) and the fitted logistic
+regression (`lr`). So we can get parameters from the logistic regression:
+
+```python
+tvsFitted.bestModel.stages[1].getRegParam()
+tvsFitted.bestModel.stages[1].getElasticNetParam()
+```
+
+Besides `TrainValidationSplit`, there is also a `CrossValidator` that works the
+same way, but does *K*-fold cross-validation to get the error estimates.
+
+## Reviewing the pipeline
+
+We've seen a lot of pieces: Estimators, transformers, tools for coding
+variables, tools for scaling and transforming, models, evaluators,
+hyperparameter tuning, and so on. It's hard to see how this all fits together.
+
+The basic pipeline is meant to look like this:
+
+```{mermaid}
+flowchart TD
+    data[Data]
+    rform[Make feature/label columns]
+    scale[Scale and transform data]
+    fit[Fit model]
+    predict[Make predictions]
+
+    data --> rform
+    rform --> scale
+    scale --> fit
+    fit --> predict
+```
+
+Each step in this pipeline is one or more `Transformer` or `Estimator` objects,
+and the entire pipeline is represented as a `Pipeline` object with multiple
+stages. A `Pipeline` is itself an `Estimator`: the entire pipeline can be fit to
+data and then used to transform new data.
+
+But pipelines have parameters that need to be tuned to optimize some evaluation
+metric. And we need some kind of train/test split to evaluate fairly. So we use
+a tuner like `TrainValidationSplit`:
+
+```{mermaid}
+flowchart TD
+    split["Split training and test data <br>(TrainValidationSplit)"]
+    subgraph pipeline["Pipeline() object"]
+        rform[Make feature/label columns]
+        scale[Scale and transform data]
+        fit[Fit model]
+
+        rform --> scale
+        scale --> fit
+    end
+
+    split-->|Training data|pipeline
+
+    fitted["Fitted pipeline<br>(PipelineModel)"]
+    fit --> fitted
+    split-->|Test data|fitted
+
+    predictions[Predictions]
+    fitted --> predictions
+
+    eval[Evaluator]
+    predictions --> eval
+```
+
+This may need to be repeated for each combination of parameters we want to test,
+so we can choose the best.
+
+
+## Saving models for later
+
+If you're working on a model for a product, once you arrive at a final model,
+you're going to want to be able to use it later. Fitted models (such as fitted
+`PipelineModel` objects) have a `write()` method that can be used to save them:
+
+```python
+tvsFitted.write().save("path/to/fitted-logit-model")
+```
+
+As with all Spark operations that involve reading and writing files, the Spark
+executors write most of the crucial data, so the path provided should be one
+that all executors have access to, such as a directory stored in HDFS or a
+shared filesystem.
+
+Since we saved a `PipelineModel`, we can also load the saved model back with
+`PipelineModel`.
+
+```python
+from pyspark.ml import PipelineModel
+
+reloaded_model = PipelineModel.load("path/to/fitted-logit-model")
+```
+
+This is now a `PipelineModel` object we can use just like `tvsFitted` above,
+except we could have exited Spark in between saving the model and loading it.
+Now you can work with the same model across many Spark sessions or reuse it in
+many applications.
+
+## Exercises
+
+::: {#exr-spark-ml-galaxy}
+
+#### Galaxy mass prediction
+
+The `hive_metastore.default.buzzard_dc_1` table contains data from a physical
+simulation of 111,172 galaxies. The data [is described
+here](https://cmustatistics.github.io/data-repository/astronomy/buzzard.html).
+Review the description so you're familiar with the data.
+
+We would like to predict galaxy stellar masses (`log.mass`) using `redshift` and
+the magnitude variables `u`, `g`, `r`, `i`, `z`, and `y`. 
+
+Note that Spark uses `.` to refer to entries in structs (records), so `log.mass`
+will be interpreted as accessing the `mass` field of the `log` object. You must
+rename the variables and remove any dots (even in the columns you do not use,
+like `u.err`) to avoid confusing it.
+
+First, set aside a final test set of 30% of the data, randomly selected. (Use
+the `randomSplit()` method of `DataFrame` objects to do so.) We will use this to
+evaluate your pipelines.
+
+Next, build three pipelines to predict `log.mass`. Each has parameters you
+should tune with 5-fold cross-validation:
+
+1. Linear regression. Tune the regularization parameters, and also consider
+   using either (a) a linear function of the original features, (b) a quadratic
+   function of them, or (c) a cubic function of them. The [`PolynomialExpansion`
+   transformer](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.feature.PolynomialExpansion.html)
+   may be helpful.
+2. A decision tree ([using
+   `pyspark.ml.regression.DecisionTreeRegressor`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.DecisionTreeRegressor.html)).
+   Tune the maximum depth and maximum number of bins.
+3. A random forest (using
+   [`pyspark.ml.regression.RandomForestRegressor`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.regression.RandomForestRegressor.html)).
+   Tune the maximum tree depth and the maximum number of bins.
+
+Tune each to select the model with the best mean absolute error (MAE). Report
+the best predictor, its MAE, and its tuning parameters.
+
+:::
+
+::: {#exr-spark-lending-club-ml}
+
+#### Machine learning for LendingClub
+
+For this exercise, we'll continue using the LendingClub data from
+@exr-spark-lendingclub.
+
+If you were an investor deciding which loans to fund, you'd be interested in
+predicting whether the borrower would pay the loan back on time. You might split
+loans into three categories:
+
+* Loans fully paid off, with no late payments
+* Loans paid back, but late
+* Loans never fully paid back
+
+The `loan_status` variable records the status of loans. There are several
+possible codes:
+
+* `Fully Paid`: The loan has been paid off
+* `Current`: The borrower has been paying on time, but still has more payments
+  to make
+* `In Grace Period`: The borrower is up to 15 days late in their payments; no
+  late fees are charged until they're over 15 days late
+* `Late (16-30 days)`: The borrower is 16-30 days late in their payments and
+  will be charged a late fee
+* `Late (31-120 days)`: The borrower is 31-120 days late in their payments
+* `Default`: The borrower is more than 120 days late in payments, despite
+  repeated reminders from LendingClub. LendingClub will now begin closing the
+  loan
+* `Charged Off`: The borrower has defaulted on the loan and LendingClub no
+  longer expects any further payments to be made. They may sell the loan to a
+  debt collection agency, or the borrower may have declared bankruptcy, in which
+  case a court will decide how much money LendingClub may receive.
+
+The status gives the current status (at the time this data was downloaded), but
+even a current or fully paid loan may have been late in the past and charged a
+late fee. The `total_rec_late_fee` column records the total late fees paid by
+the borrower.
+
+Create a notebook that completes the following tasks.
+
+Create a new column categorizing loans into the three categories above. You'll
+have to filter out loans that are current and have not been paid off yet,
+because we do not know their ultimate status -- they may become late or default
+later.
+
+An investor may want to predict this categorization using information available
+at the time the borrower applies for the loan, such as: annual income
+(`annual_inc`), the number of times they've been delinquent on other accounts in
+the past two years (`delinq_2yrs`), their reason for asking for the loan
+(`purpose`), how many mortgages the borrower has (`mort_acc`), how many
+bankruptcies the borrower has had (`pub_rec_bankruptcies`), the borrower's FICO
+credit score (`fico_range_high` and `fico_range_low`), and the amount they owe
+on credit cards (`max_bal_bc`). (There are many other covariates in the data,
+but we should start simple.)
+
+Extract these features from the data. Set aside 30% of the data to use as a test
+set.
+
+On the training set, use Spark's `MinMaxScaler` to scale all variables to be on
+the same scale. Then fit three classifiers to predict the loan categorization:
+
+1. A decision tree
+   ([`DecisionTreeClassifier`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.DecisionTreeClassifier.html)),
+   using the default tuning parameters
+2. A random forest
+   ([`RandomForestClassifier`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.RandomForestClassifier.html)),
+   using the default tuning parameters (which fit 20 trees with a depth of 5)
+3. A multilayer perceptron with three layers of 40 nodes each
+   ([`MultilayerPerceptronClassifier`](https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.ml.classification.MultilayerPerceptronClassifier.html)).
+   The `layers` argument lets you specify the size of each layer, *including*
+   the input and output layers; here you should have 20 inputs (from your
+   predictors, including dummies for categorical variables) and 3 outputs (for
+   the 3 classes).
+
+Evaluate the three classifiers on the test set and report their accuracy and F1
+scores. (With `MulticlassClassificationEvaluator`, you'll need `metricName="f1"`
+and `metricName="accuracy"`.)
+
+Turn in your notebook that does this complete task, starting with loading the
+data and ending with saving the test set metrics to a file. Include a table of
+accuracy and F1 scores.
+
+*Hints:* See @sec-creating-dataframes to see how to create a data frame
+containing the evaluation results, so you can save it to a file. Review
+@sec-spark-expressions, and following sections, to see how to manipulate and
+create columns in Spark.
+
+:::

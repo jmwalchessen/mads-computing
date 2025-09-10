@@ -1,0 +1,526 @@
+# Web Scraping {#sec-scraping}
+
+Sometimes, the data you want isn't available through a convenient API or as a
+downloadable file. It's presented in a web page, but they don't provide any way
+to get the data out of that page.
+
+But the data is right there in the page, so surely we can get it out somehow!
+That process is called *scraping*.
+
+To scrape data from a website, we must:
+
+1. Connect to the right HTTP server.
+2. Make an HTTP request for the right Web page.
+3. Parse the HTML representing the page.
+4. Extract the relevant text and data from the parsed HTML.
+
+We've already seen how to do Step 2 in @sec-http. Let's fill in the other
+pieces. It's helpful to understand how the Internet works first, if only to
+better understand the kinds of error messages you'll eventually run into.
+
+## The Internet
+
+The Internet is the collective name for all the computers and routers connected
+together in one big system that we use. Email, Web sites, video calls, your
+Internet-connected doorbell -- they all use the Internet to communicate with
+other systems, even if they do not use HTTP or Web pages as we know them.
+
+### Host and domain names
+
+A machine connected to the Internet is a *host*. Each host has a *hostname*. On
+a Mac or Linux machine, you can run the `hostname` command to see your
+computer's hostname; mine is currently `odobenus.local`.
+
+That hostname means I'm on a network called `local` and my computer is called
+`odobenus`, apparently because I had a fondness for walruses when I first named
+it.
+
+Hostnames can be assembled into *domain names*, which identify hosts on the
+Internet. For example, `andrew.cmu.edu` is a fully qualified domain name.
+Domain names are *hierarchical*, separated by dots, and are read
+right-to-left:
+
+- `[root zone]`: Conceptually, every fully qualified domain name is part of the
+  *root zone*, which is controlled by the Internet Corporation for Assigned
+  Names and Numbers ([ICANN](https://www.icann.org/)). (ICANN was originally run
+  under contract with the US Department of Commerce, but since 2016 it is
+  independent, operating with input from 111 countries.)
+- `edu`: A *top-level domain* (TLD) controlled by the organization Educause.
+- `cmu`: Carnegie Mellon's domain name.
+- `andrew`: A specific host in Carnegie Mellon's network.
+
+
+Top-level domains are created under ICANN's authority, granting specific
+organizations authority to operate specific TLDs. Those TLDs (like `.edu` or
+`.org`) then sell name registrations to organizations like CMU. CMU then can
+create its own domains underneath its `cmu.edu` registration, acting as its own
+registration authority for names like `stat.cmu.edu` and `www.cmu.edu`.
+
+(Incidentally, it is quite important that domain names are hierarchical. This is
+how you know that `securepayments.yourbank.com` is run by the same people who
+run `yourbank.com`, whereas `securepayments.yourbank.com.tech.mafia.ru` is run
+by the Russian Mafia, despite containing the same substring. Phishing sites will
+often use this trick to try to confuse you; remember to read right-to-left!)
+
+Not every computer has a publicly accessible fully qualified domain name. My
+laptop currently does not, for example; outside of my local network, the
+hostname `odobenus.local` means nothing to anyone.
+
+Domain names have to follow certain rules: for example, they do not contain
+spaces or underscore characters. Note that `http://www.stat.cmu.edu` or
+`andrew.cmu.edu/foo/bar` are *not* domain names; they are [Uniform Resource
+Locators](https://en.wikipedia.org/wiki/URL) and refer to specific services
+hosted on specific domain names.
+
+### IP addresses and routing
+
+Now, a domain name doesn't get you much. If I want my computer to send
+something to the host at `andrew.cmu.edu`, how am I supposed to do that? I
+need a way to know which physical machine to deliver to.
+
+Internet routers and switches don't know how to find domain names, but they do
+understand *IP addresses*. An [IP
+address](https://en.wikipedia.org/wiki/IP_address) is a numerical address; every
+machine connected to the public Internet has an IP address. (We'll skip
+[NAT](https://en.wikipedia.org/wiki/Network_address_translation) for now.)
+
+IPv4 uses addresses like `172.16.254.1`, with four parts each containing an
+8-bit (0 to 255) number; IPv6, the successor, uses addresses like
+`2001:db8:0:1234:0:567:8:1`, with eight parts each containing a 16-bit number
+encoded in hexadecimal. (The encoding is just for humans to look at; computers
+just look at the full 32-bit or 128-bit numbers.)
+
+Crucially, IP addresses are hierarchical as well. For example, Carnegie Mellon
+owns the entire block of addresses from `128.2.0.0` to `128.2.255.255`, which
+includes every address beginning with `128.2`. The details are a bit out of
+scope here, but using
+[BGP](https://en.wikipedia.org/wiki/Border_Gateway_Protocol), CMU's routers
+announce to other routers they're connected to, "Hey, I know how to deliver to
+any address starting with `128.2`", and *those* routers advertise to their
+neighbors "Hey, I have a way to get to `128.2`," and so on, and so every router
+on the Internet knows someone who knows someone who knows someone who can
+deliver the message. This involves something called the [Border Gateway
+Protocol](https://en.wikipedia.org/wiki/Border_Gateway_Protocol).
+
+The Internet is, basically, a big extended family where if you get a parking
+ticket, your sister says "oh, talk to our aunt, she knows the sister of a
+guy who was roommates with the cousin of the county clerk", and the message
+gets passed from step to step until it gets to the right person.
+
+But I don't want to type in `128.2.12.64` to get the website at `stat.cmu.edu`.
+I want to just type in `stat.cmu.edu`. How do I do that?
+
+### The Domain Name System
+
+The answer: the Domain Name System. When I type in `stat.cmu.edu`, my computer
+sends a DNS query to its friendly neighborhood DNS resolver (usually run by
+your Internet Service Provider). The DNS resolver follows several steps:
+
+- `[root zone]`: It asks DNS servers run by the root zone where to find the DNS
+  servers for `.edu`. A master list of root DNS servers and their IP addresses
+  has to be distributed manually; several organizations maintain root zone
+  servers on behalf of ICANN. The root zone server responds with the IP address
+  of a DNS server for `.edu`, such as `2001:501:b1f9::30`.
+- `edu`: It asks the DNS server for `.edu` where to find the DNS server for
+  `cmu.edu`, and receives a response like `128.237.148.168`.
+- `cmu`: It asks the DNS server for `cmu.edu` where to find `stat.cmu.edu`, and
+  receives a response like `128.2.12.64`.
+
+
+Obviously this involves a lot of back-and-forth communication, so resolvers
+usually have a *cache*. Every DNS server gives a *time-to-live* for its
+responses, indicating how long they can be relied upon; the resolver saves
+all responses it has received for that time period, so subsequent requests
+can be given the same answer.
+
+Typical TTLs are on the range of hours to a day or two, which is why
+sometimes after website maintenance it can take a while for your access to
+be restored -- your resolver might have an old invalid DNS response cached.
+
+When you see error messages like "`example.com` could not be found", your
+computer could not find a record for it in the Domain Name System.
+
+Some systems distribute data via DNS. Some organizations run [DNSBLs or
+RBLs](https://en.wikipedia.org/wiki/DNSBL) (DNS Blackhole List or Real-time
+Blackhole List), which provide ways to query if a domain name or host is known
+to be involved in spam mail. If your email server receives a message from
+`192.168.42.23`, it might do a DNS query for `23.42.168.192.dnsbl.example.net`;
+if the `example.net` RBL indicates that this IP is known to send spam, it will
+return an IP address, otherwise it will return a message that no such record is
+known.
+
+### Sending data with TCP
+
+Once you have received the IP address corresponding to a domain name, how do you
+communicate with it?
+
+There are layers here; [seven layers](https://en.wikipedia.org/wiki/OSI_model),
+specifically. Your computer needs a physical connection to other computers,
+either by cable or via electromagnetic field; communication over that connection
+has to be coordinated; messages have to be sent over that connection; those
+messages need to be reassembled into larger pieces with meaning; and those
+pieces need to be given meaning.
+
+We'll skip the physical layers. Suffice to say that Ethernet cables or Wi-Fi
+connections are involved.
+
+Let's talk about how we send messages and reassemble them. There are several
+ways to do this, but the one most often used is the [Transmission Control
+Protocol](https://en.wikipedia.org/wiki/Transmission_Control_Protocol).
+
+TCP is a way of delivering messages between machines. It does not discriminate
+on the content of those messages; they may involve emails, video calls, Web
+pages, DNS queries, World of Warcraft game data, or anything else. TCP does not
+care or know anything about the specific uses of the messages.
+
+TCP merely provides a way to deliver messages. It does so in steps:
+
+1. Your computer sends a TCP message asking to connect to a particular server.
+   That server replies with a message saying "Sounds good to me", and your
+   computer replies with a message saying "Great, let's get to it". This is the
+   *connection handshake*. It's what's happening when you see "connecting to
+   host..." messages.
+2. Your computer takes the content of the message it wants to send and breaks it
+   up into small pieces, called *packets*. Each packet is stamped with its
+   destination IP address and a number indicating the order they're supposed to
+   be reassembled in. Your computer sends these to be delivered to the server.
+3. As the server receives the packets, it sends acknowledgments ("ACK"). If
+   a packet is lost, your computer can re-send it.
+4. The server may reply with messages of its own, delivered in the same way, and
+   messages can flow back and forth until one computer decides to close the
+   connection and sends a "FIN" message (which has to be ACKed and matched with
+   another FIN from the other computer).
+
+
+TCP is meant to be robust: if packets are lost (which happens surprisingly
+often!) they are re-sent, and packets can arrive in any order and be
+reassembled.
+
+When you see error messages like "Could not connect to host" or "Connection
+refused", there was a problem at step 1: the server failed to reply to your TCP
+connection request. Maybe there is no server actually listening at that IP
+address, or that computer is temporarily disconnected.
+
+Now, if we connect to a server and make an HTTP request, what do we get?
+
+## HTML
+
+HTML, the HyperText Markup Language, is a way of marking up text with various
+attributes and features to define a structure – a structure of paragraphs,
+boxes, headers, and so on, which can be given colors and styles and sizes with
+another language, CSS (Cascading Style Sheets).
+
+For our purposes we don’t need to worry about CSS, since we don’t care what a
+page looks like, just what’s included in its HTML.
+
+HTML defines a hierarchical tree structure. Let’s look at a minimal example:
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>An Awesome Website</title>
+  </head>
+  <body>
+    <h1 id="awesome">Awesome Website</h1>
+    <p id="intro">
+      This is a paragraph of text linking
+      to <a href="http://example.com/page">another Web page.</a>
+    <p>This is another paragraph to introduce data &amp; stuff:
+      <table class="datatable" id="bigdata">
+        <thead>
+          <tr><th>Key</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr id="importantrow"><td>Foo</td><td>Bar</td></tr>
+          <tr><td>Baz</td><td>Bam</td></tr>
+        </tbody>
+      </table>
+      <!-- This is a comment and is ignored -->
+      <p>Notice the use of &lt;thead&gt; and &lt;tbody&gt; tags, which are
+      actually optional.
+  </body>
+</html>
+```
+
+Notice some features of HTML:
+
+- Tags: Tags are named inside square brackets, like `<h1>`. There is a set of
+  tags with predefined meanings, like `<p>` for paragraphs and `<table>` for
+  tables. Tag names are case-insensitive, so `<P>` and `<p>` mean the same
+  thing.
+- Tag hierarchy: Tags enclose text and other tags: tags open with a form like
+  `<p>` and close with `</p>`, and everything in between is enclosed in those
+  tags. All tags have to be closed, except those that don’t. (Since people
+  writing web pages were very bad at remembering to close tags, browsers now
+  have standard rules for inferring when you meant to close a tag; notice the
+  paragraphs above aren’t closed. Tables can't be inside paragraphs, so the
+  previous `<p>` does *not* contain the `<table>`.)
+- Attributes: Tags can have attributes, which are key-value pairs describing the
+  content inside them. Many attributes have specific meaning: `id` is used for
+  unique identifiers for elements, which can be used in JavaScript or CSS to
+  modify those elements, and a `class` can be assigned to many elements which
+  should somehow behave in the same way.
+- Escaping: Characters like `<`, `>`, and `&` have specific meanings in HTML. If
+  you want to write `<` without it starting a new tag, you have to escape it by
+  writing `&lt;`. There are many escapes, like `&copy;` for the copyright
+  symbol, and numeric escapes for specifying arbitrary Unicode characters. These
+  are called “HTML entities”.
+- Whitespace: Whitespace has no meaning in HTML. You could put the above HTML
+  document on one line or four hundred, if you’d like. Spaces are collapsed:
+  writing two spaces between words is the same as writing one space between
+  words. Hence lines that wrap, above, don’t have excess spaces because of the
+  indentation.
+
+
+Conceptually, HTML tags form a tree. Each tag has a parent (the enclosing tag)
+and children (the tags within). For example, above, the `<body>` tag's parent is
+`<html>`, while its direct children are `<h1>`, `<table>`, and `<p>` tags.
+
+### Selecting tags
+
+To pull information out of an HTML document, we may need only the contents of a
+few specific tags. There are several ways to do this, but they come down to
+needing a *selector*: some specification of the type or name of the tag we want.
+
+There are several common types of selector. The simplest is the CSS selector,
+used when making Cascading Style Sheets. A CSS selector might look like this:
+`.datatable tr#importantrow td`.
+
+That means:
+
+- `.datatable`: Any element with the `class` attribute “datatable”.
+- `tr#importantrow`: Any tr element with the `id` attribute “importantrow”.
+- `td`: Any `<td>` tag.
+
+These are interpreted hierarchically, so put together in one selector, this
+identifies all `td` elements inside a `tr` whose ID is “importantrow” inside
+some tag with class “datatable”. This will match two `td` elements in the
+example above. (Note that the `tbody` is not in the selector, but that is not a
+problem; any `td` inside a `tr#importantrow` matches, even if there are
+enclosing tags in between.)
+
+Tag IDs and classes are particularly important for selectors, since they're
+often used to mark specific parts of the page, or tags with specific uses. A
+tag can only have one ID, and an ID can only appear once in a page; but a tag
+can have multiple classes, separated by spaces in the class attribute:
+
+```html
+<div id="sidebar" class="left nav fixed">
+  ...
+</div>
+```
+
+Website authors add lots of class and ID attributes throughout a page because of
+their use in selectors. CSS is used to specify color, layout, backgrounds,
+sizes, and other features of tags on the page, and it uses selectors to identify
+which tags each rule applies to:
+
+```css
+p {
+    font-family: serif;
+    font-size: 110%;
+    color: #333;
+}
+
+.datatable tr#importantrow td {
+    color: #f00;
+    font-weight: bold;
+}
+```
+
+You'll see CSS included in `<style>` tags on the page, or the page header will
+specify external CSS files that the browser is supposed to download and apply.
+
+### Parsing HTML
+
+To "parse" a particular data format means to read it and extract all the pieces
+into some form you can manipulate in code. For HTML, that means turning the text
+above, with all its tags and attributes in one big string, into some kind of
+Python or R data structure we can use.
+
+HTML’s complex structure makes it difficult to parse; the [HTML
+standard](https://html.spec.whatwg.org/multipage/) chapter on syntax has
+headings going as deep as “[13.2.5.80 Numeric character reference end
+state](https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state)”.
+This means you should not try to write a parser yourself. [Nor should you
+attempt to parse HTML with regular
+expressions](https://stackoverflow.com/a/1732454).
+
+In Python, we can use the [Beautiful
+Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) package for
+parsing and working with HTML. It can parse HTML and then provides all kinds of
+functions to work with the tree of tags. See the [installation
+instructions](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-beautiful-soup)
+to get it installed.
+
+For example, for the HTML shown above:
+
+```python
+from bs4 import BeautifulSoup
+
+soup = BeautifulSoup(open("example.html", "r").read())
+
+ps = soup.find_all("p") # get a list of the 3 <p> tags
+
+ps[0]["id"] # "intro"
+
+ps[-1].string # 'Notice the use of <thead> and <tbody> tags, which are\n      actually optional.\n  '
+
+tds = soup.css.select(".datatable tr#importantrow td")
+
+tds # [<td>Foo</td>, <td>Bar</td>]
+```
+
+The [Beautiful Soup
+documentation](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) gives an
+extensive tutorial on how to use it to access specific attributes of a page, so
+we don't need to recap that here. Instead, let's consider the question: How do
+you figure out what parts of the HTML you need to extract?
+
+### Relative URLs
+
+Back in @sec-urls, we discussed the structure of URLs like
+`http://www.example.com/foo/bar.html`. When you parse a Web page, you may find
+URLs like this in `a` tags:
+
+```html
+<a href="http://www.example.com/foo/bar.html">the page</a>
+```
+
+This is a complete URL. But just as there are absolute paths and relative paths
+for files on your computer, you can also use relative paths in URLs. For
+example, if we're on the page `http://www.example.com/foo/index.html`, we can
+write a link like this:
+
+```html
+<a href="bar.html">the bar page</a>
+```
+
+This is a *relative* URL. In this case, because we're viewing it on a page in
+the `http://www.example.com/foo/` directory, it points to
+`http://www.example.com/foo/bar.html`. Other relative paths include:
+
+- `../baz/index.html`: points to `http://www.example.com/baz/index.html`, as
+  `..` represents going to the parent directory
+- `/index.html`: points to `http://www.example.com/index.html` regardless of
+  which directory on the site we are in, as the leading `/` always indicates the
+  root
+
+
+So when you extract URLs from links and other tags, you may need to parse those
+URLs to get the actual target URL, particularly if you want to make follow-up
+HTTP requests. Python's `urllib` module provides tools to do this:
+
+```python
+import urllib.parse
+
+urllib.parse.urljoin("http://www.example.com/foo/index.html",
+                     "bar.html")
+urllib.parse.urljoin("http://www.example.com/foo/index.html",
+                     "../baz/index.html")
+urllib.parse.urljoin("http://www.example.com/foo/index.html",
+                     "/index.html")
+urllib.parse.urljoin("http://www.example.com/foo/index.html",
+                     "http://foo.example.com/index.html")
+```
+
+The `urljoin()` method takes a base URL (the first argument) and a new URL (the
+second argument) and works out the absolute URL the new URL would point to.
+
+## A scraping tutorial
+
+Let's say you'd like to scrape some data from a web page. For instance, you'd
+like to pull information about books from an online bookstore: you'd like to get
+prices, review ratings, titles, and related information for an analysis of book
+markets.
+
+Instead of Amazon, let's use [Books to Scrape](http://books.toscrape.com/), an
+online store that exists to be scraped for demos like this.
+
+### Finding what you need
+
+The page HTML contains lots of tags. (Web pages are often full of tags many
+layers deep, for all the buttons, boxes, popups, images, links, headers, and
+other junk on every webpage.) How do we find what we need?
+
+Step 1 is to open the site in our web browser and find out which pages contain
+the information we need.
+
+Step 2 is to open those pages and find the tags we want. Your browser's web
+developer tools may be useful for this.
+
+::: {#exr-select-books}
+
+#### In-class activity: select some book titles
+
+Install Beautiful Soup using
+
+```sh
+pip install beautifulsoup4
+```
+
+Now load it and Requests:
+
+```python
+from bs4 import BeautifulSoup
+import requests
+```
+
+Now pull the Books to Scrape website using Requests and use Beautiful Soup to
+parse the HTML:
+
+```python
+r = requests.get("http://books.toscrape.com")
+
+soup = BeautifulSoup(r.content)
+```
+
+Use CSS selectors to extract a list of elements from which you can get:
+
+- the title of each book
+- a link to the page with details about the book
+
+Run the code and verify that it works.
+
+:::
+
+## Exercises
+
+::: {#exr-scrape-books}
+
+### Scraping some books
+
+Let's continue from @exr-select-books and scrape <http://books.toscrape.com>.
+
+For each book, we'd like:
+
+- The book title
+- Its current price
+- Its UPC (Universal Product Code)
+- A link to the page with further details about the book
+
+Write a Python script that can be run from the command line that does this. It
+should write its output to standard output in CSV format, so you can run the
+command
+
+```sh
+python scrape-books.py > books.csv
+```
+
+and get a file `books.csv` with four columns.
+
+To do this, you'll need to load each page of book listings from the site, use
+selectors to extract information, and load each book's individual page to get
+the UPC. You'll then store each book's information somewhere so you can print it
+out, or just print it out immediately as you go.
+
+Organize your code so that there are separate functions for getting information
+about books, and the printing of CSV output is done in separate code that calls
+those functions. That ensures you could later use the same functions to do
+something other than printing a CSV. Your CSV output should correctly handle
+book information containing commas, quotation marks, newlines, and any other
+characters with special meaning in CSVs.
+
+:::

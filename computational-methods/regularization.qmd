@@ -1,0 +1,265 @@
+# Regularization for Neural Networks
+
+::: {.hidden}
+$$
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\R}{\mathbb{R}}
+\DeclareMathOperator*{\argmin}{argmin}
+\newcommand{\T}{^\mathsf{T}}
+$$
+:::
+
+As we've seen, deep neural networks can quickly become large and complicated,
+with far more parameters (weights, biases, feature maps, and so on) than any
+statistical model you've used before. This makes them vulnerable to overfitting
+their training data, and can result in models that generalize poorly to new
+data.
+
+"Regularization" covers a broad category of methods to reduce this problem; @DLB
+define regularization as "any modification we make to a learning algorithm that
+is intended to reduce its generalization error but not its training error"
+(section 5.2.2).
+
+The simplest strategy might just be to make small networks. But real-world
+problems tend to involve complicated, high-dimensional relationships---or at
+least the kinds of real-world problems we try to solve with neural networks
+instead of linear models. It seems reasonable to expect that classifying
+high-resolution images or understanding written text should involve a highly
+complicated and nonlinear process, and a small network may be a poor
+approximation to that.
+
+But a large network, while it reduces the bias (because it can get closer to the
+true relationship), has high variance. So we often start with large networks and
+apply regularization to reduce their variance.
+
+## Penalties
+
+The most familiar form of regularization is penalization. For example, in
+least-squares regression, you have sometimes used estimators of the form
+$$
+\hat \beta = \argmin_\beta \underbrace{\|Y - X \beta\|_2^2}_\text{loss} +
+\underbrace{\lambda \|\beta\|}_\text{penalty},
+$$
+where $\|\beta\|$ is some norm. When it's the Euclidean ($L_2$) norm, this is
+ridge regression; when it's the Manhattan ($L_1$) norm, this is the lasso. The
+penalty term "shrinks" the coefficients towards 0, meaning that the solution
+optimizing this objective has a smaller value of $\|\beta\|$ than one that
+simply minimized the squared-error loss.
+
+You may also recall that it's common to apply the penalization to the slopes but
+not to the intercept $\beta_0$.
+
+We can apply a similar sort of penalization to weights in neural networks. In
+@sec-train-net, we defined the goal of gradient descent to be to minimize
+some loss function $L$:
+$$
+\hat \theta = \argmin_\theta \frac{1}{n} \sum_{i=1}^n L(f(x_i; \theta), y_i).
+$$
+If we think of $f$ as the neural network, we could apply a penalty to $\theta$,
+the neural network weights and biases:
+$$
+\hat \theta = \argmin_\theta \frac{1}{n} \sum_{i=1}^n L(f(x_i; \theta), y_i) +
+\lambda \|\theta\|.
+$$
+If we choose the $L_2$ norm for the penalty, this is known as *weight decay*.
+
+On fully connected layers, weight decay is typically applied to the weights and
+not the biases---for reasons related to the choice not to penalize intercepts in
+linear regression.
+
+We call this "weight decay" because of the effect it has on the parameters.
+Consider performing gradient descent to minimize the objective function above.
+When the penalty term is the Euclidean norm, we can write the objective function
+as
+$$
+\tilde J(\theta) = J(\theta) + \lambda \theta\T\theta,
+$$
+where $J(\theta)$ is the sum of the losses. If we take the gradient with respect
+to the parameters $\theta$, we obtain
+$$
+\nabla \tilde J(\theta) = \nabla J(\theta) + 2 \lambda \theta,
+$$
+and so an ordinary gradient step updates the parameters as
+\begin{align*}
+\theta &\leftarrow \theta - \gamma (\nabla J(\theta) + 2 \lambda \theta) \\
+&\leftarrow \theta - \gamma \nabla J(\theta) - 2 \gamma \lambda \theta \\
+&\leftarrow (1 - 2\gamma \lambda)\theta - \gamma \nabla J(\theta).
+\end{align*}
+This looks like an ordinary gradient step, except that first, we shrink $\theta$
+by a factor $(1 - 2 \gamma \lambda)$. In other words, the parameters decay
+toward the origin, leading to the term "weight decay."
+
+This also suggests an easy way to implement weight decay. Instead of adding the
+penalty to the loss function and tracking its gradient through backpropagation,
+our optimizer can simply shrink the weights toward zero on every gradient step.
+
+This is how PyTorch implements gradient descent. Its optimizers include a
+`weight_decay` parameter that control the amount of decay (corresponding to
+$\lambda$ above), and they automatically apply the decay to *every* parameter in
+each network. Yes, that includes the biases, and feature maps in CNNs, and
+everything else, but it's the easiest way to regularize in PyTorch.
+
+(Tensorflow lets you separately apply weight decay to weights, biases, and other
+parameters, so you can decide which get regularized.)
+
+## Data augmentation
+
+Another regularization approach is to make fake data.
+
+Consider a classification task. You have, say, images that need to be labeled
+with a category. You know that very similar images should be put into the same
+category, where "similar" means something like "shifted slightly to the left" or
+"slightly darker" or "with a bit of random noise". After all, a darker picture
+of a horse is still a picture of a horse.
+
+If a classifier cannot generalize to slightly altered versions of its training
+data, presumably it won't generalize well at all; at the least, generalizing
+well to slightly altered training data is better than not doing so.
+
+Limiting the flexibility of the model is one way to ensure this, so that it is
+not so flexible that tiny changes to the inputs can dramatically change the
+outputs. But again, often we are using neural networks because we believe a
+large, complicated model is necessary.
+
+An alternate approach is *data augmentation*. This involves augmenting your
+training data with additional "fake" data.
+
+For example, in an image classification task, for every training image you might
+create new training images (with the same labels):
+
+- one that's moved a pixel to the left
+- one that's moved a pixel to the right
+- one that's moved a pixel upward
+- one that's moved a pixel downward
+- one that's slightly scaled down toward the center (as if it were zoomed out)
+- one that's slightly scaled up from the center (as if it were zoomed in)
+- one where all the pixels are 10% brighter
+- one where all the pixels are 10% darker
+
+And so on and so on. The transformations must be chosen so that you can keep the
+same labels, so you shouldn't choose transformations that change the
+classification of the image. But if you choose carefully, you can multiply the
+"size" of your training data by a large factor and produce a network that is
+more robust and generalizable.
+
+For regression (rather than classification) tasks, it may be harder to use
+dataset augmentation. If you shift $x$, how do you know what the new "true" $y$
+should be?
+
+## Early stopping
+
+We've repeatedly hinted that when training a neural network, we're not actually
+trying to attain the global optimum of the loss function. That task is
+intractable---because there are many modes and gradient descent is not
+guaranteed to find the global optimizer---and in any case the global optimizer
+of the loss on the *training* data is likely to overfit.
+
+In the homework, we've usually created training and test datasets, and tracked
+the test performance of the model after every epoch. We could use this as an
+estimate of generalization error and use it to decide when to stop our gradient
+descent process: if the test error does not improve for some number of
+iterations, we terminate the gradient descent and use the parameters from the
+iteration with the best test error.
+
+This is called *early stopping* because it involves stopping gradient descent
+before we hit the specified maximum number of iterations (or epochs). It has the
+advantage that it requires very little additional computation, and in fact can
+save computation by letting you stop early.
+
+Algorithm 7.1 of @DLB suggests one specific way to do this. It involves
+specifying how often to check the test set and setting a parameter $p$, the
+"patience", or the number of times we're willing to see the test set error get
+worse before terminating the optimization.
+
+We can implement this in PyTorch by modifying our `train()` function to (a)
+store copies of the parameters every time we check the test error, (b) track the
+test errors to determine when to stop, and (c) return the parameters that
+attained the best test error, not the final parameters.
+
+We can think of early stopping as being much like penalization. TODO draw
+diagram like DLB 7.4
+
+## Dropout
+
+You may be familiar with *bagging* from other machine learning contexts. For
+example, random forests use bagging: multiple separate classification trees are
+built using different (bootstrapped) versions of the training data, and the
+random forest makes its predictions by having the individual trees vote on the
+correct classification. By averaging over many trees, each of which is very
+flexible, the overall variance of the estimator is reduced.
+
+We could bag neural networks, but each neural network takes so long to train
+that this would be very expensive. The idea of averaging over separate models is
+appealing, though, so can we somehow approximate it?
+
+Consider a large feed-forward network with fully connected layers. You could
+make many smaller networks by taking subsets of the nodes. These networks would
+not be completely independent---they would share the weights and biases for the
+nodes they have in common---but they'd still be different.
+
+If there are $n$ nodes, there are $2^n$ subsets of nodes. Clearly we can't fit
+all of those. But we *could* approximate somehow. The standard technique is
+*dropout*.
+
+Suppose the neural network has $m$ hidden units across all its hidden layers. We
+choose a parameter $p \in [0, 1]$. In each gradient descent step, we do the
+following:
+
+1. Sample a vector $\mu \in \{0, 1\}^m$, such that $\mu_i \sim
+   \operatorname{Bernoulli}(1 - p)$.
+2. Begin forward propagation. For each hidden layer node $i$, multiply its
+   output by $\mu_i$ before passing it to the next layer. This effectively
+   zeroes the output of nodes where $\mu_i = 0$. For nonzero outputs, multiply
+   them by $1/(1 - p)$.
+3. Perform back-propagation and take a gradient step.
+4. Return to step 1 for the next minibatch.
+
+
+Let's go through each step.
+
+First, think of $\mu$ as a mask. It determines which nodes are kept in the
+network ($\mu_i = 1$) and which are dropped out ($\mu_i = 0$). It means that on
+each minibatch, we only use a fraction $(1 - p)$ of the nodes---like we are
+sampling a subset of nodes and using them for prediction.
+
+Second, consider what we do once the network is trained and we use it for
+prediction. In bagging, we'd average over our many models; but we have only one
+network. Instead, we keep all the nodes in the network when making
+predictions---which is kind of like averaging over all the subsetted networks we
+use in training. That's why we scaled the nodes during training: by scaling
+outputs by $1/(1 - p)$, we ensured that when we don't remove any nodes, the
+inputs to each node will still be roughly the same size on average.
+
+I say "kind of like averaging" because it's obviously not the same. In bagging,
+we'd train each model fully and then average them. Here, each "model" is just a
+different subset of the same network, and the subsetting is happening per
+iteration of training.
+
+Dropout is a surprisingly powerful form of regularization, and works well in
+many contexts. It allows you to build a larger-than-necessary network and then
+essentially scale it down by choosing $p$. It ensures the network is robust to
+perturbations, because during training the network must be robust to entire
+nodes being zeroed.
+
+PyTorch implements this by making explicit dropout layers. If we specify a
+network as
+
+```python
+nn.Sequential(
+    nn.Linear(10, 100),
+    nn.ReLU(),
+    nn.Dropout(p=0.5),
+    nn.Linear(100, 1)
+)
+```
+
+we have told PyTorch to take the ReLU output (a vector of 100 numbers) and zero
+half of them. This is only done during training---the `Dropout` layer does
+nothing when the network is not in training mode. This is one reason why our
+`train()` and `test()` functions have been careful to set the network to be in
+training or evaluation mode; some layers, like dropout, change their behavior
+depending on the mode.
+
+## Batch normalization
+
+TODO

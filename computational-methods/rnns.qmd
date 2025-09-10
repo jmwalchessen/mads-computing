@@ -1,0 +1,144 @@
+# Recurrent Neural Networks
+
+::: {.hidden}
+$$
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\R}{\mathbb{R}}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator*{\argmin}{argmin}
+\newcommand{\T}{^\mathsf{T}}
+$$
+:::
+
+As we've worked through neural networks, we've increased the range of data types
+we can handle. Feed-forward networks treat their inputs as arbitrary vectors in
+$\R^p$, and don't use any information about the ordering or arrangement of those
+values. Convolutional networks treat their inputs as grids and assume that
+features can be extracted from small portions of the images, the same features
+being extracted from every portion.
+
+But what about data that comes in the form of an ordered sequence, such as a
+time series? Often our task is some form of prediction: to predict what value
+will come next in the sequence, or classify some other outcome based on recent
+values of the sequence.
+
+Convolutional networks can work on one-dimensional grids, but they don't give us
+an easy way to predict the next value in a sequence: they operate on the entire
+grid at once, rather than using a part to predict another part. Let's look
+instead at recurrent networks.
+
+## Problem setup
+
+Consider obtaining a sequence of values indexed by $t = 1, \dots, T$. At any
+time point $t$, we observe a value $x^{(t)} \in \R^p$. Let's call this the
+"state", because it indicates the state of the system at time $t$.
+
+In physics, we often have dynamical systems, which are systems where the state
+at any time point can be written in terms of the previous state:
+$$
+x^{(t)} = f(x^{(t - 1)}),
+$$
+for some $f$. This is a *recurrence relation*, and the word "recurrent" is used
+because the state at $t$ is written in terms of the state at $t - 1$, which is
+itself in terms of the state at $t - 2$, and so on:
+$$
+x^{(t)} = f(f(\cdots f(x^{(0)}) \cdots)).
+$$
+In physics, often $x$ is the position and velocity of physical objects, while
+$f$ is written in terms of some physical laws governing those objects.
+
+We can draw this out in a computational graph, like we've done with neural
+networks. Instead of going from one layer to the next, we go from one time point
+to the next---and instead of using different weights and biases each time, we
+apply the same $f$.
+
+TODO diagram
+
+This works in physics because we can define a state that determines the
+evolution of the system. If you know the current angle and angular velocity of a
+pendulum, you know everything you need to predict its angle and angular velocity
+a moment later.
+
+Most prediction problems, of course, are not like this. We do not know the
+equivalent of "laws of physics" that determine, say, tomorrow's vector of stock
+prices. There is some randomness, but there is also some *memory*: the value at
+$t$ may not depend solely on the value at $t - 1$, but also on some combination
+of what happened at several previous time points.
+
+This suggests there is additional state that we do not observe: *hidden* state.
+Suppose, then, the dynamical system is that
+$$
+h^{(t)} = f(x^{(t)}, h^{(t - 1)}),
+$$
+where $h^{(t)} \in \R^d$ is the hidden state at time $t$. This hidden state
+evolves over time, and the observed value $x^{(t)}$ provides some information
+about how it will change.
+
+Finally, there may be some observed outcome $y^{(t)}$ at each time $t$. This
+could be a different variable, or perhaps our goal is to predict $x^{(t + 1)}$,
+in which case the outcome we want to predict is $y^{(t)} = x^{(t + 1)}$.
+Conceptually, the situation looks like this:
+
+TODO diagram like @DLB figure 10.3
+
+## Representing sequences in neural networks
+
+How do we turn this into a neural network? The key is in our assumption: the
+function $f$ is the same over all time, and only the hidden state and observed
+sequence can change over time. Our network, then, does not need to learn new
+parameters (weights, biases, etc.) on every single time step $t$ to predict the
+next time step; instead, it learns one shared set of parameters that tell it how
+to predict each subsequent time step.
+
+This is parameter sharing, and it works much like the sharing in convolutional
+networks, where the same feature map is used in each part of the input grid. It
+encourages the network to learn how to predict changes using the recent state,
+rather than training a network that treats every time point differently, as you
+would get when feeding a time series to a fully connected network.
+
+Returning back to our diagram, we can write update equations:
+\begin{align*}
+h^{(t)} &= g_h(W h^{(t-1)} + U x^{(t)} + b)\\
+\hat y^{(t)} &= g_o(V h^{(t)} + c),
+\end{align*}
+where $g_h$ is an activation function for the state; $g_o$ is the activation
+function for the output layer; $W$, $V$, and $U$ are weight matrices; and $b$
+and $c$ are bias vectors.
+
+In our terminology, the hidden state is a fully connected linear layer that is
+connected to the previous hidden state and the current $x^{(t)}$; the output
+$\hat y$ is fully connected to the hidden state through another activation
+function.
+
+Finally, we need a loss function. If we are working with a time series where
+$y^{(t)}$ is scalar, we might use the squared-error loss $(y^{(t)} - \hat
+y^{(t)})^2$; if we are making a classification at every time point, we might use
+softmax as $g_o$ and use the negative log-likelihood loss, as we've done in
+other classification problems.
+
+While recurrent networks are more complicated and the same parameters are used
+many times, in principle back-propagation works the same way, and so gradient
+descent can function in exactly the same fashion.
+
+## Deep recurrent networks
+
+TODO multiple recurrent layers, stacked
+
+## Vanishing gradients and the memory problem
+
+As we mentioned in @sec-exploding-vanishing, one common problem in neural
+networks is that the gradient of the loss with respect to parameters may explode
+or vanish: the gradient may become huge, or it may become very very small. In
+either case, gradient descent may have a bad time.
+
+This is particularly problematic with recurrent networks. The hidden state
+$h^{(t)}$ is formed from repeatedly applying the *same operation* to $h^{(0)}$
+(plus the influence of $x^{(t)}$). Unfortunately, this tends to mean that the
+gradient of the loss with respect to $W$ tends to either go to zero or to
+$\infty$ [@DLB, section 10.7].
+
+TODO
+
+## LSTMs
+
+TODO

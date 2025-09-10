@@ -1,0 +1,146 @@
+# Project: Distributed Data Analysis {#sec-lsd-project}
+
+In this project, you will learn to use Spark to clean a large dataset, do
+feature engineering, do analytics reporting, and fit machine learning models.
+
+We will work with a large dataset of US airline flights. You may have used a
+subset of this data in a course before, but here we'll use the full data for ten
+years. We'll begin by using Spark to aggregate and summarize the data, before
+moving on to feature engineering and building models to predict on-time
+performance.
+
+## Logistics
+
+This project will be completed in assigned groups of 2 or 3 students. Group
+assignments will be posted on Canvas. There will be several milestones
+throughout the semester when you will turn in parts of the work; at the end of
+the mini, you will turn in the completed project.
+
+## Data description
+
+The dataset is loaded in Parquet files on our Spark cluster. They live in the
+`sampledata` container of the `madsdatastore` storage account in Azure Data Lake
+Storage. There is one CSV file per year, but fortunately Spark can read them all
+at once:
+
+```python
+delays = spark.read.csv("abfss://sampledata@lsd2025storage.dfs.core.windows.net/delays",
+                        header=True, nullValue="NULL")
+```
+
+This will only work in the Class Shared Cluster, since it is configured with the
+necessary keys to have access to the data.
+
+The data includes the following columns:
+
+| Variable | Meaning |
+|---|-----------|
+| FL_DATE | Date of flight (YYYY-mm-dd) |
+| OP_CARRIER |	Code assigned by International Air Transport Association to identify each airline; Wikipedia has a [full table of them](https://en.wikipedia.org/wiki/List_of_airline_codes). |
+| OP_CARRIER_FL_NUM | Flight number assigned by this carrier for the flight. |
+| ORIGIN |	IATA code for the airport the flight left from. Wikipedia has a [list of airports by IATA code](https://en.wikipedia.org/wiki/Lists_of_airports_by_IATA_and_ICAO_code). |
+| DEST |	IATA code for the destination airport. |
+| CRS_DEP_TIME | Scheduled departure time (local time, hhmm). |
+| DEP_TIME |	Actual departure time (local time, hhmm). |
+| DEP_DELAY |	Difference in minutes between scheduled and actual departure time. Early departures show negative numbers. |
+| TAXI_OUT |	Time taken to taxi out to the runway, in minutes. |
+| WHEELS_OFF |	Time the flight took off (local time, hhmm). |
+| WHEELS_ON |	Time the flight landed (local time, hhmm). |
+| TAXI_IN |	Time taken to taxi in to the gate, in minutes. |
+| CRS_ARR_TIME | Scheduled arrival time (local time, hhmm). |
+| ARR_TIME |	Actual arrival time (local time, hhmm). |
+| ARR_DELAY |	Difference in minutes between scheduled and actual arrival time. Early arrivals show negative numbers. |
+| CANCELLED |	1 if the flight was cancelled. |
+| DIVERTED |	1 if the flight was diverted. |
+| CRS_ELAPSED_TIME | Scheduled duration of the flight, in minutes. |
+| ACTUAL_ELAPSED_TIME|	Elapsed time of flight, in minutes. |
+| AIR_TIME | Time the flight was in the air, in minutes. |
+| DISTANCE |	Distance between origin and destination airports, in miles. |
+| CARRIER_DELAY |	Length of delay caused by the airline (e.g. maintenance, waiting for crew, cleaning the plane), in minutes. Note that if the flight was not delayed, these fields will be blank. |
+| WEATHER_DELAY |	Length of delay caused by weather, in minutes. |
+| NAS_DELAY |	Length of delay caused by the National Airspace System, including air traffic control, in minutes. |
+| SECURITY_DELAY |	Length of delay caused by a security problem, such as evacuation of a terminal or excessive security lines, in minutes. |
+| LATE_AIRCRAFT_DELAY|	Length of delay caused because the aircraft arrived late from its previous airport, in minutes.  |
+
+## Part 1: Basic data exploration
+
+This part is due Friday, February 7 at 5pm.
+
+First, create a notebook in the Databricks workspace for cleaning and formatting
+the data. Ensure you can load the data and consolidate it into one Spark
+DataFrame. Examine the columns and their types. Do any columns need to be
+converted to specific types? Review the [Spark data types
+reference](https://spark.apache.org/docs/latest/sql-ref-datatypes.html); the
+[PySpark functions
+reference](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/functions.html)
+lists functions that can do conversion and manipulation.
+
+Have your notebook do all the necessary manipulation. At the end of the
+notebook, write your new data frame into the metastore. Choose a table name that
+is unique to your group, and write it with:
+
+```python
+your_data_frame.write.saveAsTable("hive_metastore.default.your_group_table_name")
+```
+
+Next, create a new notebook in the Databricks workspace. In the notebook,
+calculate (using Spark) and present the following aggregates:
+
+- A summary table or graph showing the number of flights per month across the
+  history of the data, so you know you've loaded everything
+- The percentage of flights delayed per week, plotted over the entire length of
+  the data
+- The number of delayed flights per week, by type of delay, plotted over time
+- A table of air carriers, showing the number of flights scheduled, the number
+  canceled, the percentage delayed, and the average delay among those delayed.
+  Sort by total number of flights, so the biggest air carriers come first.
+- A table of the top 50 airports by percentage of flights delayed, showing the
+  airport code, percentage of flights delayed, and average number of flights per
+  day
+
+## Part 2: Feature engineering
+
+This part is due Friday, February 14 at 5pm.
+
+Our ultimate goal is to build a predictive model for flight delays. Given a
+flight and various features, your model should predict whether the flight is
+delayed for any reason. (We'll count cancellation as a type of delay.)
+
+You could use only the variables present in the data, but it is likely that you
+can derive new features that would be more useful.
+
+Create a notebook that generates the following additional features for each
+observation:
+
+- The day of week (Monday-Sunday)
+- Rate of weather delays at the departure airport in the previous hour (the
+  fraction of flights in the previous hour that were delayed due to weather)
+- Rate of weather delays from the arrival airport in the previous hour
+- Number of flights departing from the departure airport in the previous hour,
+  compared the average number during this hour on the same day of the week, as a
+  *z* score
+- At least two more features, calculated from the available data, that you think
+  could be useful for your model
+
+## Part 3: Delay prediction
+
+This part is due Friday, February 28 at 5pm.
+
+Now we aim to use Spark ML and the features you created in Part 2 to predict
+departure delays. Create a notebook and use your feature engineering code to
+augment the entire dataset with features.
+
+Next, split the data into training, test, and validation sets. Based on how you
+did the feature engineering, should your split be fully random, or do you need
+to do another approach? In any case, reserve at least 20% of the data for final
+validation, and do not use it when building and testing your models.
+
+Now apply Spark ML to predict departure delays. Using your training and test
+sets, choose the right classifier, tune its parameters, and calculate its
+performance.
+
+Once you are done, evaluate your model's performance on the held-out validation
+set. Report the accuracy, but break it down as well: produce the full confusion
+matrix, the true positive and false positive rates, and the sensitivity and
+specificity. Compare it to a baseline model that always predicts "no delay". How
+much better is your model?

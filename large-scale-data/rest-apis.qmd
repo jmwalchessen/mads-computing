@@ -1,0 +1,712 @@
+# REST APIs
+
+Lets say you're responsible for software that manages a large database. Maybe
+it's your database of customers, or of students, or the database of all products
+sold by your company; or maybe it's the geographic data behind Google Maps, or
+the millions of words of text in Wikipedia. Many people---other teams in your
+company, random people in the public, other software systems---want to interact
+with your database to do things.
+
+You could give them direct access. If you use a SQL database system, you could
+give them access to write their own SQL queries. (Most SQL database software
+supports permissions, so you could allow certain users to make `SELECT` queries
+but not to `INSERT` or `UPDATE` data.) But that can cause problems. Your users
+might write large, complicated queries that are slow to run, and now it's *your*
+problem that your database is working slowly. Also, your users will depend on
+your specific database schema: if you want to reorganize, change column names,
+or otherwise change how data is stored, you must now coordinate with everyone
+who happens to send a `SELECT` query to you.
+
+When you learned object-oriented programming, you learned about the principle of
+*encapsulation*. The internal details of a class should be hidden from the
+outside world, which can only interact with it through a publicly declared
+*interface*. This means the internal details of the class can change---or it can
+be replaced by an entirely different implementation---without any users having
+to know the difference.
+
+We often refer to the public interfaces of a product, such as the methods
+exposed by its classes, as its *application programming interface* (API). You
+might hear software engineers referring to a library that provides "an API for
+reticulating splines", or complaining that a particular API is too complicated
+and hard to use. PostgreSQL has a special API for submitting SQL queries and
+fetching results.
+
+In the spirit of encapsulation, it seems like large databases should have APIs
+to do common tasks. You can provide an API for the rest of your company to use,
+and then you can improve the backend (the schema, SQL engine, caching system,
+and whatever else) without having to coordinate with the rest of the company,
+which only uses your API. And you'd like this API to be available over the
+network, so different servers---or random people on their laptops---can make
+requests to the API.
+
+So how do you build a system that is widely accessible, allows authorized users
+to submit requests, and returns results, in a way that is convenient, easy to
+use, and easy to update?
+
+There have been many solutions. For example,
+[SOAP](https://en.wikipedia.org/wiki/SOAP) defines a way to send and receive
+requests that are written in XML; it was very popular in the early 2000s but
+soon gained a reputation for being verbose and overly complicated.
+
+A key realization was that HTTP already provides for ways to make requests of
+remote machines and receive responses from them. Why not provide an API as an
+HTTP server that responds to specific queries?
+
+## HTTP {#sec-http}
+
+Let's briefly recap HTTP, the HyperText Transport Protocol underlying REST APIs
+and every web page you visit. HTTP is a way to make requests to servers for
+webpages (or other resources) and receive their responses, and it communicates
+its data by using protocols like TCP.
+
+### URLs {#sec-urls}
+
+Resources available over HTTP (and some other protocols) are identified with
+[Uniform Resource Locators](https://en.wikipedia.org/wiki/URL).
+
+URLs come in parts; here's the syntax as given by Wikipedia:
+
+```
+URI = scheme:[//authority]path[?query][#fragment]
+authority = [userinfo@]host[:port]
+```
+
+Let's break that down:
+
+- Scheme: The type of thing we want. Common schemes are `http` and `https` for
+  Web pages, `mailto` for email links, `file` for files on the local file
+  system, and so on.
+- userinfo: A username and potentially a password (as `username:password`).
+  Optional. Sometimes used for FTP links so the links specifies the username to
+  use. Normally it's not good to include a password in a URL, because then it's
+  visible to anyone.
+- host: A domain name or IP address for the server that owns this content.
+- port: The port number to use when connecting.
+- path: A sequence of parts separated by slashes (`/` – no, these are not
+  backslashes). The path specifies the specific resource or file being
+  requested.
+- query: Optionally, a query, starting with a question mark. Queries are
+  typically key-value pairs separated by ampersands, as in `foo=bar&baz=bin`.
+- fragment: A name, preceded by the hash sign `#`, pointing to a specific part
+  of the document. For example, in an HTML page, the fragment may refer to a
+  specific section or heading on the page.
+
+Some URL examples:
+
+```
+https://en.wikipedia.org/wiki/URL?thing=baz
+
+https://scholar.google.com/citations?user=AxT2apgAAAAJ&hl=en
+
+ftp://alex:hunter2@ftp.example.com/home/alex/passwords
+```
+
+URLs can only contain a specific set of characters (mainly the Latin alphabet,
+digits, and some punctuation and symbol characters). Everything else must be
+"URL encoded", meaning the character is replaced by a percent sign and two
+hexadecimal digits giving its UTF-8 numeric encoding. (If the encoding is more
+than one byte, each byte is encoded separately.)
+
+For example, the space character is not permitted in URLs, so it is replaced
+with `%20`. Similarly, if we want to use `=` or `&` inside a query argument
+without it being interpreted as separating key-value pairs, we can URL-encode
+them.
+
+### Requests and responses
+
+An HTTP *request* is sent by a client (i.e. you) to a server to request a
+specific resource. It consists of several parts. For example, here’s a request I
+sent to Wikipedia for the page <https://en.wikipedia.org/wiki/World_Wide_Web>:
+
+```
+GET /wiki/World_Wide_Web HTTP/2.0
+Host: en.wikipedia.org
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+DNT: 1
+Connection: keep-alive
+Cookie: enwikiUserName=Cap%27n+Refsmmat; [more redacted]
+Upgrade-Insecure-Requests: 1
+Cache-Control: max-age=0
+If-Modified-Since: Sun, 27 Jan 2019 03:20:05 GMT
+```
+
+There’s a lot going on here. Let’s break it down.
+
+```
+GET /wiki/World_Wide_Web HTTP/2.0
+Host: en.wikipedia.org
+```
+
+There are several types of HTTP requests, but this is a `GET` request, using
+HTTP version 2.0. (See @sec-http-methods for other request types.) The first
+line specifies the type of request and the specific resource I’m requesting,
+`/wiki/World_Wide_Web`. The second line is the beginning of the *headers*,
+providing metadata about the request. These headers are in `Key: value` format,
+one per line. Here are a few selected headers and their meanings:
+
+- Host: Specifies domain name I am making the request for -- it’s possible for
+  multiple different domain names to have the same IP address, so I have to tell
+  the receiving server which domain name I'm interested in.
+- User-Agent: Tells the server what kind of program I am. Servers sometimes use
+  this to tell what version of a web page to serve – maybe a page uses some
+  features that only work in Chrome or in specific versions of Internet
+  Explorer. If you're writing a program that makes HTTP requests, it's
+  considered good practice to set a User-Agent identifying your program, so if
+  server operators notice it causing a problem, they know who to complain to.
+- Accept: Specifies the formats of responses I am willing to accept. We'll see
+  later that some APIs let us specify if we want responses as CSV, JSON, or
+  other formats.
+- Accept-Encoding: Here my browser says it is willing to receive content
+  compressed with [gzip](https://en.wikipedia.org/wiki/Gzip),
+  [DEFLATE](https://en.wikipedia.org/wiki/DEFLATE), or
+  [Brotli](https://en.wikipedia.org/wiki/Brotli). The server can automatically
+  compress its responses, and the HTTP client automatically decompresses them,
+  saving network bandwidth.
+
+
+After the server receives this request, it can send a response. Responses have a
+similar format to requests. They begin with a status line and headers:
+
+```
+HTTP/2.0 200 OK
+date: Wed, 30 Jan 2019 19:14:42 GMT
+content-type: text/html; charset=UTF-8
+content-encoding: gzip
+[...]
+```
+
+The first line gives the status code 200, meaning "OK". Other response codes
+include the famous 404 ("not found"), 403 ("forbidden"), 301 ("moved
+permanently"), and 418 (["I'm a
+teapot"](https://www.rfc-editor.org/rfc/rfc2324)). You can find a [full list on
+MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status). The client can
+check the status code to determine if their request was successful.
+
+Subsequent lines give headers for the response. The server has specified the
+date the response was generated, the type of content, and its encoding; other
+headers I have omitted set various cookies and give other caching information.
+
+The headers are followed by the response *body*. In this case, since the
+`Content-Encoding` is `gzip`, the response body is the gzip-compressed HTML of
+the web page.
+
+### HTTP methods {#sec-http-methods}
+
+Above we saw a `GET` request, which is the simplest and most common type of HTTP
+request. `GET` is one of several *methods* that can be used. The common methods
+are:
+
+* `GET`: Retrieve data from a specific resource (i.e. fetch a specific web
+  page). GET requests should not have side effects, like deleting things.
+* `POST`: Send data to the server so it can do something. Submitting a form to a
+  website often sends a POST request containing the contents of the form. POST
+  requests often have side effects, and automated scrapers should be very
+  careful about submitting POST requests.
+* `HEAD`: Same as GET, except without the body of the response – only the
+  response headers will be sent.
+* `PUT`, `PATCH`, ...: Other methods are less commonly used. PUT sends a file to
+  a server and asks it to put it at a specific URL, for example, while PATCH
+  asks for modifications to be made to a file.
+
+A POST request can contain arbitrary amounts of data, typically as key-value
+pairs.
+
+Here’s an example POST request adapted [from
+MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST):
+
+```
+POST /submit HTTP/1.1
+Host: example.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 13
+
+say=Hi&to=Mom
+```
+
+We’re sending the keys `say` and `to` to the server at example.com.
+
+There are other ways of encoding the contents of a POST request; this method is
+called `urlencoded` (because the key-value pairs resemble those in the query
+component of a URL), but we could send JSON or other data formats if the server
+knows how to read them, and we'd set the `Content-Type` appropriately.
+
+### Making HTTP requests in Python
+
+There are HTTP packages for almost any programming language. In Python, your
+best choice is probably [Requests](https://requests.readthedocs.io/en/latest/),
+which you can install with
+
+```sh
+pip install requests
+```
+
+The package is fairly straightforward. For example:
+
+```python
+import requests
+
+r = requests.get("https://en.wikipedia.org/wiki/World_Wide_Web",
+                 headers={"User-Agent": "toy demo 1.0"})
+
+r.status_code #> 200
+
+r.text #> "'<!DOCTYPE html>\n<html ..."
+```
+
+To add query parameters, we can either add them to the URL manually, or provide
+a dictionary of parameters:
+
+```python
+r = requests.get("https://forecast.weather.gov/zipcity.php",
+                 params={"inputstring": "15213"})
+```
+
+By providing a dictionary, we allow Requests to do any necessary URL encoding
+for us, so there's no problem if one of the values contains `&` or `=`
+characters.
+
+For more details, the [requests quickstart
+guide](https://requests.readthedocs.io/en/latest/user/quickstart/) and [API
+reference](https://requests.readthedocs.io/en/latest/api/) are useful starting
+points.
+
+## REST
+
+You use HTTP every day when browsing websites. When you open
+<https://www.instagram.com>, your web browser sends a GET request and receives a
+response; when you post a photo, your browser sends a POST request containing
+the photo data and information like the photo caption and tags.
+
+But let's return to the idea of providing an interface to databases. How can we
+turn HTTP into a general interface for specifying requests, receiving data, and
+sending updates?
+
+### RESTful design
+
+The basic design idea is called [representational state
+transfer](https://en.wikipedia.org/wiki/Representational_state_transfer), or REST.
+
+REST defines a basic architecture:
+
+* A client makes requests of a server. The server worries about how to store and
+  manipulate the data; the client just has to specify what it wants.
+* The requests are *stateless*. This doesn’t mean they qualify for [Nansen
+  passports](https://en.wikipedia.org/wiki/Nansen_passport); it means that each
+  HTTP request is independent, and doesn’t depend on the previous requests you
+  may have made. This prevents complexity from creeping in.
+* Resources are identified with URLs. A "resource" might be a web page (as in
+  normal web browsing), but it might also represent a user, an article, a post,
+  or some other thing stored by the system. Each resource as a URL in a specific
+  form.
+* Operations are done with GET and POST requests to specific URLs. A GET request
+  to the URL for a resource might return information about that resource, while
+  a particular POST request might be used to add or update data.
+
+
+Sometimes the URLs to perform actions are known as *endpoints*, and so we refer
+to the "API endpoint" to fetch certain data.
+
+### REST over HTTP
+
+We can implement this for a particular system by making a web server that
+responds to HTTP requests by looking up data or modifying it accordingly. Then a
+client can issue the right requests to read and modify data.
+
+Let's use a real API to see how this works. GitHub provides a [REST
+API](https://docs.github.com/en/rest) that lets you obtain information about
+users, repositories, issues, pull requests, and so on. Each of these is a
+resource. All API requests are sent to <https://api.github.com>, so URLs build
+on that address.
+
+For example, each user is a resource, and there is a URL for each user. For
+example, we can make a GET request to `/users/{username}` to get information
+about a user with a particular username:
+<https://api.github.com/users/capnrefsmmat>
+
+If we open this link in a web browser, we see that GitHub returns data in JSON
+format about me. The data includes my name and website, my user ID number, and
+various other details. GitHub also helpfully includes the address of other
+resources as well, like the `repos_url` to get a list of all my public Git
+repositories.
+
+In Requests, we can get this JSON-encoded data into Python.
+
+```python
+import requests
+
+r = requests.get("https://api.github.com/users/capnrefsmmat")
+
+r.status_code #> 200
+
+r.text #> the text of the JSON-encoded data
+
+j = r.json() #> the JSON decoded into a Python dictionary
+
+j['name'] #> Alex Reinhart
+```
+
+### Handling errors
+
+For interactive use, this is straightforward enough. But if you're writing code
+that wraps the GitHub API in functions, you'll need to handle errors that might
+occur. For example, consider the following function:
+
+```python
+def get_github_user(username):
+    r = requests.get(f"https://api.github.com/users/{username}")
+
+    return r.json()
+```
+
+This fetches the API data for a particular user and returns it as a Python
+dictionary. It works great -- unless there's a problem. Suppose we were looping
+through some usernames to do something to each account:
+
+```python
+for username in usernames:
+    user_info = get_github_user(username)
+
+    user_login = user_info["login"]
+    user_bio = user_info["bio"]
+    user_avatar = user_info["avatar_url"]
+
+    # do stuff, print stuff, calculate stuff...
+    # etc.
+```
+
+Now suppose `usernames` contains an invalid username. We get the following
+error:
+
+```
+---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+Cell In[8], line 4
+      1 for username in usernames:
+      2     user_info = get_github_user(username)
+----> 4     user_login = user_info["login"]
+      5     user_bio = user_info["bio"]
+      6     user_avatar = user_info["avatar_url"]
+
+KeyError: 'login'
+```
+
+That's not helpful! A `KeyError` means we tried to access a key in the
+dictionary that does not exist. Evidently the GitHub API returns a different
+set of data when we request an invalid username, and we'd have to check before
+using it.
+
+But before we start writing `if 'login' in user_info`, we should consider what
+HTTP gives us for free. Each HTTP response has a status code. In this case,
+GitHub gives a 404 code for invalid usernames:
+
+```python
+r = requests.get("https://api.github.com/users/capnrefsm mat")
+r.status_code
+```
+
+Rather than checking if `r.status_code == 404`, which wouldn't cover other error
+codes, we can let Requests do the work. Here's an updated version of the
+function:
+
+```python
+def get_github_user(username):
+    r = requests.get(f"https://api.github.com/users/{username}")
+
+    r.raise_for_status()
+
+    return r.json()
+```
+
+The `raise_for_status()` method raises a Python exception if the request failed.
+Running our loop over usernames again, we get the following error:
+
+```
+---------------------------------------------------------------------------
+HTTPError                                 Traceback (most recent call last)
+Cell In[16], line 2
+      1 for username in usernames:
+----> 2     user_info = get_github_user(username)
+      4     user_login = user_info["login"]
+      5     user_bio = user_info["bio"]
+
+Cell In[15], line 4, in get_github_user(username)
+      1 def get_github_user(username):
+      2     r = requests.get(f"https://api.github.com/users/{username}")
+----> 4     r.raise_for_status()
+      6     return r.json()
+
+File ~/miniconda3/lib/python3.10/site-packages/requests/models.py:960, in Response.raise_for_status(self)
+    957     http_error_msg = u'%s Server Error: %s for url: %s' % (self.status_code, reason, self.url)
+    959 if http_error_msg:
+--> 960     raise HTTPError(http_error_msg, response=self)
+
+HTTPError: 404 Client Error: Not Found for url: https://api.github.com/users/capnrefsmm%20at
+```
+
+By raising an exception, we have turned this problem into an error we can handle
+with standard Python techniques. For example, we could adapt our loop to handle
+errors:
+
+```python
+for username in usernames:
+    try:
+        user_info = get_github_user(username)
+    except requests.HTTPError as e:
+        print(f"Unable to get information for user '{username}'")
+        print(f"{e.response.status_code} {e.response.reason}")
+        continue
+
+    user_login = user_info["login"]
+    user_bio = user_info["bio"]
+    user_avatar = user_info["avatar_url"]
+
+    # do stuff, print stuff, calculate stuff...
+    # etc.
+```
+
+In this version, we handle the error (by getting useful information from the
+exception object) and then proceed to process the rest of the list. Your
+error-handling strategy may vary depending on the type of problem encountered.
+
+### Authenticating
+
+Many APIs require authentication: you must be an authorized user to access the
+API or perform certain operations. Because REST requires that APIs be stateless
+-- the server doesn't have to remember your status between requests --
+authentication typically involves providing a special token or key with each
+request you make.
+
+For example, GitHub provides [personal access
+tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+If you create such a token, you can use it to access its API. The token is
+simply a unique random string that is connected to your account. If we don't
+provide a token, we only get to see what logged-out users see.
+
+I have a private GitHub repository, and let's try to get information about it:
+
+```python
+r = requests.get("https://api.github.com/repos/capnrefsmmat/think-alouds")
+
+r.status_code  #=> 404
+```
+
+Notice that GitHub says 404 (Not Found) and not 403 (Not Authorized), because it
+doesn't want users to be able to find out the names of private repositories --
+it simply denies all knowledge of them if you don't have permission to see them.
+
+On the other hand, we can fetch information about the repository if we provide
+my token:
+
+```python
+r = requests.get("https://api.github.com/repos/capnrefsmmat/think-alouds",
+                 headers={"Authorization": "Bearer my-token-goes-here"})
+
+r.json()
+```
+
+With the right token, this produces a bunch of data:
+
+```
+{'id': 141750320,
+ 'node_id': 'MDEwOlJlcG9zaXRvcnkxNDE3NTAzMjA=',
+ 'name': 'think-alouds',
+ 'full_name': 'capnrefsmmat/think-alouds',
+ 'private': True,
+ 'html_url': 'https://github.com/capnrefsmmat/think-alouds',
+ 'description': 'Think-aloud questions for intro statistics',
+ 'fork': False,
+ 'url': 'https://api.github.com/repos/capnrefsmmat/think-alouds',
+ ...
+}
+```
+
+Other APIs may give the header a different name or expect a different kind of
+token, but this is the basic approach.
+
+### POSTing data
+
+As we discussed above (@sec-http-methods), if you want to make a request that
+has side effects -- adds new data, edits a record, deletes something, sends
+assassins to your enemies -- you will likely use a `POST` request rather than a
+`GET` request.
+
+In principle, a `POST` request consists of headers and a body, and the body can
+be anything that the server understands. In practice, there are a few common
+types and formats of request body.
+
+Most bodies are a bunch of key-value pairs. For example, when I edit the
+preferences for my Wikipedia account and hit "Save", my browser sends the
+following request:
+
+```
+POST /wiki/Special:Preferences HTTP/2
+Host: en.wikipedia.org
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/111.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Referer: https://en.wikipedia.org/wiki/Special:Preferences
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 3410
+Origin: https://en.wikipedia.org
+[...]
+
+title=Special%3APreferences&wplanguage=en&wpgender=unknown&wpemail-blacklist=&wpskin=vector-2022&wpskin-responsive=1&[...]
+```
+
+I've trimmed some of the superfluous headers and most of the request body, but
+you can see how the form works: each form field is sent with a key (the field
+name) and a value (the setting I chose).
+
+We could make such a request in Requests by using `requests.post()`:
+
+```python
+r = requests.post("https://en.wikipedia.org/wiki/Special:Preferences",
+                  data={"title": "Special:Preferences",
+                        "wplanguage": "en",
+                        "wpgender": "unknown",
+                        "wpemail-blacklist": None,
+                        "wpskin": "vector-2022",
+                        [...]})
+```
+
+That's convenient, but this "urlencoded" format limits us to a simple set of
+key-value pairs. It's hard to do more complicated data structures. Each value
+must be a string, so we can't easily send lists except by sending the same key
+multiple times; and we can't nest things unless we manually convert the nested
+data into strings.
+
+That's why many web applications and APIs use
+[JSON](https://en.wikipedia.org/wiki/JSON). JSON is a standard way to write
+dictionaries, lists, and other simple data as text. For example, you could write
+
+```
+{
+    "andrewid": "areinhar",
+    "semester": "2023-spring",
+    "courses": [
+        {
+            "number": 46927,
+            "title": "Machine Learning II",
+        },
+        {
+            "number": 36615,
+            "title": "Software for Large-Scale Data",
+        },
+        {
+            "number": 36616,
+            "title": "Computational Methods for Statistics",
+        },
+    ]
+}
+```
+
+This actually matches Python syntax for dictionaries very closely, so it should
+be easy to see how a particular Python dictionary will be translated into a JSON
+string.
+
+In Requests, you can simply pass a dictionary and ask for it to be sent as JSON:
+
+```python
+r = requests.post("https://www.example.com/some-api",
+                  json=some_big_dictionary)
+```
+
+This automatically adds the `Content-Type: application/json` header, to notify
+the web server to process the request body as JSON. In some cases, APIs will
+process everything as JSON automatically; in other cases, they support multiple
+formats and require you to specify a `Content-Type` to ensure the data is
+handled correctly.
+
+## Exercises
+
+::: {#exr-weather-api}
+
+#### Weather forecasting
+
+The National Weather Service, a US government agency, operates a [weather
+API](https://www.weather.gov/documentation/services-web-api) that provides
+access to current weather conditions, forecasts, storm warnings, and related
+data in JSON format. All this weather data is publicly and freely available, so
+anyone who needs weather information can obtain it from the government at no
+cost. (In fact, commercial weather forecasters, like the Weather Channel or the
+weather apps built into phones, mainly process and repackage data from the
+National Weather Service.) The API is hosted at <https://api.weather.gov>.
+
+In this exercise, your goal is to build a command-line Python script that can
+display the hourly forecast for a given location specified at the command line,
+using latitude and longitude. For example:
+
+```
+$ python forecaster.py --interval=3 --periods=5 40.4397 -79.976
+
+Hourly forecast for Pittsburgh, PA:
+
+Thu 7 AM: Slight Chance Rain Showers, 54°F.
+Thu 10 AM: Chance Rain Showers, 52°F.
+Thu 1 PM: Chance Rain Showers, 53°F.
+Thu 4 PM: Slight Chance Rain Showers, 53°F.
+Thu 7 PM: Mostly Cloudy, 52°F.
+```
+
+Notice that here we've asked for forecasts every 3 hours for 5 periods, but the
+API can give hourly forecasts several days into the future. You can add
+additional output formatting if you'd like, such as breaking the forecasts into
+blocks by date, adding umbrella and sunshine emoji, or even color-coding
+forecasts.
+
+Some requirements and tips for your script:
+
+- Use the [argparse module](https://docs.python.org/3/library/argparse.html) to
+  process the command-line arguments. Your script should accept the `--interval`
+  and `--periods` arguments, as above, as well as the latitude and longitude. If
+  `--interval` is not provided, default to an hourly forecast; if `--periods` is
+  not provided, default to 24 periods.
+- The script should gracefully handle errors. For example:
+  - What if the location requested does not have any forecasts available in the
+    API?
+  - What if the user requests more `--periods` than the API provides forecast,
+    e.g. they request forecasts 400 hours into the future?
+  - What if the API returns a server error or other bad status code?
+- Use the requests package to make the API requests and decode the JSON into a
+  Python dictionary.
+- Set a user-agent of "forecaster (yourandrew@andrew.cmu.edu)" for all requests
+  you make to the API.
+- The Specification tab of the [API Web Service
+  page](https://www.weather.gov/documentation/services-web-api) documents all
+  the available API URLs and what they require.
+- Your script will have to use two endpoints. The `/points/{point}` endpoint
+  lets you look up a point by latitude and longitude and get the URL of the
+  hourly forecast for that point; that URL will be to the
+  `/gridpoints/{wfo}/{x},{y}/forecast/hourly` endpoint, which returns the hourly
+  forecast.
+- All times returned by the API are in ISO 8601 format. Python's `datetime`
+  module can turn these into `datetime` objects using the
+  [`datetime.fromisoformat()`
+  method](https://docs.python.org/3/library/datetime.html#datetime.datetime.fromisoformat).
+  You can then use the [`strftime()`
+  method](https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior)
+  to format the times for printing however you'd like.
+- Use good program design principles. That means splitting the code into
+  reusable functions, and separating the fetching of data from its formatting
+  for output.
+
+As a starting point, open <https://api.weather.gov/points/40.4397,-79.976> in
+your web browser. You should get a JSON reply giving details about that point,
+including the name of the nearby city, API URLs for its forecasts. Examining
+this manually will show you which fields your code should extract and use when
+printing its output. Similarly, you can open the hourly forecast endpoint in
+your browser to figure out how it is formatted and how to process it.
+
+Turn in your Python script and an example hourly forecast for Pittsburgh, whose
+coordinates are shown above.
+
+**Note:** Please be careful and ensure your script does not send thousands of
+API requests in a loop. You should only need to make two requests each time the
+script is run. We don't want to annoy the National Weather Service and risk a
+penalty hailstorm.
+
+:::

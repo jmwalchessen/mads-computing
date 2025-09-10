@@ -1,0 +1,394 @@
+# Packaging Code
+
+In your time working with R and Python, you have installed many packages. Many
+of those packages depended on other packages for some of their features. Using
+`import` or `library()`, you loaded the packages and used functions and data
+from them to complete assignments.
+
+Package management is a surprisingly complex topic in software engineering. As
+software gets increasingly complex, it has more and more dependencies; and with
+more dependencies come more potential problems. You may depend on specific
+versions of certain packages, but those packages depend on *other* versions of
+each other, causing a conflict. New versions might make incompatible changes.
+Corporate security policies may require new versions to be reviewed before
+installation. A problem with a package you're unaware of, but which is depended
+upon by packages you use, might [break every developer's
+workflow](https://qz.com/646467/how-one-programmer-broke-the-internet-by-deleting-a-tiny-piece-of-code).
+
+We're not going to get into the full complexity of package and dependency
+management. Instead we'll answer a simple question: How can *you* create a
+package? We'll focus on Python, since R works completely differently.
+
+Or, to put it in Python terms: How do you make your code available via `pip
+install` so anyone can `import` it?
+
+## Why package?
+
+A package is simply a way to organize code. You can, of course, simply dump a
+bunch of R or Python files into a folder, and use `import` or `source()`
+liberally to get all the functions and classes you need. Or, even simpler, you
+could just keep all the functions you need in one giant file.
+
+But software engineering is about *managing complexity.* Your program will grow
+large. It may be maintained by a team. It may be maintained my *multiple* teams,
+each specializing in specific features. Dividing the program into pieces, each
+with well-defined goals makes good sense.
+
+And so we have packages. A package is a collection of code presenting an
+interface to users: a selection of functions and classes that can be used to
+achieve specific things. A large project can be divided into multiple packages
+that interact to achieve the goals.
+
+::: {#exm-delphi-packaging}
+
+#### Packaging the Delphi COVIDcast pipeline
+
+In early 2020, the [Delphi Group](https://delphi.cmu.edu) quickly built
+COVIDcast, a system integrating multiple data sources to produce daily
+county-level measurements of signals related to COVID-19. For example, some
+signals were aggregated from medical insurance claim records, while others came
+from government-reported COVID case data.
+
+Each data source was different, so it required separate code to take the
+original data, process it, aggregate it to the county and state level, smooth it
+over time, and format it to be inserted into a SQL database. This code was
+originally developed by a separate team for each data source; some was in Python
+and some was in R.
+
+But there were many tasks in common for each data source. For geographic
+aggregation, each had to be able to convert between ZIP codes, counties,
+metropolitan statistical areas, states, and several other geographic levels;
+each needed to smooth data over time; each had to output data in a specific
+format; and so on.
+
+So eventually, after the initial rush faded, Delphi developed a [single Python
+package](https://github.com/cmu-delphi/covidcast-indicators/tree/main/_delphi_utils_python)
+to perform all these tasks. Each separate data pipeline could be reduced to a
+much simpler script that loaded the raw data, then used the package to format it
+for publication. The package could be maintained by a small team with
+specialized understanding of geographical aggregation and time-smoothing, while
+each data pipeline could be maintained by those who understood the data source
+best.
+
+:::
+
+## How imports work
+
+To understand how packages work, we need to understand imports.
+
+Let's say you run
+
+```python
+import spam
+```
+
+The Python interpreter must find something named `spam` to import. How does it
+do this?
+
+(The answer is [much more
+complicated](https://docs.python.org/3/reference/import.html) than I will
+describe here, but the basics are sufficient for now.)
+
+First, Python checks if you have already loaded `spam`. Then it checks if it is
+built into Python, like `sys` or other standard library packages. Then it checks
+`sys.path`. Let's see what this variable contains:
+
+```{python}
+import sys
+
+sys.path
+```
+
+We see a list of directories. Some of these are to the locations where packages
+are installed by `pip`; you might recall the `site-packages/` name from
+printouts as you installed other packages. The empty string means the current
+working directory.
+
+Notice the first entry is the directory where I am writing these notes. If you
+run `python some/script.py` at the shell, the directory containing `script.py`
+will be put into the first entry of `sys.path`, so if that script imports
+anything, it will look first in the same directory. (Check the [`sys.path`
+documentation](https://docs.python.org/3/library/sys.html#sys.path) for other
+special cases.)
+
+Python goes through each of the options in `sys.path` in order. In each it looks
+for something named `spam` to import.
+
+The "something" it looks for is a module. So what are modules?
+
+## Modules
+
+A "module" is a file containing Python code. A file named `spam.py` is the
+module `spam`. Each module has its own *namespace*, meaning a place where
+variable, function, and class names are defined.
+
+For example, suppose `spam.py` contains:
+
+```python
+# spam.py
+
+meaning_of_life = 42
+
+def add(x, y):
+    return x * y
+```
+
+Then, in `eggs.py`, we can write
+
+```python
+# eggs.py
+
+import spam
+
+spam.meaning_of_life #=> 42
+
+spam.add(2, 2) #=> 4
+
+spam.__name__ #=> "spam"
+```
+
+The `import spam` statement causes Python to check `sys.path` for the `spam`
+module. Assuming it finds it, it evaluates the code in `spam.py`, which defines
+a variable and a function. These are in the `spam` namespace, and so now in
+`eggs.py` we must access them with the `spam.` prefix. If we try to access
+`meaning_of_life` without the prefix, or define it to have a different value, we
+will not affect the version in `spam`.
+
+Every module has a `__name__` variable defined in its namespace. This is a
+string giving the module name. `spam`'s name is `spam`, of course. A program run
+directly from the command line has the name `__main__`, so if we run `python
+eggs.py`, the `__name__` variable in `eggs.py` will be set to `__main__`.
+
+This is useful to solve a problem. Suppose a file both defines some useful
+functions and also does some tasks:
+
+```python
+# addinator.py
+
+import argparse
+
+def add(x, y):
+    return x * y
+
+parser = argparse.ArgumentParser(
+    prog="Addinator",
+    description="Adds two numbers")
+
+parser.add_argument("x")
+parser.add_argument("y")
+
+args = parser.parse_args()
+
+print(add(args.x, args.y))
+```
+
+If I try to import `addinator` from another file so I can use the `add`
+function, it will not go well, because Python runs the entire contents of the
+file. So it will try to parse command-line arguments and print out a result.
+
+Instead, we can check if this script is `__main__`:
+
+```python
+# addinator.py
+
+import argparse
+
+def add(x, y):
+    return x * y
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="Addinator",
+        description="Adds two numbers")
+
+    parser.add_argument("x")
+    parser.add_argument("y")
+
+    args = parser.parse_args()
+
+    print(add(args.x, args.y))
+```
+
+If we `import addinator` from another module, then `addinator.__name__ ==
+"addinator"`, and so the code guarded by the `if` will not run. If, on the other
+hand, we run `python addinator.py 2 2`, then `__name__ == "__main__"` and we
+will get the correct answer printed out.
+
+It's common to divide up programs into many modules, based on their logical
+purpose. Pre-processing code might go in one module, database code in another,
+and model-fitting in a third. This makes it easier to find
+
+## Packages
+
+A package is a directory containing modules. To signal to Python that the
+directory is a package, it must contain a file named `__init__.py`.
+
+For example, suppose we have a directory like this:
+
+```
+spam/
+    __init__.py
+    bacon.py
+    eggs.py
+```
+
+If the `spam/` directory is in `sys.path`, then `import spam.bacon` or `from
+spam import bacon` will both work fine.
+
+The `__init__.py` can be empty. However, it can also contain Python code just
+like any other module. If it did, whatever functions, classes, and variables it
+defines would be available through `import spam`.
+
+For example, in Pandas, you can do
+
+```python
+import pandas as pd
+
+pd.read_csv("foo.csv")
+```
+
+The [`__init__.py` in
+Pandas](https://github.com/pandas-dev/pandas/blob/main/pandas/__init__.py) does
+not contain the code for `read_csv()`, but it does import it from other files
+within Pandas, so it is within its namespace. Hence importing `pandas` gives you
+direct access to `read_csv()` and various other functions, without you having to
+import specific modules within Pandas.
+
+### Relative imports {#sec-relative-imports}
+
+Packages also enable *relative imports*. A relative import is a way of telling
+Python to import from within the current package. In `bacon.py` in the `spam`
+package above, we could write
+
+```python
+from .eggs import over_easy
+```
+
+or
+
+```python
+from . import eggs
+```
+
+to indicate that we're importing from `eggs` within the current package `spam`.
+(You cannot write `import .eggs`, since that would create a module called
+`.eggs`, and names starting with periods are not valid syntax in Python.)
+
+Packages can contain sub-packages, each a subdirectory with its own
+`__init__.py`, and relative imports can work within these. For instance, `from
+.. import foo` imports from the parent package containing this one.
+
+## Distribution packages {#sec-distribution-packages}
+
+Packages are simple, but they still don't answer key questions: How do you get
+them onto `sys.path`? And how do you distribute them to other people?
+
+A *distribution package* is a package plus additional information: author name,
+version, dependencies, and so on. A distribution package can be turned into a
+file that can be distributed to others, and that can be understood by programs
+like `pip`, which can install packages into directories on `sys.path`.
+
+There have historically been many ways to make distribution packages. We'll
+focus on the current one, documented in more detail in the [Python Packaging
+User Guide](https://packaging.python.org/en/latest/flow/).
+
+If we want to make a `spam` distribution package, we need to add a new file to
+the package and reorganize slightly:
+
+```
+spam/
+    spam/
+        __init__.py
+        bacon.py
+        eggs.py
+    pyproject.toml
+```
+
+The `pyproject.toml` file is a metadata file in [TOML
+format](https://toml.io/en/) specifying details of the package. For example, we
+might have:
+
+```toml
+[project]
+name = "spam"
+version = "0.4.2"
+dependencies = [
+    "pandas",
+    "numpy"
+]
+description = "Spams the ham"
+authors = [
+    {name = "Alex Reinhart", email = "areinhar@stat.cmu.edu"},
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+```
+
+Now we can build the package. By "build", I mean we can assemble a file
+containing all the contents of the package, plus the metadata specifying its
+dependencies and such. For example, if we are in the `spam/` directory, we
+can run
+
+```sh
+python -m build
+```
+
+This makes distribution files containing your package code and places them in a
+`dist/` subdirectory. These files can be uploaded to PyPI or manually installed
+with `pip`, which automatically ensures that the dependencies are installed when
+you do so.
+
+Alternately, you can use the file to install the package. For example, you might
+have a distribution file called `spam-0.4.2-py3-none-any.whl`, which is the
+distribution file from building `spam`. To install it, place the file in a
+convenient directory, and in that directory run
+
+```sh
+pip install spam-0.4.2-py3-none-any.whl
+```
+
+This will install the contents of the package
+
+## Exercises
+
+::: {#exr-package}
+
+#### Make a toy package
+
+Let's make a toy Python package that can be installed using `pip`.
+
+Make a package named `hard_math`. It should have two modules:
+
+- `linear`: defines a function `linear_root(a, b)` that returns the solution to
+  the equation $ax + b = 0$.
+- `quadratic`: defines a function `quadratic_roots(a, b, c)` that returns a tuple
+  of the (real) roots of the polynomial equation $ax^2 + bx + c = 0$.
+
+
+Set up `__init__.py` so that one can write `from hard_math import
+quadratic_roots` or `from hard_math import linear_root` and get the desired
+function. Use relative imports when doing so (@sec-relative-imports).
+
+Set up `pyproject.toml` to contain the package name, a short description, a
+version number (0.0.1), and author information. Specify that the package uses
+setuptools.
+
+Build the package and then install it using `pip`, as described in
+@sec-distribution-packages.
+
+Now make a `test.py` script in a completely different directory (so that the
+`hard_math` directory is not contained in it). In that script, import
+`hard_math` and use it to solve the quadratic equation $2x^2 + 2x - 3 = 0$,
+printing the roots out.
+
+Run `python test.py` at the command line and see that it successfully runs,
+importing from the package you wrote and installed.
+
+Turn in the contents of your files. You can concatenate them into a single
+document, with headings indicating which file is which. Begin the file with an
+outline indicating the directory structure, like the ones I shows above to
+indicate how files are contained in the `spam/` directory.
+
+:::

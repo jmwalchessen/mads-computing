@@ -1,0 +1,3 @@
+# The Cloud {#sec-cloud}
+
+"The cloud" is just somebody else's computer.

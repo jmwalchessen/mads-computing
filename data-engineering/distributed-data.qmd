@@ -1,0 +1,308 @@
+# Distributed Data and Computation {#sec-distributed-data}
+
+In large companies or large scientific projects, there's problem of scale: the
+amount of data we want to process is very large, so we divide it up to process
+on multiple machines. This is Big Data.
+
+Think of it this way: if you have one server with loads of RAM, a big hard
+drive, and a top-of-the-line CPU with many cores, and your data fits easily on
+that server, you're probably best off writing parallel code and using that
+server. But if the data is going to be too large---or you're receiving new data
+all the time---instead of buying an even bigger server, it might make more sense
+to buy a fleet of many smaller servers.
+
+Computing on many independent machines is *distributed computing*. It brings
+many challenges over just using a single machine:
+
+- How do you distribute the data across multiple machines?
+- How do you ingest new data that might be arriving all the time?
+- How do you split up the computing task so it can be performed on separate
+  machines with a minimum of communication between machines?
+- How do you collect the results from each machine and combine them together to
+  get the final answer?
+- With more machines, the chance of one crashing or having a hardware failure
+  increases--how do you recover from this?
+
+
+Each of these is a difficult problem. There is an ecosystem of software built to
+solve these problems, from the Hadoop Distributed File System to Spark to Hive
+to Mahout. But before we learn what the buzzwords mean, let's talk about the
+structure of the problems.
+
+## Distributing data {#sec-distributing-data}
+
+Statisticians tend to think of datasets as simple things: maybe a few CSV files,
+a folder full of text files, or a big pile of images. Usually our biggest
+storage challenge is that we have to pay for extra Dropbox storage space to
+share the dataset with our collaborators. If datasets change, we usually just
+get some new data files or a few corrections.
+
+But this is not what happens in industry. Consider a few examples:
+
+- **A web search engine.** Search engines run "crawlers," programs that browse
+  web pages, extract text and links from the HTML, and process the data to form
+  a search index. There may be thousands of crawlers running on different
+  machines at once (the Web is huge!), each producing vast quantities of data,
+  and the search index must be updated with the new data very quickly to stay
+  relevant.
+- **A shopping site.** A large shopping site might take many customer orders per
+  minute, and have thousands of people browsing products all the time. To
+  measure demand, adjust search results, recommend relevant products, and decide
+  how much of each product to order for the warehouse, all this activity must be
+  processed at least daily.
+- **An ad network.** Advertisements online are weird. When you visit a webpage
+  containing ads, a tiny auction happens instantaneously: data on the webpage
+  and about you is sent to different ad companies, running programs that submit
+  bids on how much they're willing to pay to show you an ad. An advertiser
+  collects vast data on consumers, what pages they visit, and what ad campaigns
+  are most profitable, and must crunch this data so it can instantaneously
+  decide how much a particular pair of eyeballs is worth.
+- **A retailer.** A big chain like Walmart has hundreds or thousands of stores
+  selling tens of thousands of different products. New sales happen every
+  second, and data arrives about warehouse supplies, pricing changes from
+  suppliers, online searches, and so on. Pricing needs to be adjusted, products
+  ordered, ad campaigns mailed to relevant customers, and executives keep asking
+  analysts to make charts justifying their latest big ideas.
+
+
+There are a few common features here:
+
+- New data arrives regularly or continuously.
+- New data is being produced from many sources simultaneously.
+- The analysis must be updated regularly or it will no longer be useful.
+- The analysis may involve large amounts of computation that can only be done
+  in parallel for it to be finished in time.
+- The incoming data is vast, and so is the archive.
+
+
+Saving to a big CSV file simply is not going to scale. Large companies may
+have terabytes or petabytes of data stored, with gigabytes more arriving each
+day. We're also fundamentally limited by how quickly we can write data to a
+single hard drive (and afraid of what would happen if that drive fails).
+
+This is where a *distributed* file system is useful.
+
+In a distributed file system, data is
+
+- Spread across multiple machines (often dozens or hundreds). Each server has
+  its own large and fast hard drives containing a subset of the full data.
+- Stored redundantly. Each new data file is stored on several different servers,
+  to prevent it from being lost if a hard drive fails or a power supply lets out
+  its magic smoke.
+- Stored *near where it is useful*. Ideally, the machine where the data is
+  processed is near the particular machine where it is stored, to avoid
+  congesting the network with data files being sent back and forth.
+- Coherent. It shouldn't be possible to change a file and have the change appear
+  in one copy but not another redundant copy.
+- Available in quantity. It's often assumed that rather than wanting small parts
+  of many files, applications will want to receive huge chunks of single files;
+  distributed systems may not be very fast if you try accessing many small files
+  very quickly.
+
+
+To achieve this, distributed file systems usually have several parts:
+
+- A bunch of servers with hard drives. Each server stores some chunk of files.
+- A coordination server (or servers) that tracks the data servers and knows
+  where every file is stored, so users can fetch data from the right servers.
+- Some kind of library or client software for connecting to the distributed
+  file system and accessing its data.
+
+
+There are two common strategies in the distributed file systems you might use:
+
+* Block-based file systems: In HDFS, each file is split up into *blocks*, and
+  the blocks are sent to different machines for storage. A 1 GB file might be
+  split into 10 blocks of about 128 MB each, and those blocks might live on the
+  same machines or different machines, based on HDFS settings and automatic
+  criteria.
+* Object-based file systems: [Amazon S3](https://aws.amazon.com/s3/) is a cloud
+  service that stores files as *objects*, meaning each file is one unit that is
+  stored and can be read. Files are not split up into blocks.
+
+Fortunately for users, these distributed file systems are designed to look like
+any other file system you might use, and work in much the same way.
+
+A common block-based file system is the [Hadoop Distributed File
+System](https://hadoop.apache.org/docs/current1/hdfs_design.html), HDFS, though
+there are many others. Amazon S3 (Simple Storage Service) is a distributed
+object-based file system as a service, letting you send arbitrary objects to be
+stored on Amazon's servers and retrieved whenever you want.
+
+## Distributing computation
+
+Reading the above, you might think: Why not use a big relational database? As we
+discussed, these are designed to keep large amounts of data coherent and
+consistent, and to make the data available quickly on request.
+
+The simplest answer is that sometimes, the data volume is more than any one
+database server can handle.[^cynical] But the better answer is that sometimes
+the *computation* is more than any one server can handle.
+
+[^cynical]: The cynical answer is that software engineers need to put more
+    things on their résumés, so they adopt new technologies every month.
+
+As we have seen, relational databases can do surprisingly complex calculations.
+But those calculations are limited by the size of the server (try writing a SQL
+query that aggregates 100GB of data on a server with 16GB of RAM!), and of
+course are limited by what can be expressed in the SQL language. If you want to
+write a calculation that works on several terabytes of data, be prepared for
+your relational database server to grind to a halt for hours while it processes
+the query.
+
+But some computational tasks can be split into pieces. We can do the
+calculations for each piece separately, then combine the results together when
+we're done. And all those calculations can be done at the same time, if we have
+enough computers with access to the right chunks of data.
+
+Hence distributed computing and distributed data fit together. If we've built a
+system for spreading data across many machines, and we also have analytic tasks
+that can operate on chunks of data and then combine their results, we can use a
+distributed data system to do large-scale calculations that couldn't be done on
+a single machine.
+
+So how do we divide up computing tasks to be run on multiple machines, loading
+their input data from a distributed file system?
+
+There are several conceptual models we could use. The first is MapReduce.
+
+## MapReduce
+
+MapReduce dates to 2004, when Google engineers published [a
+paper](https://ai.google/research/pubs/pub62) advertising the MapReduce concept
+as "Simplified Data Processing on Large Clusters". By 2006 the Hadoop project
+existed to make an open-source implementation of the MapReduce ideas, and Hadoop
+soon exploded: it was the single largest buzzword of the early 2010s, being the
+canonical Big Data system.
+
+Let's talk about the conceptual ideas before we discuss the implementation
+details.
+
+MapReduce uses the Map and Reduce operations you may have learned in functional
+programming, but with an extra twist: Shuffle. A MapReduce system has many
+"nodes"---different servers running the software---that are connected to some
+kind of distributed file system.
+
+- **Map.** Each node loads one chunk of data from the distributed file system,
+  applies some function to that data, and writes the result to an output file.
+  The result can have a "key", some arbitrary identify.
+- **Shuffle.** The output files are moved around so that all data with the same
+  key is on the same node. (Or, keys are assigned to nodes, and they fetch the
+  data with that key from the distributed file system.)
+- **Reduce.** Each node applies another function to each chunk of output data,
+  processing all chunks with the same key.
+
+
+The output of all the reduction functions is aggregated into one big list.
+
+The Map and Reduce steps are parallelized: each node processes the Map
+function simultaneously, and each node processes the Reduce function on each
+key simultaneously.
+
+The Shuffle step lets us do reductions that aren't completely associative.
+
+::: {#exm-mapreduce-wc}
+
+#### Counting words
+
+The standard MapReduce example is counting words in a huge set of documents.
+Stealing pseudocode from Wikipedia,
+
+```
+function map(String name, String document):
+    // name: document name
+    // document: document contents
+    for each word w in document:
+        emit (w, 1)
+
+function reduce(String word, Iterator partialCounts):
+    // word: a word
+    // partialCounts: a list of aggregated partial counts
+    sum = 0
+    for each pc in partialCounts:
+        sum += pc
+    emit (word, sum)
+```
+
+Here `emit (w, 1)` means `w` is the key for the value `1`.
+
+If we supply these to a MapReduce system that has many documents on many nodes,
+each node can apply `map()` to each document it stores. The emitted results are
+shuffled so each node contains all the output for specific words. Then each node
+runs `reduce()` for each word, and gets a word count.
+
+:::
+
+::: {#exr-k-means-mapreduce}
+
+#### k-means clustering
+
+Word counting doesn't really give you a sense of the scale of MapReduce, so
+let's consider a more statistical example: [parallel K-means
+clustering](https://link.springer.com/chapter/10.1007/978-3-642-10665-1_71).
+
+First, a brief review of K-means. We have $n$ points (in some $d$-dimensional
+space) we want to cluster into $k$ clusters. We randomly select $k$ points and
+use their locations as cluster centers. Then:
+
+1. Assign each point to a cluster, based on the distance between it and the
+   cluster centers.
+2. Take all the points in each cluster and set that cluster's center to be
+   the mean of the points.
+3. Return to step 1.
+
+
+The distance calculations are the scaling problem here: each iteration
+requires calculating the distance between all $n$ points and all $k$ cluster
+centers.
+
+How could we do K-means as a *sequence* of MapReduce operations?
+
+:::
+
+::: {.solution}
+
+TODO
+
+:::
+
+### Apache Hadoop
+
+[Apache Hadoop](https://hadoop.apache.org/) is an implementation of the
+MapReduce idea, in the same way that PostgreSQL or SQLite are implementations of
+the SQL idea. It's built in Java.
+
+Hadoop handles the details: it splits up the data, assigns data chunks to
+compute nodes, calls the Map function with the right data chunks, collects
+together output with the same key, provides output to the Reduce function,
+and handles all the communication between nodes. You need only write the Map
+and Reduce functions and let Hadoop do the hard work.
+
+It's easiest to write map and reduce functions in Java, but Hadoop also
+[provides ways](https://hadoop.apache.org/docs/current1/streaming.html) to
+specify "run this arbitrary program to do the Map", so you can have your
+favorite R or Python code do the analysis.
+
+Hadoop can be used to coordinate clusters of hundreds or thousands of
+servers running the Hadoop software, to which MapReduce tasks will be
+distributed.
+
+### Limitations
+
+Hadoop was incredibly popular for quite a while, but it has its limitations.
+
+- Hadoop relies heavily on the distributed file system, storing all its
+  intermediate results on disk. That can make it slow.
+- The MapReduce paradigm is quite restricted. There are extra features---like a
+  Combiner step that operates on the Map's output before it's Reduced---but it
+  can still be tricky to turn your task into a MapReduce operation, and it
+  forces everything to be done in a certain order.
+- MapReduce isn't very good for interactive use, when you just want to query
+  your data and try stuff. It works in batches, reading data files from disk
+  and spitting out new results to disk.
+- Hadoop was cool for long enough that its buzzword value was wearing off.
+
+It would be nice to have something more flexible: something where we can write
+complicated programs and automatically have the work split up between nodes, but
+without having to structure our problem as a series of Map and Reduce steps. And
+that's where Spark comes in.

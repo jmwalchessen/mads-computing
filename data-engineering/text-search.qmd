@@ -1,0 +1,906 @@
+# Full Text Search {#sec-fts}
+
+So far our searching, grouping, and aggregation has focused on numerical columns
+and numerical summaries of them. But text data is quite common. We can easily
+store text in PostgreSQL by using the `TEXT` column type, but often we want ways
+to efficiently *search* through text. This problem is known as *full text
+search*, because you'd like to search using the entire contents of the text, not
+just features or tags attached to it.
+
+Full text search requires special consideration because doing it well is a lot
+of work. A naive approach---looping through every row of data and checking if
+the text matches a search query---would be impossibly slow and wouldn't even be
+very good at searching, so we must plan ahead to make full text search
+effective.
+
+## Text searching tasks
+
+Text is complicated. As you can imagine, there are many ways you might want to
+search it.
+
+::: {#exm-search-titles}
+
+#### Movie titles
+
+You run a website that hosts movie information and reviews. Users type the title
+of a movie---or parts of it---into a search box, and your system must find the
+matching movies to list for them.
+
+If you have a `movies` table with a `title` column, a simple query is
+
+```sql
+SELECT * FROM movies
+WHERE title = %s
+```
+
+filling in the user's entry for the placeholder. But they may type in only part
+of the title (*everything everywhere* to find *Everything Everywhere All at
+Once*), they might misspell it (*the avngers*), or they might misremember it and
+get parts wrong (*star wars the return of the sith*). How do you find the best
+match?
+
+:::
+
+::: {#exm-search-regex}
+
+#### Citation search
+
+You're analyzing a database of scientific papers to find out which ones cite
+each other. Each paper has a Digital Object Identifier (DOI), a unique ID in the
+form `doi:10.NNNN/suffix`, where `NNNN` is a four-digit (or longer) number and
+the suffix can be any string of characters not including spaces.
+
+Reference lists for papers often give the DOI for the papers they cite, so you'd
+like to find all papers with DOIs in them. How do you search for text matching
+this pattern?
+
+:::
+
+::: {#exm-search-docs}
+
+#### Legal documents
+
+You're suing a large tech company because you believe they violate antitrust
+law. Through subpoenas, you have obtained millions of their internal emails, and
+you want to search the emails for ones mentioning *monopoly*, *competition*,
+*collusion*, and other such words and phrases. But those words have many
+variations: *monopolies*, *monopolistic*, *competitive*, *competitors*,
+*colluding*, etc.
+
+If the emails are in a table with `subject` and `body` columns containing their
+contents, how do you effectively search them?
+
+:::
+
+There are a variety of basic text operators that can help with simple tasks, and
+we'll address those first. Then we'll move on to more advanced full-text search.
+
+But first: What *is* text, and how is it stored?
+
+## Character encoding
+
+Computer memory is binary: it stores only 0s and 1s. It follows that text must
+be stored as numbers, not as text. That requires a *character encoding*: a
+system to number each character in a given alphabet, so they can be stored as
+numbers and then displayed as the correct characters.
+
+Since the 1960s, the common standard has been the American Standard Code for
+Information Interchange (ASCII). ASCII reflects the biases of American computer
+engineers in the 1960s: it uses only 7 bits to encode each number, allowing only
+$2^7 = 128$ possible characters.[^7bits] These were used to encode the upper- and
+lowercase Latin alphabet, spaces, newlines, punctuation marks, and a variety of
+control characters that tell a teletype machine to do something rather than
+displaying text. (For example, there's a character that tells the machine to
+ring a bell to alert the operator to do something.)
+
+[^7bits]: Aren't bytes 8 bits each? Yes. But ASCII's designers were worried
+    about data transmission and storage, which both were expensive. Dropping a
+    bit cut costs by 1/8th. Using 7 bits also allowed use of the 8th bit as an
+    error correcting code to detect errors when text was transmitted between
+    computers.
+
+Notably, ASCII does not include any accented characters (like é, ñ, or ö),
+characters from any other alphabet (Cyrillic, Arabic, Devanagari, Hangul, etc.),
+or symbols from any other writing system (Chinese, Japanese, etc.).
+
+This led to an explosion of character encoding systems specialized for specific
+scripts, each supporting only some scripts but not others. You'll encounter a
+few of the most common:
+
+- ISO 8859-1, also called Latin-1: Uses 8 bits instead of 7, allowing it to
+  extend ASCII with accented characters used in many European languages.
+  Commonly also seen as Windows-1252 or CP-1252, which adds some additional
+  characters.
+- GB 2312 and GB 18030, Chinese government standards supporting simplified and
+  traditional Chinese characters.
+- Shift JIS, used for Japanese.
+- Windows-1251, used for Cyrillic.
+
+Nowadays, the most common encoding is UTF-8, which is designed to cover almost
+every script used in the world (and many historic ones no longer in use). We'll
+discuss it in more detail in @sec-utf8.
+
+### Character encoding mishaps
+
+Character encoding problems occur when text in one encoding is interpreted as
+being from another encoding.
+
+For example, the string `can’t` (notice the right curly apostrophe) can be
+encoded in UTF-8, which has a character for the right single quotation mark. But
+that character is represented as three bytes. In Windows-1252, those three bytes
+are read as â, €, and ™, so the string appears `canâ€™t`. If you don't know the
+encoding of the text and pick the wrong one, you will display it incorrectly.
+
+This is also annoying for searching: if you're searching for a string that
+you've written in one encoding, but the data you've stored is in a different
+encoding, a naive search that checks the bytes stored will not find it.
+
+### Converting
+
+Old programming languages like C do not require strings to be in any specific
+encoding---you can shove any bytes you want into a string, and it's your problem
+if the encoding is wrong.
+
+Modern systems like Python (since Python 3) enforce a consistent encoding. In
+Python, every string must be read in with a defined encoding, so Python can
+convert it automatically when doing any operations. For example, if I try to
+read a file that is not UTF-8-encoded:
+
+```
+In [5]: f = open("/bin/ls", "r")
+In [6]: f.readline()
+---------------------------------------------------------------------------
+UnicodeDecodeError                        Traceback (most recent call last)
+Cell In[6], line 1
+----> 1 f.readline()
+
+File ~/miniconda3/lib/python3.10/codecs.py:322, in BufferedIncrementalDecoder.decode(self, input, final)
+    319 def decode(self, input, final=False):
+    320     # decode input (taking the buffer into account)
+    321     data = self.buffer + input
+--> 322     (result, consumed) = self._buffer_decode(data, self.errors, final)
+    323     # keep undecoded input until the next call
+    324     self.buffer = data[consumed:]
+
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xca in position 0: invalid continuation byte
+```
+
+The file `/bin/ls` is a compiled program, not text, so when Python tries to
+interpret the bytes as UTF-8 text, it finds some of them are not valid
+characters and immediately complains.
+
+This is why `open()` has an `encoding` argument: so you can tell it which
+encoding to read, and it can automatically translate the encoding as you operate
+on the text.
+
+### UTF-8: the only acceptable encoding {#sec-utf8}
+
+Unicode is a standard that attempts to list the characters in all the world's
+writing systems, assigning each a unique identifying number. (Right now nearly
+155,000 characters are defined and numbered.) These are called *code points*.
+Each code point is, conceptually, one "thing" in the writing system.
+
+Unicode code points are commonly written with the notation U+NNNN. For example,
+U+0065 is the code point `LATIN SMALL LETTER E`, i.e. `e`. The number is written
+in hexadecimal.
+
+There are several encodings defined in the Unicode standard, which give ways to
+encode the code points in binary. The most popular, now used by around 99% of
+websites and applications, is UTF-8.
+
+UTF-8 is weird and it may break some of your assumptions about how text is
+stored, so it's useful to understand how it works.
+
+UTF-8 is a *variable-width encoding*. That means some characters are represented
+with only one byte (8 bits) and others are represented with up to 4 bytes (32
+bits). The one-byte characters generally match the encodings used in ASCII, so
+if you UTF-8 encode English text without any accents or special characters, it
+will also be valid ASCII.
+
+This is useful for compatibility and for compactness: the designers of UTF-8,
+who were Westerners who mostly dealt with the Latin alphabet, wanted to use the
+fewest bytes for what was (to them) the most common type of text.
+
+For characters outside the basic ASCII range, a special code in the first byte
+indicates that the character continues to two, three, or four bytes. The
+encoding is designed so that software reading the bytes can quickly determine
+where characters start and end, so there's no danger of accidentally reading,
+say, the middle two bytes of a four-byte character and interpreting them as a
+character of their own.
+
+This can cause confusion in languages where string indexing and length is based
+on the number of bytes. For instance, 💩 (U+1F4A9) is encoded with four bytes,
+but it is only one code point. Python counts code points:
+
+```
+In [8]: len("💩")
+Out[8]: 1
+```
+
+Despite its quirks, UTF-8 is now almost universally supported by software and is
+widely used across the Internet. If you are creating text data, you should
+encode it as UTF-8.
+
+### Normalization
+
+Another quick is that Unicode provides two ways to encode many common
+characters. For example, the code point `U+0301` represents the `COMBINING
+ACUTE ACCENT`. Place it after any character and it puts an acute accent on that
+character. Hence we can write é as U+0065 U+0301 (e plus an acute accent).
+
+(This combining feature is also used for encoding emojis that can be displayed
+in different skin tones: 👍🏽 is 👍 plus the U+1F3FD medium skin tone modifier.)
+
+But Unicode also provides *precomposed* forms of common characters, so U+00E9 is
+`LATIN SMALL LETTER E WITH ACUTE`. Consequently:
+
+```
+In [14]: len("é")
+Out[14]: 1
+
+In [15]: len("é")
+Out[15]: 2
+```
+
+This is another problem for searching text: a user searching for "résumé" might
+not find a document containing "résumé" because it's encoded differently.
+
+To solve this, Unicode defines *normalization* procedures that take text and
+turn it into a single canonical form. For instance, NFC (Normalization Form
+Canonical Composition) composes every character when possible, so é is always
+one byte, not two. (There are three other normalization schemes that produce
+different normalized forms, but NFC is the most commonly used.)
+
+To effectively search text, then, we must both know its encoding and ensure it
+is normalized consistently.
+
+### Language differences
+
+Some operations depend not just on the encoding but on the language.
+
+For example: what is the uppercase version of i? In many languages, I; but in
+Turkish, it's İ. What's the lowercase version of I? In Turkish, it's ı. (Turkish
+scores a point for logical consistency.)
+
+Operations like uppercasing and lowercasing hence depend on the language! Even
+Python doesn't handle this automatically, and so if you're serious about text,
+you'll need a library like [ICU](https://icu.unicode.org/) (International
+Components for Unicode) that provides all the necessary procedures.
+
+## Basic text operations in PostgreSQL
+
+In PostgreSQL, every database has a default encoding (hopefully UTF-8), and
+PostgreSQL uses that encoding to store all text and character columns. Since it
+knows the encoding, it can do text operations. Here are a few common ones:
+
+```sql
+SELECT trim(' foo bar   '); -- deletes whitespace at beginning and end
+
+SELECT 'foo' || 'bar'; -- concatenate
+
+SELECT 'foo' || 4; -- convert to string and concatenate
+
+-- find location in string:
+SELECT position('doi:' in 'it is doi:10.1073/pnas.2111454118');
+```
+
+The SQL standard only defines a small set of string functions, so database
+engines provide their own additional functions. PostgreSQL supports many common
+operations you might want to do:
+
+```sql
+SELECT starts_with('doi:10.1073/pnas.2111454118', 'doi');
+
+SELECT substr('doi:10.1073/pnas.2111454118', 5);
+
+SELECT length('💩'); -- Azure Data Studio bug
+```
+
+### Pattern matching
+
+Often, as in @exm-search-titles, it's sufficient to search a text column for
+values matching a certain pattern. SQL provides the `LIKE` operator to do this.
+`LIKE` uses a special pattern syntax to define what to look for. In the
+patterns, `%` represents any sequence of zero or more characters, so we can
+write:
+
+```sql
+SELECT 'doi:10.1073/pnas.2111454118' LIKE 'doi%';
+
+SELECT 'Gone with the Wind' LIKE '%with the%';
+
+-- case sensitive:
+SELECT 'Gone with the Wind' LIKE '%WITH THE%';
+
+-- or use ILIKE for case-insensitive:
+SELECT 'Gone with the Wind' ILIKE '%WITH THE%';
+
+SELECT 'Return of the Jedi' LIKE '%revenge%';
+```
+
+Similarly, `_` represents any single character, but not more:
+
+```sql
+SELECT 'foo' LIKE '_o_';
+
+SELECT 'foooo' LIKE '_o_';
+```
+
+Instead of `LIKE` and `ILIKE`, you can also write `~~` or `~~*`, as in `'Gone
+with the Wind' ~~ '%with the%'`. This is not part of the SQL standard, but
+PostgreSQL supports them internally.
+
+::: {#exr-i-like-ike}
+
+#### Like, totally
+
+In the `events` table, the `feedback` column gives a textual description of the
+feedback to the student. Produce a query that counts how many events have the
+string "you" in their feedback, in upper- or lowercase.
+
+:::
+
+::: {.solution}
+
+```sql
+SELECT COUNT(*)
+FROM events
+WHERE feedback ILIKE '%you%';
+```
+
+:::
+
+### Regular expression matching
+
+`LIKE` provides simple patterns, but its pattern matching is quite limited. What
+if you want to, say, find strings containing only the digits 0-9 repeated at
+most 4 times, followed by at least one uppercase letter? What if you want to
+check if every password has at least one uppercase letter, one symbol, a Pokémon
+character name, and a Mersenne prime?[^passwords]
+
+[^passwords]: In case your company ever considers this, consider NIST SP
+    800-63A, a government standard describing security practices. [Section
+    3.1.1.2](https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver) states
+    that government login systems "SHALL NOT impose other composition rules
+    (e.g., requiring mixtures of different character types) for passwords",
+    because (as Appendix A.3 notes) these rules usually result in people picking
+    dumb passwords like "password1".
+
+To match more complex passwords, we can use regular expressions. There are
+multiple ways to write regular expressions; the SQL standard provides the
+`SIMILAR TO` operator, which uses a syntax no other software uses, but most
+database systems also support POSIX regular expressions. These follow a standard
+syntax widely used by many different systems; even software that varies
+typically only varies in the details and not the general picture.
+
+A regular expression is a specially formatted string that defines the pattern we
+would like to match. Basic patterns are simple: the regular expression `ducks`
+matches any portion of text containing the substring `"ducks"`. But other syntax
+in patterns produces more complex behavior. Let's work through basic syntax with
+some examples:
+
+- `du.ks`
+- `^du.ks`
+- `^du.ks$`
+- `du.+ks`
+- `du.*ks`
+- `du.?ks`
+
+These wildcards are *greedy*: they will match everything they can, even if a
+shorter match is possible. However, we can change their behavior with `?`:
+
+- `du.*?ks`
+
+We can give a *set* of characters using square brackets:
+
+- `du[cn]ks`
+- `<[a-zA-Z]>`
+- `<[^j]>`
+- `du[cn]ks|g[oe]+se`
+
+There are certain common sets that are represented using special escapes:
+
+- `\d`: any digit 0-9
+- `\s`: any whitespace character (space, newline, tab, etc.)
+- `\w`: any word character (alphanumeric and underscore)
+
+We can define *capturing groups* using parentheses, then refer to them later in
+our pattern:
+
+- `(du[cn]ks|g[oe]+se)`
+- `<([a-zA-Z]+)>(.*)</\1>`
+
+
+If you need to literally match parentheses, brackets, or other syntax, you must
+escape them with a backslash: `\(` matches an open parenthesis.
+
+There are many additional options and syntax features we can define, but it's
+best to master the basics first.
+
+Regular expressions can be used within Postgres using the `~` operator. Regular
+expressions are specified as strings, so we must be careful with string
+escaping. For example:
+
+```sql
+SELECT 'foo' ~ 'foo';
+SELECT 'ducks' ~ 'du.ks';
+SELECT '<foo>bar</foo>' ~ '<([a-zA-Z]+)>(.*)</\1>';
+```
+
+Using `regexp_match()`, we can see the portion of the string that matches, or
+the capture groups that match:
+
+```sql
+SELECT regexp_match('the mighty ducks', 'du.ks');
+SELECT regexp_match('<foo>bar</foo>', '<([a-zA-Z]+)>(.*)</\1>');
+```
+
+
+There are also functions count how many matches there are; see [section 9.7.3 of
+the
+manual](https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP)
+for details.
+
+[RegExr](https://regexr.com/) is a great tool to visualize your regular
+expressions and see what they match. There are slight syntactic differences
+between TODO
+
+::: {#exr-regexp-practice}
+
+#### Practice regular expressions
+
+For each pattern below, use `regexp_match()` to confirm the expression matches
+what you intend it to.
+
+1. Write a regular expression that matches strings of the form `doi:10.`,
+   followed by one or more numbers, then a forward slash, then one or more
+   alphanumeric characters. Capture the part after `doi:` in a capture group.
+2. Match strings like `[tag]text[/tag]`, where the two tags match and the text
+   does *not* contain `[/tag]`. For instance, in the string
+   `"[foo]text[/foo]bar[/foo]"`, the match should only be `"[foo]text[/foo]"`.
+3. Match strings like `key=value`, capturing both the key name and the value.
+   The key should be alphabetical and the value should be a decimal number, like
+   `3.14`. For example, `pi=3.1415` should capture `pi` and `3.1415`, but
+   `4=7.2.4` should not match.
+
+:::
+
+Finally, there is one use case that often comes up: If you're parsing HTML (to
+scrape a website, for instance), it's tempting to use regular expressions to
+match the element you need. Don't! [You can't parse HTML with
+regex.](https://stackoverflow.com/a/1732454) The syntax of HTML is too
+complicated for it to be possible to write a regular expression that always
+correctly matches HTML tags. See @sec-scraping for the correct approach.
+
+### Regular expression replacement
+
+One common use of regular expressions is to replace certain patterns in text
+with others. Frequently this is used inside text editors to do sophisticated
+find-and-replace, and it gets used in many other applications processing text
+that needs to be reformatted to match some specification.
+
+::: {#exm-bbcode}
+
+#### BBCode
+
+You may be familiar with [Markdown](https://en.wikipedia.org/wiki/Markdown), the
+simple text markup language used in systems like R Markdown and in comment boxes
+on many websites. Before Markdown was widely used, forum software often used
+[BBCode](https://en.wikipedia.org/wiki/BBCode), a system based on a restricted
+set of "tags" similar to HTML.
+
+For example, `[b]some phrase[/b]` represents bolding the text, and might be
+translated into the HTML for `<b>some phrase</b>` or `<strong>some
+phrase</strong>`.
+
+Using BBCode prevents users from writing HTML directly (and hence messing with
+the site's formatting) and restricts them to only tags supported by the forum
+software.
+
+A simple implementation of BBCode might use regular expressions to match a set
+of tags and convert them to the corresponding HTML tags.
+
+:::
+
+Most regular expression systems support regular expression-based text
+replacement. In PostgreSQL this is called `regexp_replace()`, and takes a
+regular expression (to choose what to replace) and a replacement pattern. In the
+simplest form, the replacement is just a static string:
+
+```sql
+-- Filter naughty words
+SELECT regexp_replace('recrudescent', 'dang|crud', '****') AS clean;
+```
+
+```
+    clean
+--------------
+ re****escent
+(1 row)
+```
+
+But the pattern can also refer to the capture groups in the regular expression.
+For instance, we can make text dirtier:
+
+```sql
+--- Emphasize naughty words
+SELECT regexp_replace('dang recrudescents!', '(dang|crud)', '\1!!!') AS dirty;
+```
+
+```
+         dirty
+------------------------
+ dang!!! recrudescents!
+```
+
+Note only the first match was replaced. That's the default behavior, but
+`regexp_replace()` takes additional arguments to control it. A `flags` argument
+gives a string of characters setting options, such as `i` for case-insensitive
+matching and `g` for global matching, meaning replacing everything in the
+string:
+
+```sql
+SELECT regexp_replace('dAnG ReCruDeSCeNts!', '(dang|crud)', '\1!!!', 'ig') AS dirty;
+```
+
+```
+           dirty
+---------------------------
+ dAnG!!! ReCruD!!!eSCeNts!
+(1 row)
+```
+
+### Regular expressions in Python
+
+Besides PostgreSQL, you can do regular expressions in most languages, including
+Python. In Python they are supported by the [`re`
+module](https://docs.python.org/3/library/re.html) of the standard library.
+
+```{python}
+import re
+
+# list all matches
+re.findall('(dang|crud)', 'dang recrudescents!')
+```
+
+```{python}
+# check if entire string matches
+re.fullmatch(r"<([a-zA-Z]+)>(.*)</\1>", "<foo>bar</foo>")
+```
+
+```{python}
+# substitute (replace) text
+re.sub("(dang|crud)", r"\1!!!", "dAnG ReCruDeSCeNts!",
+       flags=re.IGNORECASE)
+```
+
+Notice we're using raw string syntax (`r"string"`) to avoid needing to escape
+backslashes.
+
+::: {#exr-bbcode}
+
+#### BBCode with regexp
+
+Suppose you're building a simple forum software and want to support BBCode
+(@exm-bbcode). Write a single `re.sub()` call that supports `i`, `b`, and `u`
+tags, converting them to the HTML tags `<i>`, `<b>`, and `<u>` (italic, bold,
+and underline).
+
+For example, `[i]This[/i] is a [b]test![/b]` should be converted to `<i>This</i>
+is a <b>test!</b>`, but `Your mother is a [duck]hamster[/duck]` should be
+unchanged. However, when tags are not nested, they should not match: `[b]This
+[i]is[/b] a test[/i]` should not be replaced with anything.
+
+:::
+
+::: {#exr-sql-syntax-replace}
+
+#### Syntax adaptation
+
+Different SQL engines generally support the SQL standard but add variations and
+special features, causing problems when you use SQL code written for one engine
+in another. MySQL uses backticks to delimit column and table names so they are
+not interpreted as SQL syntax (e.g. if you have a table named `select`).
+
+For example, a file full of MySQL queries might contain
+
+```sql
+CREATE TABLE `employeelist` (
+  eid INTEGER,
+  firstName varchar(31) NOT NULL DEFAULT '',
+  ... -- more columns go here
+);
+```
+
+But PostgreSQL does not support backtick syntax.
+
+Write a Python regular expression to take a string containing the MySQL `CREATE
+TABLE` syntax, returning a form without the backticks around the table name.
+
+:::
+
+::: {.solution}
+
+Here's a solution:
+
+```python
+re.sub(r"^CREATE\s+TABLE\s+`(\w+)`", r"CREATE TABLE \1", text,
+       flags=re.IGNORECASE)
+```
+
+:::
+
+## Language-aware text search
+
+Despite all this fancy pattern-matching, we're still not done searching text.
+Recall @exm-search-docs: we wanted to search emails for words like *monopoly*,
+while also including variations like *monopolies*, *monopolistic*, and so on. We
+could write many patterns to do this, of course:
+
+```sql
+SELECT subject, body FROM emails
+WHERE body LIKE '%monopoly%' OR body LIKE '%monopolies%' OR ...;
+```
+
+But that gets boring to write. And inefficient: to search the text, PostgreSQL
+must load every row of text and search through it---potentially many megabytes
+or gigabytes of text. (My CMU email account contains 12 gigabytes of messages,
+for instance.) So: We'd like to automatically handle word variants, and we'd
+like to index our text so we can quickly find words and phrases.
+
+### Lexing text
+
+To handle word variants, we need two pieces:
+
+1. A *tokenizer* that splits text up into discrete *tokens*, such as words,
+   numbers, links, and so on. Then we can operate on tokens, rather than on
+   individual characters.
+2. A *lexer* that normalizes tokenized text to make all variants of a word the
+   same. The lexer might make all words lowercase, remove plural suffixes (*s*
+   or *es*), convert conjugated verbs to their infinitive form (*washed* →
+   *wash*, *monopolized* → *monopolize*), and remove *stop words*, which are
+   very common words that are useless for searching because they appear
+   everywhere (*the*, *and*, *is*, and so on). The lexer outputs *lexemes*, the
+   normalized tokens.
+
+Building good tokenizers and lexers is hard. They must be specialized to the
+language and grammar. Languages are often irregular, so they need lots of
+special-case rules and dictionaries. Fortunately PostgreSQL already has lexers
+for popular languages (and you can probably find lexers for uncommon languages
+if you need them).
+
+PostgreSQL's lexer system turns strings into `tsvectors` (for *text search
+vectors*). Here's what they look like:
+
+```sql
+SELECT to_tsvector('english', 'the quick brown fox jumps over the lazy dog');
+```
+
+```
+                      to_tsvector
+-------------------------------------------------------
+ 'brown':3 'dog':9 'fox':4 'jump':5 'lazi':8 'quick':2
+(1 row)
+```
+
+Despite the appearance, the `tsvector` is not a string. It is an internal data
+structure presenting the lexemes and their positions within the lexed text.
+Notice that `the` has disappeared, because it is a stopword, and `lazy` has been
+lexed into `lazi`. (*Laziness*, *lazies*, and similar words all lex to `lazi`.)
+
+Similarly, the first sentence of the [Gettysburg
+address](https://en.wikipedia.org/wiki/Gettysburg_Address) is lexed into this
+`tsvector`:
+
+```
+'ago':6 'brought':9 'conceiv':17 'contin':13 'creat':29 'dedic':21
+'equal':30 'father':8 'forth':10 'four':1 'liberti':19 'men':27
+'nation':16 'new':15 'proposit':24 'score':2 'seven':4 'upon':11 'year':5
+```
+
+### Querying documents
+
+Next, Postgres has a `tsquery` type for queries. Queries consist of lexed words,
+optionally in a specific order. The `to_tsquery()` function converts strings
+into this format:
+
+```sql
+SELECT to_tsquery('english', 'the & quick & brown & fox & jumps');
+```
+
+```
+              to_tsquery
+------------------------------------
+ 'quick' & 'brown' & 'fox' & 'jump'
+(1 row)
+```
+
+The query string is written using the `&` operator to indicate we want all of
+the words; notice that `the` was dropped (it's a stopword) and `jumps` was lexed
+to `jump`. This will match the words in any order. We use the `@@` operator to
+match a `tsvector` to a `tsquery`:
+
+```sql
+SELECT to_tsvector('the fox brown jumps quickly') @@
+  to_tsquery('the & quick & brown & fox & jumps');
+```
+
+The query syntax supports all logical operators, not just `&`; we can use `|`
+(OR) and `!` (negation) to express complex queries.
+
+Alternately, Postgres supports queries written in a way you may be more
+familiar with from Google and other search systems. Phrases are searched as
+individual words with `&`; phrases inside quotation marks must match exactly;
+writing OR between words allows any to match; and `-` acts as NOT. For instance:
+
+```sql
+SELECT to_tsvector('the fox brown jumps quickly') @@
+  websearch_to_tsquery('"the quick brown" -dog');
+```
+
+### Indexing lexed text
+
+It's clearly inconvenient to use `to_tsvector` on a text column every time we
+want to search it. Postgres must go through the entire column, tokenize and lex
+the text, and then prepare to search it. We can instead ask Postgres to create
+an index of the `tsvector` version:
+
+```sql
+CREATE INDEX name_of_index ON tablename
+USING GIN (ts_tsvector('english', columnname));
+```
+
+Now, whenever we do `to_tsvector()` on the column in a query, Postgres will use
+the index instead. A `GIN` index is an "inverted" index: the index will contain
+all the lexemes in the column and, for each lexeme, a list of all the rows
+containing it. The lexemes are organized in a tree so they can quickly be found
+in a search.
+
+Alternately, we can ask Postgres to store the `tsvector`s in a separate column.
+PostgreSQL can automatically generate columns that are updated whenever a row is
+changed:
+
+```sql
+ALTER TABLE tablename
+ADD COLUMN column_index_col tsvector
+GENERATED ALWAYS AS (to_tsvector('english', columname)) STORED;
+
+CREATE INDEX column_idx ON tablename USING GIN (column_index_col);
+```
+
+Now we can write our search queries in terms of `column_index_col` instead of
+writing `to_tsvector()` out every time.
+
+### Searching with indices
+
+In the `examples` database, I have loaded several tables containing emails from
+[Enron](https://en.wikipedia.org/wiki/Enron). In brief, Enron was a major
+electricity, gas, and communications company with revenues of $100 billion
+dollars in 2000---until, in 2001, it was discovered that its executives used
+accounting fraud to fake its revenues, and the company collapsed. During the
+various lawsuits and criminal trails afterward, many of Enron's internal emails
+were released, and they are still often used as example data in data analysis.
+(Often the emails between executives are treated as a social network and used in
+social network analysis examples, for instance.)
+
+The `message` table contains several hundred thousand emails. I have indexed the
+`subject` and `body` columns containing the email contents, so we can quickly
+search it:
+
+```sql
+SELECT sender, subject FROM message
+WHERE subject_index_col @@ websearch_to_tsquery('monopoly')
+LIMIT 10;
+```
+
+This query is blazing fast despite the size of the database. Even searching the
+bodies is fast:
+
+```sql
+SELECT sender, subject FROM message
+WHERE body_index_col @@ websearch_to_tsquery('monopoly')
+LIMIT 10;
+```
+
+One approach is to parse the query in the `FROM` clause, allowing it to be used
+repeatedly throughout the query. This will be useful when we discuss ranking:
+
+```sql
+SELECT sender, subject
+FROM message, websearch_to_tsquery('monopoly') AS query
+WHERE body_index_col @@ query
+LIMIT 10;
+```
+
+The query has one row and `message` has many; implicitly, listing two tables in
+`FROM` does a full join, so every row of `message` has the same `query` attached
+to it.
+
+### Ranking matches
+
+Usually, when we search a database we want the results to be listed in some kind
+of useful order. Intuitively, the closest match (containing all the words in our
+query in roughly the same order) should be on top, as should be documents that
+contain the query terms many times. A document containing the query terms, but
+very far apart from each other and only once each, should appear near the end of
+the list of results.
+
+We might also want to weight parts of the text differently. Perhaps a search
+query should apply to both the title and the text of a document, but matches in
+the title should be more important than matches in the text.
+
+In short, we need a ranking function that supports weights. PostgreSQL provides
+two:
+
+- `ts_rank()` ranks matches by how many lexemes in the document match the query
+- `ts_rank_cd()` also accounts for how close the matching lexemes are to each
+  other
+
+The ranks are calculated so that larger ranks mean more relevant matches, so we
+sort in descending order. For example,
+
+```sql
+SELECT mid, sender, subject, ts_rank_cd(body_index_col, query) AS rank
+FROM message, websearch_to_tsquery('monopoly competition') AS query
+WHERE body_index_col @@ query
+ORDER BY rank DESC
+LIMIT 10;
+```
+
+These ranks do not account for the length of the document. If the document is
+long and hence includes the matching lexemes many times, it will rank higher
+than a shorter document that includes them at the same rate. That may not be
+desirable, so the optional third argument to `ts_rank()` and `ts_rank_cd()`
+selects a normalization method. The default is 0, which does no normalization, 1
+normalizes by the log of the document length while 2 normalizes by the length.
+(There are several additional options and combinations of normalizations can be
+used; see [section 12.3.3 of the
+manual](https://www.postgresql.org/docs/current/textsearch-controls.html) for
+details).
+
+To make a search index column that does a weighted search of multiple fields,
+such as the subject and body of an email, we can change how we define the index
+column:
+
+```sql
+ALTER TABLE tablename
+ADD COLUMN column_index_col tsvector
+GENERATED ALWAYS AS (
+  setweight(to_tsvector('english', coalesce(important_column, '')), 'A') ||
+  setweight(to_tsvector('english', coalesce(less_important_column, '')), 'D')
+)
+STORED;
+
+CREATE INDEX column_idx ON tablename USING GIN (column_index_col);
+```
+
+Weights are the letters A through D, where A has highest weight and D has the
+lowest. Notice we use `coalesce()` so that if the column value is `NULL`, it's
+replaced with the empty string; and we can use the `||` operator to concatenate
+`tsvector` values, so the index column contains the combined results for both
+columns.
+
+## Exercises
+
+::: {#exr-enron-search}
+
+#### Find the incriminating evidence
+
+Part of Enron's fraud involved recording transactions early so the revenue would
+be included in the current quarter's financial reports, increasing the reported
+quarterly revenue. (Some of that revenue wasn't real either.) Search the Enron
+messages for emails by employees containing topics about revenue, quarters, and
+loans. Present your results in a table with the name of the sender, the subject
+line of the email, and its date. You can adjust your query to give what you
+think are the most interesting results.
+
+(Employee names are available in the `employeelist` table, which lists names and
+email addresses for known Enron employees.)
+
+:::
+
+::: {.solution}
+
+TODO
+
+:::

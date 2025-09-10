@@ -1,0 +1,1093 @@
+# SQL Basics {#sec-sql-basics}
+
+::: {.callout-note}
+
+Portions of these notes are based on material co-developed with Christopher
+Genovese for 36-750.
+
+:::
+
+Let's learn how to write basic SQL queries. We'll start by writing the queries
+by hand, and instead of using Python to submit them, we'll use the `psql`
+command-line program. This program allows you to type queries and get responses
+back from the server.
+
+If you need help writing SQL queries, finding functions in Postgres, and so on,
+consult the [PostgreSQL manual](https://www.postgresql.org/docs/current/). It is
+among the best-written and most comprehensive manuals you can get for
+open-source software.
+
+## Connecting to our database server
+
+The Department runs a PostgreSQL server in Microsoft Azure for this course. You
+should receive an automated email with your username and password.
+
+### Azure Data Studio
+
+A simple way to work with PostgreSQL in Azure is Microsoft's [Azure Data
+Studio](https://azure.microsoft.com/en-us/products/data-studio). Download and
+install it. Once you've installed it, find the Extensions button on the left and
+search for the PostgreSQL extension by Microsoft, and install it.
+
+You can now connect to our PostgreSQL server with the following information:
+
+| Field | Value |
+|------|---------------|
+| Connection type | PostgreSQL |
+| Server name | `pinniped.postgres.database.azure.com` |
+| Authentication type | Password |
+| User name | Your username |
+| Password | Your password |
+| Database | Select either your database or `examples` |
+
+Once connected, you'll be able to see all the databases and tables your account
+can access on the left. The `examples` database is for examples used in class,
+and you can read it but not modify it. You have your own database, under your
+Andrew ID, that you can work in.
+
+When you connect, you'll get a query window (or can create one with File→New
+Query) for writing queries. You can select at the top which database to run
+those queries in.
+
+You can also create a notebook (based on Jupyter notebooks) to access a specific
+database. For example, open the list of databases on the left, right click on
+`examples`, and select "New Notebook". You will use these notebooks for your
+homework.
+
+*Note:* You will not be able to connect through the eduroam wireless network,
+since it blocks PostgreSQL connections. If you're on campus, always use
+CMU-SECURE.
+
+### Entering SQL statements
+
+SQL consists of a sequence of *statements*.
+
+Each statement is built around a specific command, like `SELECT` or `INSERT`,
+with a variety of modifiers and optional clauses (like `WHERE` or `LIMIT`).
+
+Command names and modifiers are *not* case-sensitive. You can write `SELECT`,
+`select`, or `sEleCt`. It is standard style to use upper case command names and
+lower case for table and column names.
+
+SQL statements can span several lines, and *all* SQL statements end in a
+semi-colon (`;`).
+
+Keep in mind: strings are delimited by single quotes `'like this'`, *not* double
+quotes `"like this"`. To write a single quote in a string, write it twice:
+`'can''t'` represents the string `can't`.
+
+SQL comments are lines starting with `--`.
+
+### Submitting assignments
+
+Your SQL homework assignments should be completed as notebooks in Azure Data
+Studio. Use File→New Notebook to create one, and connect it to the right
+database. (These are a lot like Jupyter notebooks, or the notebooks you may have
+used in Visual Studio Code in 36-650.)
+
+Use text cells to create headings labeling each problem, and to include text
+answers to any questions that ask for your comments. Use SQL cells for your
+queries. Use `LIMIT` clauses on queries returning lots of rows so the output
+isn't enormous---we don't want to scroll through 50 pages of results to find
+your next homework problem.
+
+Save the notebook as a Jupyter `.ipynb` file. When you're ready to submit your
+homework, upload the notebook to Gradescope.
+
+## Our example database {#sec-example-db}
+
+To learn how to write queries, we'll start with a database already filled with
+example data. This database is for a hypothetical online learning platform where
+students see material and then take short quizzes. We'll start by looking at the
+`events` table, which records every time a student interacted with some element
+of the system, such as a quiz item. @tbl-events-sample shows a few example rows.
+
+| id | time                | persona | element | latency | score | feedback           |
+|----|---------------------|---------|---------|---------|-------|--------------------|
+| 17 | 2015-07-11 09:42:11 |    3271 |   97863 |   329.4 |   240 | Consider...        |
+| 18 | 2015-07-11 09:48:37 |    3271 |   97864 |   411.9 |  1000 |                    |
+| 19 | 2015-07-08 11:22:01 |     499 |  104749 |   678.2 |   750 | The mean is...     |
+| 22 | 2015-07-30 08:44:22 |    6742 |    7623 |   599.7 |   800 | Try to think of... |
+| 24 | 2015-08-04 23:56:33 |    1837 |  424933 |   421.3 |     0 | Please select...   |
+| 32 | 2015-07-11 10:11:07 |     499 |   97863 |   702.1 |   820 | What does the...   |
+| 99 | 2015-07-22 16:11:27 |      24 |   88213 |   443.0 |  1000 |                    |
+: A few rows from the `events` table. {#tbl-events-sample}
+
+You can load this data into your own database. Download
+[`events.sql`](/data/events.sql) and load it in Azure Data Studio. You will see
+a file full of SQL queries that create the table. At the top, select your
+database connection, then press Run to run all the queries and create the table.
+
+## Selecting data
+
+The `SELECT` command is how we query the database. It is versatile and powerful
+command.
+
+The simplest query is to look at all rows and columns of a table:
+
+```sql
+SELECT * FROM events;
+```
+
+The `*` is a shorthand for "all columns."
+
+Selects can include expressions, not just column names, as the quantities
+selected. And we can use `as` clauses to name (or rename) the results.
+
+```sql
+SELECT 1 AS one;
+SELECT persona AS person FROM events;
+```
+
+Most importantly, we can qualify our queries with conditions that refine the
+selection. We do this with the `WHERE` clause, which accepts a logical condition
+on any expression and selects only those rows that satisfy the condition. The
+conditional expression can include column names (even temporary ones) as
+variables.
+
+```sql
+SELECT * FROM events WHERE id > 20 AND id < 40;
+```
+
+We can also order the output using the `ORDER BY` clause:
+
+```sql
+SELECT score, element FROM events
+WHERE persona = 1150
+ORDER BY element, score;
+```
+
+Specifying two columns (`element, score`) means the results will be sorted by
+the first column, and any ties broken using the second column.
+
+We can limit the number of results using `LIMIT`:
+
+```sql
+SELECT score, element FROM events
+WHERE persona = 1150
+ORDER BY element, score
+LIMIT 10;
+```
+
+::: {#exr-basic-select}
+
+#### Basic `SELECT` queries
+
+Craft queries to do the following in the `events` table:
+
+1. List all ids, persona, score where a score > 900 occurred.
+2. List all persona (sorted numerically) who score > 900. Can you eliminate
+   duplicates here? (Hint: Consider `SELECT DISTINCT`.)
+
+:::
+
+::: {.solution}
+
+```sql
+SELECT id, persona, score
+FROM events
+WHERE score > 900;
+
+SELECT DISTINCT persona
+FROM events
+WHERE score > 900
+ORDER BY persona;
+```
+
+:::
+
+### Expressions and built-in functions
+
+SQL queries can contain *expressions*, such as multiplication and addition. For
+example:
+
+```sql
+SELECT 2 * score, element FROM events
+WHERE persona < 1201
+LIMIT 2;
+```
+
+Relational databases also typically have a library of built-in functions that
+can do various useful things. The [chapter on built-in functions and
+operators](https://www.postgresql.org/docs/current/functions.html) in the
+PostgreSQL manual lists numerous such functions: mathematical functions, string
+concatenation and formatting, date and time operations, comparisons, ...
+
+These functions can be used anywhere you'd expect a value. For example:
+
+```sql
+SELECT log(score) AS log_score, element,
+       upper(feedback) AS shouty_feedback
+FROM events
+LIMIT 10;
+```
+
+You can think of these functions as being inherently vectorized: given a column
+of data, they return an entire column of results, much like applying a function
+to a column of a Pandas data frame.
+
+### Data types
+
+Each value in a SQL database has a type controlling the operations you can
+perform with it: text, numbers, dates, and so on.
+
+Just as expressions in Python or R can "cast" data from one type to another
+(like `as.character(7)` in R, or `str(7)` in Python), in SQL you can cast to
+different data types. The `CAST()` function does this. For example, to convert a
+string specifying a timestamp to a timestamp object, we can write
+
+```sql
+SELECT CAST('2020-10-01 11:00:00' AS TIMESTAMP);
+```
+
+The string now has the timestamp type, so functions that work on timestamps
+(listed in the [chapter on date/time
+functions](https://www.postgresql.org/docs/current/functions-datetime.html)) can
+work on it:
+
+```sql
+SELECT date_part('dow', CAST('2020-10-01 11:00:00' AS TIMESTAMP));
+```
+
+The database will automatically reject operations on the wrong type of data, or
+that try to insert the wrong type into a column.
+
+One special value is `NULL`. Most data types can be `NULL`, which represents a
+missing value, must like `NA` in R or `None` in Python. By default, most types
+allow `NULL` values, so if you want to enforce that a value must always be
+provided, you must declare the column to be `NOT NULL` (see
+@sec-creating-schemas below).
+
+### Grouping and aggregate functions {#sec-grouping-aggregate}
+
+Sometimes we want to calculate something from many rows, not just one row. For
+example, most databases have `count()`, `max()`, `min()`, and `sum()` functions.
+These are all *aggregate* functions, meaning they take many values and produce a
+single value.
+
+For example, let's calculate the average score obtained by students:
+
+```sql
+SELECT avg(score) FROM events;
+```
+
+This produces a single row: the average score. Any aggregate function takes
+many rows and reduces them to a single row. This is why you *can't* write
+this:
+
+```sql
+SELECT persona, avg(score) FROM events;
+```
+
+Try it; why does Postgres complain?
+
+We often want to apply aggregate functions not just to whole columns but to
+*groups of rows* within columns. This is the province of the `GROUP BY` clause.
+It groups the data according to a specific value, and aggregate functions then
+produce a single result *per group*.
+
+For example, if I wanted the average score for each separate user, I could
+write:
+
+```sql
+SELECT persona, avg(score) AS mean_score
+FROM events
+GROUP BY persona
+ORDER BY mean_score desc;
+```
+
+You can apply conditions on the groups. While `WHERE` filters the individual
+rows, `HAVING` filters the groups after aggregation. For example, we can find
+groups with average score above 50:
+
+```sql
+SELECT persona, avg(score) AS mean_score
+FROM events
+WHERE moment > CAST('2014-10-01 11:00:00' AS timestamp)
+GROUP by persona
+HAVING avg(score) > 300
+ORDER BY mean_score DESC;
+```
+
+::: {#exr-basic-grouping}
+
+#### Grouping and aggregating
+
+Using the `events` table,
+
+1. List all personas whose maximum latency is greater than 575, and calculate
+   their average scores. Sort the results by increasing average score.
+2. List all persona whose average score > 600. You will need to do a `GROUP BY`
+   as above. (Hint: use `HAVING` instead of `WHERE` for the aggregate
+   condition.)
+3. Produce a table showing how many times each instructional element was
+   practiced. The `COUNT()` aggregate function counts the number of rows in each
+   group.
+4. List all personas and, as a string, the month and year of their first event
+   (by `moment`) in the table. (For example, "January 2014".) Limit this to the
+   first 10 results.
+
+   *Hint:* Check the PostgreSQL documentation on [data type
+   formatting](https://www.postgresql.org/docs/current/functions-formatting.html)
+   to see how to convert a timestamp to a string, particularly tables 9.27 and
+   9.31.
+
+:::
+
+::: {.solution}
+
+```sql
+SELECT persona, avg(score) AS mean_score
+FROM events
+GROUP BY persona
+HAVING MAX(latency) > 575
+ORDER BY mean_score;
+
+SELECT persona
+FROM events
+GROUP BY persona
+HAVING avg(score) > 600;
+
+SELECT element, count(element)
+FROM events
+GROUP by element
+ORDER by element;
+
+SELECT persona, to_char(min(moment), 'FMMonth YYYY')
+FROM events
+GROUP BY persona
+LIMIT 10;
+```
+
+:::
+
+## Inserting data
+
+The `INSERT` command specifies data to insert.
+
+The basic template is
+
+```
+INSERT INTO <tablename> (<column1>, ..., <columnk>)
+       VALUES (<value1>, ..., <valuek>);
+```
+
+If the column names are excluded, then values for all columns must be
+provided. You can use `DEFAULT` in place of a value for a column with a default
+setting.
+
+You can also insert multiple rows at once:
+```
+INSERT INTO <tablename> (<column1>, ..., <columnk>)
+       VALUES (<value11>, ..., <value1k>),
+              (<value21>, ..., <value2k>),
+              ...
+              (<valuem1>, ..., <valuemk>);
+```
+
+For example:
+
+```sql
+INSERT INTO events (persona, element, score, answer, feedback)
+       VALUES (1211, 29353, 824, 'C', 'How do the mean and median differ?');
+INSERT INTO events (persona, element, score, answer, feedback)
+       VALUES (1207, 29426, 1000, 'A', 'You got it!');
+INSERT INTO events (persona, element, score, answer, feedback)
+       VALUES (1217, 29433,  842, 'C', 'Try simplifying earlier.'),
+              (1199, 29435,    0, 'B', 'Your answer was blank'),
+              (1207, 29413, 1000, 'C', 'You got it!'),
+              (1207, 29359,  200, 'A', 'A square cannot be negative');
+```
+
+By default, `INSERT` does not return a table of results. But you can ask it to:
+
+```sql
+INSERT INTO events (persona, element, score, answer, feedback)
+       VALUES (1217, 29433,  842, 'C', 'Try simplifying earlier.'),
+              (1199, 29435,    0, 'B', 'Your answer was blank'),
+              (1207, 29413, 1000, 'C', 'You got it!'),
+              (1207, 29359,  200, 'A', 'A square cannot be negative')
+RETURNING id;
+```
+
+This query returns a table with 4 rows and 1 column: the `id` column that is
+automatically filled in (because it is `SERIAL`). You can return one or more
+columns or expressions in `RETURNING`: it takes a list of columns just like
+`SELECT`.
+
+::: {#exr-insert-invalid}
+
+#### Inserting invalid data
+
+Write a query to insert data into the `events` table, but provide the wrong data
+type for one column (such as a string instead of an integer). Report the message
+you receive. Which of the ACID guarantees (@sec-acid-guarantees) is the database
+enforcing here?
+
+:::
+
+::: {.solution}
+
+Postgres is enforcing *consistency*: the data must satisfy all defined
+constraints at all times.
+
+Any query that inserts invalid data is fine here. Note that Postgres will
+automatically do some kind of casts: for example, inserting the string `'100'`
+for the score is fine, because that string can be automatically converted to a
+number, and Postgres will not complain. Only if Postgres does not know how to do
+the conversion, or if the conversion fails, will it complain. Hence inserting
+`'ducks'` into a numeric column will not work.
+
+:::
+
+## Updating data
+
+The `UPDATE` command allows us to modify existing entries in any way we like.
+The basic syntax looks like this:
+
+```
+UPDATE table
+    SET col1 = expression1,
+        col2 = expression2,
+        ...
+    WHERE condition;
+```
+
+**Beware:** If you omit the `WHERE` clause, the update will be applied to every
+row.[^updatewhere]
+
+[^updatewhere]: I once accidentally omitted the `WHERE` clause on an `UPDATE`
+    query to change a user's password in a database, and hence changed
+    *everyone's* password. On a live website with thousands of users. I had to
+    very frantically get the previous day's backup and figure out how to reset
+    passwords to those contained in the backup.
+
+The `UPDATE` command can update one or more columns at once.
+
+As with `INSERT`, you can use `RETURNING` with `UPDATE` queries. Here it returns
+one row per row that was modified, and you can choose the columns returned.
+
+::: {#exr-basic-update}
+
+#### Updating data
+
+In the `events` table,
+
+1. Set the answer for events with id > 800 to the letter C.
+2. Update the scores to subtract 50 points for every hint taken (in the `hints`
+   column). Ensure that the score stays above 0. Use `RETURNING` to get the `id`
+   and the new score for each updated event.
+
+   *Hint:* The `GREATEST()` function returns the maximum of its arguments, so
+   `GREATEST(-5, 0, -2)` is 0.
+
+:::
+
+::: {.solution}
+
+```sql
+UPDATE events
+SET answer = 'C'
+WHERE id > 800;
+
+UPDATE events
+SET score = GREATEST(score - 50 * hints, 0)
+RETURNING id, score AS new_score;
+```
+:::
+
+## Deleting data
+
+The `DELETE` command allows you to remove rows from a table that satisfy a
+condition. The basic syntax is:
+
+```
+DELETE FROM table WHERE condition;
+```
+
+**Beware:** If you omit the `WHERE` clause, *all rows in the table* will be
+deleted immediately.
+
+As before, you can use `RETURNING` to get results from `DELETE`. There will be
+one row per deleted row.
+
+::: {#exr-gems}
+
+#### Gems data
+
+The file [`gems.sql`](/data/gems.sql) contains the commands needed to create a
+table called `gems` filled with some random data. Connect to your personal
+database. Open the file and run the queries inside to create the table.
+
+Try
+
+```sql
+SELECT * FROM gems LIMIT 10;
+```
+
+to see a few examples of the data in the new `gems` table.
+
+Now try writing some queries:
+
+1. Set the `label` to `'thin'` for all gems with fewer than 10 facets.
+2. Set the `label` to `'wow'` and the price to $100 for all gems with more than
+   20 facets.
+
+   (The `price` column is defined to be of type `money`. To convert a number to
+   `money`, you can write `cast('100.0' as money)`. The `money` type is useful
+   because it represents a number with fixed decimal precision; by default, this
+   is two decimal digits. It stores these exactly, unlike floating-point
+   numbers, which can't represent some simple decimals.) 
+3. Delete all gems with fewer than four facets.
+
+:::
+
+::: {.solution}
+
+For reference, here is how the table was created:
+
+```sql
+CREATE TABLE gems (label TEXT DEFAULT '',
+                   facets INTEGER DEFAULT 0,
+                   price MONEY);
+
+INSERT INTO gems
+(SELECT '', ceiling(20 * random() + 1), '1.00'::money
+ FROM generate_series(1, 20) AS k);
+
+UPDATE gems SET label = ('{thin,quality,wow}'::text[])[ceil(random() * 3)];
+```
+
+Here are the queries:
+
+```sql
+UPDATE gems SET label = 'thin'
+WHERE facets < 10;
+
+UPDATE gems SET label = 'wow', price = CAST('100.00' AS money)
+WHERE facets >= 20;
+
+DELETE FROM gems WHERE facets < 4;
+```
+
+:::
+
+## Creating and updating table schemas {#sec-creating-schemas}
+
+### Selecting the schema
+
+Before making a table, we must choose what columns it should have, what they
+will be named, and what types they have.
+
+We'll discuss the selection of columns in more detail in @sec-schema-design.
+Broadly, we choose the columns to describe whatever entity is in the table: if
+each row is a student, the columns should be features of the students. Their
+names should be reasonably descriptive without being so long as to make typing
+queries a pain.
+
+Types require careful choice. PostgreSQL supports [dozens of
+types](https://www.postgresql.org/docs/current/datatype.html). The most common
+are:
+
+* Booleans: `boolean` can be either `true` or `false` (or `yes` and `no`, `on`
+  or `off`, or 1 and 0)
+* Numeric
+  * `integer` for integers
+  * `numeric` for arbitrary-precision numbers (i.e. to any number of decimal
+    places -- making them slow to manipulate)
+  * `double precision` (or just `double`) for 64-bit floating point numbers
+  * `serial` for an integer column whose default value is always the last value
+    plus 1 (great for IDs)
+  * `money` for monetary amounts with fixed precision
+* Strings
+  * `text` is the general-purpose text type, for strings up to any length. This
+    should be your default choice in PostgreSQL. (However, the SQL standard does
+    not include `text`, so some databases don't have it, forcing everyone to use
+    `varchar`.)
+  * `char(n)` gives a fixed-length string of a certain length, padded with
+    spaces, so `char(10)` always is 10 characters long
+  * `varchar(n)` gives variable-length strings up to a certain length, so
+    `varchar(10)` can be any length up to 10 characters.
+* Dates and times
+  * `timestamp` records a specific point in time with date and time. Optionally,
+    `timestamp with time zone` records the time zone associated with the event.
+  * `date` gives a date with no time of day
+  * `time` gives a time of day (from midnight to midnight), but no date,
+    optionally with a time zone.
+  * `interval` represents the interval between two timestamps, and is what you
+    get when you subtract two timestamps
+* Enumerated types are user-created. Each value takes one of several defined
+  options, much like a factor in R.
+
+There are many other types and options; view the [full Postgres
+list](https://www.postgresql.org/docs/current/datatype.html) for more.
+
+### Creating tables
+
+To create a new table, we use the `CREATE TABLE` command. In its most basic
+form, it looks like
+
+```text
+CREATE TABLE name (attribute1 TYPE1, attribute2 TYPE2, ...);
+```
+
+A simple `products` table specifying products for sale is:
+
+```sql
+CREATE TABLE products (
+       product_id INTEGER,
+       name TEXT,
+       price DOUBLE,
+       sale_price DOUBLE
+);
+```
+
+Here we have chosen five columns and specified their types, out of the list of
+types [supported by
+PostgreSQL](https://www.postgresql.org/docs/current/datatype.html).
+
+Here's a fancier version:
+
+```sql
+CREATE TABLE products (
+       product_id SERIAL PRIMARY KEY,
+       name TEXT,
+       price NUMERIC CHECK (price > 0),
+       sale_price NUMERIC CHECK (sale_price > 0),
+       CHECK (price > sale_price)
+);
+```
+
+The `SERIAL` type specifies that `product_id` is automatically set to an
+increasing integer whenever we add a row. We have also specified it is the
+*primary key*, meaning it uniquely identifies rows in this table. We've also set
+constraints on price, sale price, and their relationship.
+
+PostgreSQL will reject any data of the wrong type or violating the constraints:
+
+```sql
+INSERT INTO products (name, price, sale_price)
+VALUES ('duck', 'duck', 'goose');
+
+INSERT INTO products (name, price, sale_price)
+VALUES ('kirk action figure', 50, 52);
+```
+
+We can also specify default values using `DEFAULT` and require entries to not be
+null. Here's an even fancier products table:
+
+```sql
+CREATE TABLE products (
+       product_id SERIAL PRIMARY KEY,
+       name TEXT NOT NULL,
+       quantity INTEGER DEFAULT 0,
+       price NUMERIC CHECK (price > 0),
+       sale_price NUMERIC CHECK (sale_price > 0),
+       CHECK (price > sale_price)
+);
+```
+
+::: {#exr-create-table}
+
+#### Creating a table
+
+Write the `CREATE TABLE` command for a table called `students` containing the
+following columns:
+
+- Student ID, a unique integer
+- Student name, which cannot be null
+- Date of birth (as a date *without* a time), which must be before the present
+- A boolean flag for whether each student has completed orientation, false by
+  default
+- The tuition charged for that student, which must be greater than 0
+- The scholarship amount that student receives, which must be less than the
+  tuition amount, and is 0 by default
+
+You may choose appropriate column names, and should choose appropriate data
+types from [the many types supported by
+PostgreSQL](https://www.postgresql.org/docs/current/datatype.html). [Chapter 5
+of the manual](https://www.postgresql.org/docs/current/ddl.html) gives great
+detail on defining tables, constraints, defaults, and other features.
+
+Write an `INSERT` query that adds four example students to the table. Write
+another `INSERT` query that attempts to insert invalid data, proving that your
+definition enforces the criteria above.
+
+:::
+
+::: {.solution}
+
+Names may differ, but the general idea is this:
+
+```sql
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    name text NOT NULL,
+    birthdate date CHECK (birthdate < now()),
+    completed_orientation boolean DEFAULT FALSE,
+    tuition money CHECK (tuition > CAST(0 AS money)),
+    scholarship money,
+    CHECK (scholarship <= tuition)
+);
+```
+
+The crucial parts are that
+
+* `id` is a serial primary key, so it is unique and increasing
+* `name` is marked `NOT NULL`,
+* `birthdate` has a check constraint
+* `completed_orientation` defaults to `FALSE`
+* `tuition` has a check constraint
+* a check constraint ensures the scholarship amount is valid.
+
+For example,
+
+```sql
+INSERT INTO students (name, birthdate, completed_orientation, tuition, scholarship)
+VALUES
+('Englebert Humperdinck', CAST('1936-05-02' AS date), FALSE, 36000, 15000);
+```
+
+Whereas this doesn't work:
+
+```sql
+INSERT INTO students (name, birthdate, completed_orientation, tuition, scholarship)
+VALUES
+('Daffy Duck', CAST('2038-01-03' AS date), TRUE, 39, 40);
+```
+
+:::
+
+### Altering tables
+
+The `ALTER TABLE` command allows you to change a variety of table features. This
+includes adding and removing columns, renaming attributes, changing constraints
+or attribute types, and setting column defaults. See the full
+[documentation](https://www.postgresql.org/docs/current/static/sql-altertable.html)
+for more.
+
+A few examples using the most recent definition of `products`:
+
+-   Let's rename `product_id` to just `id` for simplicity.
+
+    ```sql
+    ALTER TABLE products
+          RENAME product_id TO id;
+    ```
+
+-   Let's add a `brand_name` column.
+
+    ```sql
+    ALTER TABLE products ADD brand_name TEXT DEFAULT 'generic' NOT NULL;
+    ```
+
+-   Let's drop the `discount` column
+
+    ```sql
+    ALTER TABLE products DROP discount;
+    ```
+
+-   Let's set a default value for `brand_name`.
+
+    ```sql
+    ALTER TABLE products
+          ALTER brand_name SET DEFAULT 'generic';
+    ```
+
+
+### Deleting tables
+
+The command is `DROP TABLE`.
+
+```sql
+DROP TABLE products;
+```
+
+Try it, then type `\d` at the prompt.
+
+**Beware:** This command is immediate and permanent (unless you have a backup).
+
+
+## Joins and foreign keys {#sec-joins-and-foreign-keys}
+
+As we will see shortly, principles of good database design tell us that tables
+represent distinct entities with a single authoritative copy of relevant data.
+This is the DRY principle (Don't Repeat Yourself) in action, in this case
+eliminating *data redundancy*.
+
+An example of this in the `events` table are the `persona` and `element`
+columns, which point to information about students and components of the
+learning environment. We do **not** repeat the student's information each time
+we refer to that student. Instead, we use a **link** to the student that points
+into a separate `personae` table. @tbl-personae-sample shows a few rows of this
+table.
+
+| id | firstname | lastname | birthdate | account_balance |
+|----|-----------|----------|-----------|-----------------|
+|  1 |    Arnold | Perlstein | 1988-06-02 | $1700.02 |
+|  2 |    Carlos |     Ramon | 1988-04-27 | $0.00 |
+|  3 |   Dorothy |    Hudson | 1989-01-06 | $-406.79 |
+|  4 |    Keesha |  Franklin | 1988-03-15 | $0.00 |
+: The first few rows of the `personae` table. {#tbl-personae-sample}
+
+But if our databases are to stay DRY in this way, we need two things:
+
+1. A way to define links between tables (and thus define _relationships_ between
+   the corresponding entities), and to enforce that these links are valid.
+
+2. An efficient way to combine information across these links.
+
+The former is supplied by *foreign keys* and the latter by *joins*. We will
+tackle both in turn.
+
+
+### Foreign keys {#sec-foreign-keys}
+
+A *foreign key* is a field (or collection of fields) in one table that
+uniquely specifies a row in another table. We specify *foreign keys* in
+PostgreSQL using the `REFERENCES` keyword when we define a column or
+table. A foreign key that references another table must be the value
+of a unique key in that table, though it is most common to reference
+a _primary key_.
+
+For example, the `events` table was defined using `REFERENCES`:
+
+```sql
+CREATE TABLE events (
+    id SERIAL PRIMARY KEY,
+    moment TIMESTAMP,
+    persona INTEGER REFERENCES personae (id),
+    -- more columns go here:
+    ...
+);
+```
+
+Foreign keys can also be added (and altered) as _table constraints_
+that look like `FOREIGN KEY (<key>) REFERENCES <table>`.
+
+Now try this
+
+```sql
+INSERT INTO events (persona, element, score)
+VALUES (-1, 123, 1000);
+```
+
+Notice that the insertion did not work----and the entire transaction was rolled
+back---because the foreign key constraint was violated. There was no persona
+with ID -1.
+
+So let's fix it.  Try it!
+
+```sql
+INSERT INTO personae VALUES (-1, 'Englebert', 'Humperdinck', '1936-05-02', 100.0);
+
+INSERT INTO events (persona, element, score)
+VALUES (-1, 123, 1000);
+```
+
+A foreign key is allowed to be `NULL`, meaning it points to nothing, unless you
+include a `NOT NULL` constraint in the column definition.
+
+### Joins {#sec-joins}
+
+Suppose we want to display features of an event with the name and course of the
+student who generated it. If we've kept to DRY design and used a foreign key for
+the `persona` column, this seems inconvenient.
+
+That is the purpose of a *join*. For instance, we can write:
+
+```sql
+SELECT personae.lastname, personae.firstname, events.score, events.moment
+FROM events
+JOIN personae ON events.persona = personae.id
+WHERE moment > CAST('2015-03-26 08:00:00' AS timestamp)
+ORDER BY moment;
+```
+
+Joins incorporate additional tables into a select. This is done by appending to
+the `from` clause:
+
+`FROM <table> JOIN <table> ON <condition> ...`
+
+where the `on` condition specifies which rows of the different tables are
+included. And within the select, we can disambiguate columns by referring them
+to by `<table>.<column>`. Look at the example above with this in mind.
+
+You can think of `FROM <table> JOIN <table>` as producing a new virtual table
+formed by the two joined together, and the `SELECT` operates on this. You can
+join this virtual table to others: `FROM <table> JOIN <table> ON <condition>
+JOIN <table>` and so on.
+
+After joining two or more tables, you can operate on the resulting table just
+like in any other queries, with grouping, aggregates, and so on.
+
+We will start by seeing what joins mean in a simple case, using these tables:
+
+```sql
+CREATE TABLE a (id SERIAL PRIMARY KEY, name TEXT);
+INSERT INTO a (name)
+       VALUES ('Pirate'),
+              ('Monkey'),
+              ('Ninja'),
+              ('Flying Spaghetti Monster');
+
+CREATE TABLE b (id SERIAL PRIMARY KEY, name TEXT);
+INSERT INTO b (name)
+       VALUES ('Rutabaga'),
+              ('Pirate'),
+              ('Darth Vader'),
+              ('Ninja');
+```
+
+Let's look at several kinds of joins. (There are others, but this
+will get across the most common types.)
+
+#### Inner join
+
+An *inner join* produces the rows for which attributes in *both* tables match.
+(If you just say `JOIN` in SQL, you get an inner join; the word `INNER` is
+optional.)
+
+```sql
+SELECT * FROM a INNER JOIN b on a.name = b.name;
+```
+
+#### Full outer join
+
+A full outer join produces the full set of rows in **all** tables, matching
+where possible but `NULL` otherwise.
+
+```sql
+SELECT * FROM a FULL OUTER JOIN b on a.name = b.name;
+```
+
+#### Left outer join
+
+A left outer join produces all the rows from A, the table on the "left" side of
+the `join` operator, along with matching rows from B if available, or `null`
+otherwise. (`LEFT JOIN` is a shorthand for `LEFT OUTER JOIN` in PostgreSQL.)
+
+```sql
+SELECT * FROM a LEFT OUTER JOIN b ON a.name = b.name;
+```
+
+::: {#exr-join-ops}
+
+#### Set operations
+
+Write queries to:
+
+1. Select all the rows of A that are **not** in B.
+2. Select the rows of A not in B _and_ the rows of B not in A.
+
+*Hint:* To check if a value is null, use `value IS NULL`.
+
+:::
+
+::: {.solution}
+
+We can use outer joins. When a row in one table does not match a row in the
+other, the second table's entries are `NULL`, so we can check for null in the
+results:
+
+```sql
+SELECT * FROM a LEFT OUTER JOIN b on a.name = b.name where b.id IS NULL;
+SELECT * FROM b FULL OUTER JOIN b on a.name = b.name
+    WHERE b.id IS NULL OR b.id IS NULL;
+```
+
+:::
+
+::: {#exr-join-elements}
+
+#### Joining educational data
+
+Besides the `events` and `personae` tables, our database also contains an
+`elements` table providing information about each instructional element (such as
+a quiz question) within the system. Here is its schema:
+
+```sql
+CREATE TABLE elements (
+       id SERIAL PRIMARY KEY,
+       content TEXT,
+       points_max INTEGER CHECK (points_max >= 0),
+       module INTEGER, -- references a modules table, if we had one
+       hint TEXT,
+       max_tries INTEGER CHECK (max_tries > 0)
+);
+```
+
+Write queries to:
+
+1. List all events, with the score they received, the name of the student
+   completing the event, their birthdate, and the maximum number of points
+   possible.
+2. The same, but only for events where the student's score is higher than the
+   number of points possible.
+3. List all elements IDs that have never been part of an event.
+4. Calculate the average score for all events for each element.
+5. Sum the scores for all students born after June 1, 1988.
+
+:::
+
+::: {.solution}
+
+TODO solutions
+
+:::
+
+
+## Indices
+
+When we know we will search on certain fields regularly, it can be helpful to
+create an *index*, which speeds up those particular searches. An index tells
+PostgreSQL to keep a data structure (typically a tree) for a particular column
+so that it can identify all rows matching a query without scanning the entire
+table.
+
+For example, PostgreSQL automatically indexes any column declared as a `PRIMARY
+KEY`. In the `events` table, the `id` column is the primary key, so a query like
+
+```sql
+SELECT * FROM events WHERE id > 200 AND id < 300;
+```
+
+will use the index. PostgreSQL will search the tree (in something like $O(\log
+n)$ time, where $n$ is the number of rows) and pull the matching rows of the
+table, rather than looping over the entire table and checking every row.
+
+While PostgreSQL automatically indexes primary keys, we can also tell it
+explicitly to add indexes for specific columns. For example, if we know we'll
+often be searching events by start time, we could do
+
+```sql
+CREATE INDEX event_moment_index
+ON events (moment);
+```
+
+Each index has a name so that we can identify it when we use `DROP INDEX` to
+remove it. Postgres also uses these names if we ask it to explain how it will
+conduct a query. By default, this index is based on a B-tree, but there are
+other index types that are useful for other things. Hash indices, for instance,
+are very fast for equality (`SELECT * FROM foo WHERE col == 'something'`). See
+the [indexes chapter of the
+manual](https://www.postgresql.org/docs/current/indexes.html) for more
+information on the syntax and type of indexes.
+
+Indices are particularly important for tables with many thousands or millions of
+rows. Companies often have tables with gigabytes of data, and looping through
+every row to find matching results would be prohibitively slow. Worse, joining
+two large tables requires matching up rows from the two tables, and would be
+even slower. A clever selection of indices can make these operations much
+faster.
+
+Much of the engineering work in database software is in the so-called *query
+planner*, which takes your query, information about the size of each table, and
+the available indices to determine the most efficient way to execute the query.
+(Should it filter the data first, then join? Or join and then filter? Which of
+several indices should it use to filter first, so it has less work to do for
+subsequent operations?)
+
+It is possible to develop an entire career around building database tables,
+specifying their indices, and writing queries that both solve business questions
+and are extremely fast for enormous databases.

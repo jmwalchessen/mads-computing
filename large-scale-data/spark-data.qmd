@@ -1,0 +1,396 @@
+# Spark Data Management
+
+So far, I have suggested that distributed data systems like Spark (or
+MapReduce/Hadoop) are best suited for problems where your data is so enormous
+that it cannot conveniently fit on one machine. This is for a few reasons:
+
+1. Any system that runs on multiple machines will be more complicated, and
+   harder to use, than a system that runs on just one machine.
+2. Coordinating and transmitting data between machines is almost always slower
+   than using the data on one machine.
+3. Single-machine database systems have been in use for decades, so their
+   ecosystems are *very* mature. You can find detailed books, packages for every
+   conceivable programming languages, thousands of online tutorials, example
+   projects, and so on. Distributed systems are much newer and change rapidly,
+   so it can be hard to find up-to-date information.
+
+But sometimes you do need distributed data. Given your statistical skills, the
+distribution of this data is likely to be handled by someone else: other teams
+at your company will be running the systems that produce and store the data, and
+your job will be to analyze it to answer business questions. So let's talk about
+how data would be stored and how you get it into Spark.
+
+## Distributed file systems
+
+Back in @sec-distributing-data, we discussed distributed file systems. These run
+on multiple servers and automatically store files redundantly. To store a
+petabyte of data, we might have 100 machines, each with 40 TB of hard drives
+installed---allowing the distributed file system enough space to store multiple
+copies of each file, on multiple machines, so that the failure of a few machines
+does not mean the loss of any data.
+
+Apache Spark supports several distributed file systems, including HDFS,
+natively. It can load data directly from HDFS, and also from S3 and several
+other popular storage systems.
+
+## Loading data from files
+
+Spark supports a whole bunch of data formats---a confusingly large number,
+actually. You can read text files, CSVs, JSON, Parquet, ORC, Avro, HBase, and
+various other things with connectors and libraries.
+
+The `SparkSession` object you get when initializing PySpark has a `read`
+attribute that returns a [`DataFrameReader`
+object](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameReader.html#pyspark.sql.DataFrameReader)
+with methods for loading numerous different data formats. Let's look at two
+common formats, CSV and Parquet.
+
+### CSVs {#sec-spark-read-csv}
+
+CSV files can be read with the `csv()` method on the `DataFrameReader`:
+
+```python
+spark.read.csv("some-csv-file.csv")
+```
+
+This returns a `DataFrame`. However, you may need some additional steps to get
+the `DataFrame` you want. By default, Spark does not read the first line to get
+column headers, so the columns will have names like `_c0`, `_c1`, `_c2`, etc.
+(much like R uses `V1`, `V2`, and so on). Use the `header=True` option to have
+it read column headers.
+
+Second, CSV files do not specify the types of their columns. The type must be
+inferred: if you read a column and it only contains numbers, you can guess it's
+a numeric column. But that requires reading the entire file to check its
+contents, a costly operation for a large dataset. The `inferSchema` option can
+be used to turn this on.
+
+Alternately, the `schema` argument can be used to specify the column types,
+using the same syntax you'd use inside a SQL `CREATE TABLE` command:
+
+```python
+spark.read.csv("some-csv-file.csv",
+               schema="id INTEGER, name STRING, post_date DATE")
+```
+
+A [table of supported
+types](https://spark.apache.org/docs/latest/sql-ref-datatypes.html) (partway
+down the page) is given in the Spark documentation.
+
+Finally, you may need to tell Spark how null (missing) values are represented.
+For example, if they're stored as `NA` in the CSV file, use the `nullValue="NA"`
+argument.
+
+Besides CSVs, many other formats are supported. So what should you choose? When
+you're scraping your data and preparing it for Spark, what file format is best?
+
+For perfectly ordinary data files, CSVs are fine. But as the data file gets
+large---tens or hundreds of megabytes---reading the CSV can become slow. To
+access a single column or a small subset of data you usually have to parse the
+entire file. On huge datasets that defeats the purpose of having a distributed
+system.
+
+### Parquet
+
+[Parquet](https://parquet.apache.org/) is designed as a *columnar* data store.
+Instead of storing one row at a time, it stores one *column* at a time, with
+metadata indicating where to find each column in the file. It's very efficient
+to load a subset of columns. Parquet files can also be *partitioned*, meaning
+the data is split into multiple files according to the value of a certain column
+(e.g., the year of the entry). This is nice for huge datasets, and on a
+distributed file system lets different chunks exist on different servers.
+
+Reading a Parquet file is similar to reading a CSV:
+
+```python
+spark.read.parquet("some-file.parquet")
+```
+
+This produces a `DataFrame`. Parquet files support all the data types of Spark,
+so things like timestamps, booleans, and arrays are automatically read and
+converted, unlike a CSV where you might have to manually parse a date or
+specify a schema.
+
+Arrow is the name of the *in-memory* format for Parquet, i.e. how the data is
+laid out in memory once it is loaded. This is standardized so you can load
+Parquet data into Arrow and pass it between libraries in programming languages
+without any conversion.
+
+There is a [Python library](https://arrow.apache.org/docs/python/parquet.html)
+for Parquet and Arrow, and an [R
+package](https://arrow.apache.org/docs/r/index.html) that can read and write
+Parquet.
+
+## Partitioning and bucketing {#sec-partitioning-bucketing}
+
+The whole point of a distributed file system, and of distributed data analysis,
+is that data might be too big to fit on a machine. If we have an enormous
+dataset, it can be broken into pieces for storage. That also provides an
+advantage in analysis with Spark: each Spark executor can read in pieces of the
+file instead of the whole thing.
+
+These pieces are called *partitions*. When reading a large data file from a
+block file system like HDFS, Spark will create one partition per block, meaning
+each executor will hold only part of the `DataFrame`.
+
+Depending on the operations you do to the data, Spark might have to move the
+partitioned data between executors: if you sort the `DataFrame`, for instance,
+it will need to collect it all into one place in sorted order. This will cost
+time as the data is sent between machines. But it does suggest we could choose
+how to partition the data for maximum efficiency. Spark allows for data files to
+themselves be partitioned or bucketed, meaning the data is split into multiple
+files when stored.
+
+### Manual partitioning
+
+Suppose you are working with account data from a bank. Each transaction in a
+bank account has a date, and most of your analyses use data within a certain
+date range: you produce monthly reports, quarterly reports, and annual reports,
+each doing complicated analysis in that date range, but rarely need to work with
+the entire dataset from all dates.
+
+If your data has a column for month or year, you could choose to partition the
+data manually by that column. That means storing the data in a special folder
+where every month or year has its own data file whose name includes the date.
+
+If we are writing the data from Spark, we can use the `partitionBy()` method on
+`DataFrameWriter` to do this:
+
+```python
+df.write.partitionBy("year").parquet("foo.parquet")
+```
+
+Instead of a single file `foo.parquet`, we'll instead get a folder named
+`foo.parquet/`, containing folders with names like `year=2022/`, themselves
+containing Parquet data files.
+
+We can read the file normally:
+
+```python
+df_new = spark.read.parquet("foo.parquet")
+```
+
+Spark automatically recognizes this is a partitioned file that has been split by
+year. If we write a Spark operation like
+
+```python
+df_new.filter(col("year") >= 2020) \
+    .groupBy("accountno") \
+    .agg(...) \
+    ... # more Spark stuff here
+```
+
+then when we execute an action like `.collect()` or `.show()`, Spark will know
+that its executors need only read the files for 2020 and later. The rest of the
+data will never be read into memory. And if we write an operation like
+
+```python
+df_new.filter(col("year") >= 2020) \
+    .groupBy("year") \
+    .agg(...) \
+    ... # more Spark stuff here
+```
+
+then each file can be read on one executor, and the grouping and aggregating can
+be performed on the same executor---requiring no shuffling of data between
+machines.
+
+Explicitly partitioning by a specific column works best for columns that have
+dozens of unique values, not millions; you want partitions that are large enough
+that each can be comfortably managed by an executor, but are not so small that
+Spark must read millions of tiny files. (Many distributed file systems are not
+good at managing many small files, and are better at working with fewer larger
+files.)
+
+### Bucketing
+
+In *bucketing*, we can organize the data in a more flexible way than
+partitioning. We can specify multiple columns to use in bucketing, and the
+result is something like a hash table: the columns are combined together and
+hashed into a single value, and that value determines which bucket the data is
+stored in. Multiple unique values can be stored in the same bucket, unlike in
+partitioning, where every partition is a separate file.
+
+For example,
+
+```python
+df.write.bucketBy(10, "year", "month", "account").parquet("foo.parquet")
+```
+
+tells Spark to use the `year`, `month`, and `account` columns to split the data
+into 10 buckets. This ensures that all records for a particular account in a
+particular month will be placed into the same bucket, and hence the same file.
+Again, `foo.parquet` will be a directory of multiple files, and Spark will
+automatically understand the bucketing when we try to read the data.
+
+If we load this data into a Spark `DataFrame`, it will only read the buckets
+necessary to fulfill a query. This is useful for filtering---if we want a
+particular account's records in a particular month---but also is useful for
+joins. Suppose we want to join the *entire* table with another data frame, and
+the join is on the columns used in bucketing. Each executor can read in one
+bucket and join it with the matching rows in the other table, and the results
+can be concatenated together at the end. If the other table is also bucketed,
+each executor may only need to read certain buckets from each table, and do the
+joining within those buckets, rather than needing to read the entire tables into
+memory.
+
+## Working with data catalogs {#sec-spark-catalog}
+
+So far we have seen two ways of accessing data from Spark. The boring way is to
+read a data file directly from the file system. Spark can read from the local
+filesystem (if the data is available on all executors), but it can also read
+from distributed filesystems like HDFS, or from cloud data stores like Amazon S3
+and Azure Blob Storage.
+
+The more interesting way is through a *metastore*. A metastore is essentially a
+registry of available data files, their types, their locations, and additional
+metadata---such as who is allowed to access and modify them. This becomes useful
+in a large organization, where you need *data governance*: control over who is
+officially in charge of certain data sets and who is allowed to access them,
+records showing when they were used, a search system to find datasets from
+across the organization, and so on.
+
+For this reason, metastores seem pointless when you are just noodling around
+with data on your own. And they are useless in that context. But think of them
+as a technical solution to the organizational problems that arise when your
+company is big and complex enough to require a data processing system as big and
+complex as Spark.
+
+Traditionally, Spark uses the [Apache Hive](https://hive.apache.org/) metastore.
+This is still very common.
+
+Databricks provides its own proprietary system, Unity Catalog, that includes
+more advanced features. (It is unfortunately not available on our class Azure
+Databricks setup.) But the basic principles are the same.
+
+### Managed tables
+
+We have already used the Hive metastore when we write Spark commands like this:
+
+```python
+events = spark.read.table("hive_metastore.default.events")
+```
+
+The string `hive_metastore.default.events` is the name of a *managed table*.
+Here "managed" means that Hive is responsible for its storage, and all access
+goes through Hive (via Spark, in our case). The name has three parts:
+
+* The catalog: `hive_metastore`. A catalog contains schemas. Different users can
+  have access permissions to different catalogs.
+* The schema: `default`. A schema contains tables. Different users can have
+  access permissions to different schemas.
+* The table: `events`. A table refers to an actual data table with rows and
+  columns. Different users can have access permissions to different tables.
+
+This creates a hierarchy. If I want to access `hive_metastore.default.events`, I
+need access to the `hive_metastore` catalog, its `default` schema, and the
+`events` table contained therein.
+
+You can't put tables directly inside catalogs, or put schemas inside tables, or
+anything like that: you are restricted to a three-level hierarchy.[^hierarchy]
+
+[^hierarchy]: I don't know why Hive (and Unity Catalog) are restricted to
+    three-level hierarchies, instead of allowing a general hierarchy of any
+    depth. It's like if every file on your computer had to be stored exactly two
+    folders deep.
+
+With managed tables, the data is stored wherever Hive is configured to store it.
+In systems like Azure Databricks or Amazon's EMR, it's usually configured to
+store its data in the cloud's object storage system.
+
+### Creating a managed table
+
+Data frames can be written to managed tables using the `write` attribute. This
+returns a
+[`DataFrameWriter`](https://spark.apache.org/docs/latest/api/python/reference/pyspark.sql/api/pyspark.sql.DataFrameWriter.html),
+which has further options to control partitioning and bucketing. For example:
+
+```python
+df.write.partitionBy("some_column") \
+    .saveAsTable("hive_metastore.default.example_table")
+```
+
+Similarly, bucketing can be done with the `bucketBy()` method.
+
+## Using data from SQL databases
+
+One strength of Spark is the ability to load data from many different sources
+and work with them in identical ways within Spark. One alternative data source
+is a relational database that speaks SQL, like PostgreSQL.
+
+Of course, if all your data fits in a SQL database on one large server, it
+probably makes sense to do your analysis on that server in SQL. But sometimes
+you must use data from a SQL database as part of a larger analysis. For example,
+your company might have log data stored on HDFS in Parquet files, but your
+analysis needs to match up those logs to user accounts stored in PostgreSQL.
+
+Spark supports accessing any SQL database that supports JDBC (Java Database
+Connectivity), a standard Java interface for connecting to databases. Because
+both SQL and Java are extremely popular, almost every relational database has a
+JDBC package available. Using it is pretty easy:
+
+```python
+df = spark.read.format("jdbc") \
+    .option("url", "jdbc:postgresql://sculptor.stat.cmu.edu/databasename/") \
+    .option("user", YOURUSERNAME) \
+    .option("password", YOURPASSWORD) \
+    .option("dbtable", "name_of_table") \
+    .load()
+```
+
+As usual, Spark will try to be smart about how it reads the database table, and
+it will not simply do `SELECT * FROM name_of_table` to read all the data from
+memory. For example, if you do a `filter()` in Spark, it will try to turn this
+into a `WHERE` clause for the database. It will also make connections from each
+executor that try to read different parts of the data in parallel. You can thus
+benefit from the SQL server's ability to use indexes to make queries faster,
+while still benefiting from Spark's distributed data analysis. You might join
+the table with other large datasets you've loaded into Spark.
+
+## Exercises
+
+::: {#exr-lendingclub-partition}
+
+#### Partioned LendingClub data
+
+Return to the LendingClub data you loaded in @exr-spark-lendingclub.
+
+Spark does not provide a direct way to tell what variable a `DataFrame` was
+partitioned by, if any. But `DataFrame` objects do have an `inputFiles()` method
+that lists the one or more data files used as their input.
+
+Get the `inputFiles()` list for the LendingClub data file. Examine the file
+names. What variable is the Parquet file partitioned by?
+
+:::
+
+::: {#exr-fisc-partition}
+
+#### Fiscally standardized cities
+
+A dataset of information on "fiscally standardized" cities is available at
+`abfss://sampledata@lsd2025storage.dfs.core.windows.net/fisc_full_dataset_2020_update.csv`.
+You can read the [full dataset
+description](https://cmustatistics.github.io/data-repository/politics/standard-cities.html)
+for details on what it contains; the short version is that it gives revenue,
+expenses, and tax information on over 200 American cities for over 40 years,
+adjusting for differences in government structure across states.
+
+1. Load the data using `spark.read.csv()`. Check the schema with the
+   `printSchema()` method. Make any necessary tweaks to have the column names
+   and schema read correctly (see @sec-spark-read-csv).
+2. Add a `net_income` column to the data, calculated as the difference between
+   its total revenue (`rev_general`) and total spending (`spending_total`).
+3. Once you have the data correctly formatted, save it as a table in the Hive
+   metastore. Name it something like `fisc_andrewid`, with your Andrew ID, so it
+   does not collide with any other student's table. Partition it by the variable
+   that seems most useful to partition by in the remaining steps of this
+   exercise.
+4. Complete the following steps in Spark SQL using the table you created. First,
+   produce one row per city, giving the year it had the *worst* net income --
+   the most negative net income -- and its revenue, spending, and net income for
+   that year. Order by city and state.
+5. Now produce one row per city, listing its name, average net income from 1977
+   to 2020, and standard deviation of net income over that time period.
+
+:::

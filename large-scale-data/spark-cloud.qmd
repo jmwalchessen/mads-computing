@@ -1,0 +1,251 @@
+# Spark in the Cloud
+
+As we saw previously (@sec-spark), Apache Spark is designed for distributed data
+analysis: splitting up a data analysis task to operate on chunks of the data
+that may be hosted on many different machines. In a cloud computing context,
+that means the data is often hosted on many rented machines, or stored in the
+cloud provider's object storage system and analyzed by many machines at a time.
+
+First, let's return to @sec-spark-architecture and recall how Spark is set up
+and runs on multiple machines.
+
+Now that we recall the details about drivers and executors, let's talk about how
+we can write Spark jobs that run in the cloud, instead of just on our laptops.
+
+Previously we used `pyspark`, a program that opened an interactive Python shell
+and let us type commands and see their output. That's great to test things out,
+or for a quick interactive data analysis, but it's not so good for a big data
+analysis job requiring many hours to run. Let's see how to submit jobs at the
+command line.
+
+## Submitting a job
+
+When installed on a computer, Spark provides a number of utility programs. Let's
+say Spark is installed in the `$SPARK_HOME` -- this is a shell notation for an
+environment variable, so the actual location is stored in a variable. (If you
+log in to our Spark server via SSH, this variable should already be defined in
+your shell; try running `echo $SPARK_HOME`.) Spark's programs are stored in
+`$SPARK_HOME/bin`.
+
+In there, you'll find the `pyspark` program you used previously. You'll also
+find `spark-submit`, the tool for submitting scripts to a Spark cluster.
+
+As we described before, Spark can run Python, Java, or Scala programs, but we'll
+be working in Python. Here's a simple usage of `spark-submit` for a Python
+script:
+
+```sh
+$SPARK_HOME/bin/spark-submit \
+    --master spark://localhost:7077 \
+    --deploy-mode client \
+    some-analysis-script.py
+```
+
+This sends `some-analysis-script.py` to Spark. Specifically:
+
+- We choose the `client` deployment mode, meaning that our script is run on the
+  local machine and sends Spark operations to the cluster.
+- The script becomes the Spark *driver*. It loads the `SparkContext` and
+  contains all the code telling Spark what analyses to do (what data to load,
+  what aggregations and calculations to do, etc.)
+- The script connects to the specified Spark cluster master. Here we've
+  specified `spark://localhost:7077`, meaning the script will connect to a Spark
+  cluster running on the same machine (`localhost`) on port 7077. The master is
+  part of the Spark cluster manager, and is responsible for creating Spark
+  executors to actually do the data analysis.
+
+There are many other options, but we'll consider them later if we need them.
+
+## An example Spark cluster
+
+Let's suppose we have a Spark cluster with five machines:
+
+- spark-users: Has accounts for all the data analysts who need to use Spark, and
+  lets them log in to run `spark-submit` or `pyspark`.
+- spark-master: Runs the cluster manager.
+- spark-worker-1 through spark-worker-3: Members of the cluster that run
+  executors when needed.
+
+Each of these is a separate machine with its own operating system and files.
+
+## An example job
+
+Now let's suppose we log in to the spark-users server and use `spark-submit` to
+run the following Python file:
+
+```python
+from pyspark.sql import SparkSession
+
+# Create the SparkSession, which makes this script the driver and
+# connects to the cluster manager to get executors
+spark = SparkSession \
+    .builder \
+    .appName("Python Spark SQL basic example") \
+    .getOrCreate()
+
+# Load data. The path is a location on the *executor* servers, so
+# the data must be available there
+df = spark.read.json("examples/src/main/resources/people.json")
+
+# Do an action
+df.groupBy("age").count()
+```
+
+In the "client" deploy-mode, this Python script runs on spark-users, so it has
+access to the Python libraries available on that machine.
+
+### Getting resources for the job
+
+`spark-submit` will connect to the cluster manager (as specified by the
+`--master` command-line argument) and request executors on which to run this
+application. We can control how many executors it will request from the cluster
+manager. For example, if we include `--total-executor-cores 2` when calling
+`spark-submit`, our job will only get two CPUs on the cluster to run on; if we
+do not include the option, it will request all currently available cores,
+however many that may be.
+
+We can also request specific amounts of memory, if that should be necessary. By
+default, each executor gets 1 GB of memory, but we can ask for different amounts
+with the `--executor-memory` command-line argument. For example, use
+`--executor-memory 10G` to request 10 GB for each executor. This might be
+necessary if you're doing enormous joins on large datasets.
+
+Be careful, though: you're limited by what is available in your cluster. If you
+request more cores than are available, you'll only get what's available. If
+someone else is currently using *all* the cores, you may see a message like
+this:
+
+```
+WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+```
+
+This could happen because there are no cores available at all, or because there
+is insufficient memory available. In standalone cluster mode, `spark-submit`
+will simply retry every 15 seconds until sufficient resources are available;
+other cluster systems, like Mesos or YARN, have queuing systems where jobs queue
+up to run and are served in order.
+
+### Breaking the job into pieces
+
+Recall that in Spark, nothing is actually calculated until we perform an
+*action*. Actions include things like printing a data frame or writing it to a
+file. Until then, all of our operations (`groupBy()`, `filter()`, and so on) are
+collected together.
+
+When we perform the action, Spark breaks those operations into *stages*. A stage
+is a group of operations that can be done simultaneously on many machines. After
+each stage, data may be shuffled between machines, putting it where it is needed
+for the next stage of operations.
+
+However, the output of this action doesn't go anywhere visible to us:
+`spark-submit` provides lots of debugging output, but not the values printed
+from the script. We'll need to write output to data files as needed. We'll
+discuss files and data management next.
+
+## Working with distributed data {#sec-working-with-hdfs}
+
+Back in @sec-distributed-data, we talked about the idea of *distributed data*. A
+distributed file system looks like any other file system from the outside --
+with files stored in directories inside other directories -- but stores its data
+on multiple machines, often redundantly, and fetches data from machines as
+needed.
+
+With Spark, a common choice is the [Hadoop Distributed File
+System](https://hadoop.apache.org/docs/current1/hdfs_design.html). HDFS is
+designed to work when spread across thousands of machines for enormous datasets,
+but it presents a file system that looks much like any other.
+
+It's organized by using a single NameNode and multiple DataNodes. The NameNode
+is a machine that keeps track of which files are stored in the filesystem and
+which machines they live on; the DataNodes are the machines that actually store
+the data. A client trying to open a file asks the NameNode which DataNodes have
+it, and then fetches the contents from the DataNodes. The NameNode periodically
+checks the status of the DataNodes to find out if any of them has gone down or
+failed.
+
+Typically, then, a company using HDFS would have dozens or hundreds of servers,
+each with as many hard drives as can fit, serving as DataNodes. In a basic
+setup, there is only one NameNode, so its failure would prevent any user from
+accessing files; since Hadoop 2.0, it's been possible to set up a ["High
+Availability"
+cluster](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HDFSHighAvailabilityWithQJM.html)
+that has multiple NameNodes, one serving requests and others waiting in reserve
+in case the primary fails.
+
+To access data on HDFS from Spark, we need the address of the HDFS NameNode. We
+can then provide a path that begins with `hdfs://`. For example, we could run
+
+```python
+df = spark.read.parquet("hdfs://10.0.0.4:9000/lending-club.parquet")
+```
+
+to read a Parquet file called `lending-club.parquet` from the NameNode at
+`10.0.0.4:9000`.
+
+We can also view and manipulate HDFS files from the command line. The program
+`$HADOOP_HOME/bin/hdfs` has a sub-command `dfs` to manipulate the file system.
+For example,
+
+```sh
+$HADOOP_HOME/bin/hdfs dfs -ls /
+```
+
+lists the files in the root directory. Run `$HADOOP_HOME/bin/hdfs dfs` to see a
+list of all available commands. The `-copyFromLocal` and `-copyToLocal` commands
+may be particularly useful, as they allow you to copy a file from your local
+filesystem into HDFS, and to copy a file from HDFS back into your local
+filesystem.
+
+## Using our Spark cluster {#sec-using-spark-cluster}
+
+TODO Update to Databricks
+
+We have a class Spark cluster set up on Azure. It has several machines:
+
+- msp-cool-stuff: Configured as the Spark cluster manager. You'll log in to this
+  machine to run `spark-submit` or `pyspark`. You can log in via SSH following
+  the instructions in the email you received.
+- msp-spark-worker-1 through msp-spark-worker-3: Spark workers. Each has 8 cores and
+  32 GB of RAM.
+
+This means our cluster has 24 cores and 96 GB available for student use.
+
+The cluster runs HDFS at `hdfs://10.0.0.4:9000/`. Each student has a directory
+in HDFS that matches your username. If your username is `jdoe`, you have access
+to a directory `/jdoe/`, and can write results to that directory. So if you need
+to write output files, write them to paths beginning with
+`hdfs://10.0.0.4:9000/yourusername/`.
+
+Some basic rules for use:
+
+- **If you run the PySpark shell,** set `--total-executor-cores 2`. Otherwise
+  you will get all the available cores; if nobody else is using the cluster at
+  the time, you'll get the entire cluster, and nobody will be able to use it
+  until you exit PySpark.
+
+  You can hence start PySpark by running:
+
+  ```sh
+  $SPARK_HOME/bin/pyspark \
+      --master spark://10.0.0.4:7077 \
+      --total-executor-cores 2
+  ```
+- **If you're submitting a job** with `spark-submit`, you can use the defaults
+  and request all available cores -- but do not allow your job to take more than
+  a few minutes, so other students do not have to wait. (You can use Ctrl-C to
+  stop the job.) If other students are using the cluster, you may have to wait
+  for their jobs to finish before your job can start. Just leave `spark-submit`
+  open until it gets resources and starts running your job.
+
+  You run `spark-submit` with the command
+
+  ```sh
+  $SPARK_HOME/bin/spark-submit \
+      --master spark://10.0.0.4:7077 \
+      --deploy-mode client \
+      your-script.py
+  ```
+
+## Exercises
+
+TODO
