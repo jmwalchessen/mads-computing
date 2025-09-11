@@ -22,9 +22,6 @@ website:
         - data-engineering/cloud.qmd
         - data-engineering/distributed-data.qmd
         - data-engineering/project.qmd
-    - references.qmd
-  appendices:
-    - servers.qmd
 
 bibliography: references.bib
 
