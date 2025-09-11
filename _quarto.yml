@@ -1,11 +1,11 @@
 project:
-  type: website
+  type: book
   resources:
     - "data/*.csv"
     - "data/*.json"
   output-dir: docs
 
-website:
+book:
   title: "MADS Computing"
   author: "Alex Reinhart"
   date: "February 17, 2025"
