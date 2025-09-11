@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>advanced-sql</title>
+<title>4&nbsp; Advanced SQL – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,11 +59,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/sql-code.html" rel="next">
+<link href="../data-engineering/sql.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -73,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -103,24 +106,161 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/advanced-sql.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-schema-design" id="toc-sec-schema-design" class="nav-link active" data-scroll-target="#sec-schema-design"><span class="header-section-number">4.1</span> Schema design principles</a>
+  <ul class="collapse">
+  <li><a href="#give-entities-unique-identifiers" id="toc-give-entities-unique-identifiers" class="nav-link" data-scroll-target="#give-entities-unique-identifiers"><span class="header-section-number">4.1.1</span> Give entities unique identifiers</a></li>
+  <li><a href="#give-each-attribute-a-single-value" id="toc-give-each-attribute-a-single-value" class="nav-link" data-scroll-target="#give-each-attribute-a-single-value"><span class="header-section-number">4.1.2</span> Give each attribute a single value</a></li>
+  <li><a href="#make-non-key-attributes-depend-only-on-the-primary-key" id="toc-make-non-key-attributes-depend-only-on-the-primary-key" class="nav-link" data-scroll-target="#make-non-key-attributes-depend-only-on-the-primary-key"><span class="header-section-number">4.1.3</span> Make non-key attributes depend only on the primary key</a></li>
+  <li><a href="#make-non-key-attributes-independent-of-each-other" id="toc-make-non-key-attributes-independent-of-each-other" class="nav-link" data-scroll-target="#make-non-key-attributes-independent-of-each-other"><span class="header-section-number">4.1.4</span> Make non-key attributes independent of each other</a></li>
+  <li><a href="#use-your-judgment-to-decide-when-to-stop" id="toc-use-your-judgment-to-decide-when-to-stop" class="nav-link" data-scroll-target="#use-your-judgment-to-decide-when-to-stop"><span class="header-section-number">4.1.5</span> Use your judgment to decide when to stop</a></li>
+  </ul></li>
+  <li><a href="#sec-transactions" id="toc-sec-transactions" class="nav-link" data-scroll-target="#sec-transactions"><span class="header-section-number">4.2</span> Transactions</a></li>
+  <li><a href="#subqueries" id="toc-subqueries" class="nav-link" data-scroll-target="#subqueries"><span class="header-section-number">4.3</span> Subqueries</a></li>
+  <li><a href="#more-advanced-grouping" id="toc-more-advanced-grouping" class="nav-link" data-scroll-target="#more-advanced-grouping"><span class="header-section-number">4.4</span> More advanced grouping</a></li>
+  <li><a href="#sec-sql-window" id="toc-sec-sql-window" class="nav-link" data-scroll-target="#sec-sql-window"><span class="header-section-number">4.5</span> Window functions</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/advanced-sql.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="advanced-sql" class="level1">
-<h1>Advanced SQL</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -134,8 +274,8 @@ Note
 <p>Portions of these notes are based on material co-developed with Christopher Genovese for 36-750.</p>
 </div>
 </div>
-<section id="sec-schema-design" class="level2">
-<h2 class="anchored" data-anchor-id="sec-schema-design">Schema design principles</h2>
+<section id="sec-schema-design" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sec-schema-design"><span class="header-section-number">4.1</span> Schema design principles</h2>
 <p>The key design principle for database schema is to keep the design DRY – that is, <em>eliminate data redundancy</em>. The process of making a design DRY is called <em>normalization</em>, and a DRY database is said to be in “normal form.”</p>
 <p>The basic modeling process:</p>
 <ol type="1">
@@ -145,7 +285,7 @@ Note
 <li>Normalize by the steps below</li>
 </ol>
 <div id="exm-songs-schema" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (Managing songs)</strong></span> Consider a database to manage songs:</p>
+<p><span class="theorem-title"><strong>Example 4.1 (Managing songs)</strong></span> Consider a database to manage songs:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -208,14 +348,14 @@ Note
 </ul>
 <p>Let’s write this schema as <code>Album (artist, name, record_label, song_list)</code>, where <code>Album</code> is the entity and the labels in parentheses are its attributes. To normalize this design, we will add new entities and define their attributes so <strong>each piece of data has a single authoritative copy</strong>.</p>
 </div>
-<section id="give-entities-unique-identifiers" class="level3">
-<h3 class="anchored" data-anchor-id="give-entities-unique-identifiers">Give entities unique identifiers</h3>
+<section id="give-entities-unique-identifiers" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="give-entities-unique-identifiers"><span class="header-section-number">4.1.1</span> Give entities unique identifiers</h3>
 <p>First, we give entities unique identifiers. This will be their primary key.</p>
 <p>Key features of a primary key are that it is unique, non-null, and it never changes for the lifetime of the entity.</p>
 <p>Some entities already have unique identifiers attached to them – but you should consider whether those identifiers can ever change. Social Security numbers are often used to uniquely identify people, but they can be changed in rare circumstances; books can be uniquely identified by ISBNs, but these change for new editions or formats; and sometimes supposedly unique numbers get accidentally reused by other people you can’t control.</p>
 </section>
-<section id="give-each-attribute-a-single-value" class="level3">
-<h3 class="anchored" data-anchor-id="give-each-attribute-a-single-value">Give each attribute a single value</h3>
+<section id="give-each-attribute-a-single-value" class="level3" data-number="4.1.2">
+<h3 data-number="4.1.2" class="anchored" data-anchor-id="give-each-attribute-a-single-value"><span class="header-section-number">4.1.2</span> Give each attribute a single value</h3>
 <p>What does each attribute describe? What attributes are repeated in <code>Albums</code>, either implicitly or explicitly?</p>
 <p>Consider the relationship between albums and songs. An album can have one or more songs; in other words, the attribute <code>song_list</code> is non-atomic (it is composed of other types, in this case a list of text strings). The attribute describes a collection of another entity – <code>Song</code>.</p>
 <p>So, we now have two entities, <code>Album</code> and <code>Song</code>. How do we express these entities in our design? It depends on our model. Let’s look at two ways this could play out.</p>
@@ -243,8 +383,8 @@ Note
 </ul></li>
 </ol>
 </section>
-<section id="make-non-key-attributes-depend-only-on-the-primary-key" class="level3">
-<h3 class="anchored" data-anchor-id="make-non-key-attributes-depend-only-on-the-primary-key">Make non-key attributes depend only on the primary key</h3>
+<section id="make-non-key-attributes-depend-only-on-the-primary-key" class="level3" data-number="4.1.3">
+<h3 data-number="4.1.3" class="anchored" data-anchor-id="make-non-key-attributes-depend-only-on-the-primary-key"><span class="header-section-number">4.1.3</span> Make non-key attributes depend only on the primary key</h3>
 <p>This step is satisfied if each non-key column in the table serves to <em>describe</em> what the primary key <em>identifies</em>.</p>
 <p>Any attributes that do not satisfy this condition should be moved to another table.</p>
 <p>In our schema of the last step (and in the example table), both the <code>artist</code> and <code>label</code> field contain data that describes something else. We should move these to new tables, which leads to two new entities:</p>
@@ -255,57 +395,21 @@ Note
 <p>Each of these may have additional attributes. For instance, producer in the latter case, and in the former, we may have additional entities describing members in the band.</p>
 <p>We could then update our <code>Album</code> schema to use these as foreign keys: <code>Album(id, title, label_id, artist_id)</code>.</p>
 </section>
-<section id="make-non-key-attributes-independent-of-each-other" class="level3">
-<h3 class="anchored" data-anchor-id="make-non-key-attributes-independent-of-each-other">Make non-key attributes independent of each other</h3>
+<section id="make-non-key-attributes-independent-of-each-other" class="level3" data-number="4.1.4">
+<h3 data-number="4.1.4" class="anchored" data-anchor-id="make-non-key-attributes-independent-of-each-other"><span class="header-section-number">4.1.4</span> Make non-key attributes independent of each other</h3>
 <p>Consider <code>RecordLabel</code>. The <code>state_name</code>, <code>state_abbrev</code>, and <code>zip</code> code are all non-key fields that depend on each other. (If you know the zip code, you know the state name and thus the abbreviation.)</p>
 <p>This suggests to another entity <code>State</code>, with name and abbreviation as attributes. And so on.</p>
 </section>
-<section id="use-your-judgment-to-decide-when-to-stop" class="level3">
-<h3 class="anchored" data-anchor-id="use-your-judgment-to-decide-when-to-stop">Use your judgment to decide when to stop</h3>
+<section id="use-your-judgment-to-decide-when-to-stop" class="level3" data-number="4.1.5">
+<h3 data-number="4.1.5" class="anchored" data-anchor-id="use-your-judgment-to-decide-when-to-stop"><span class="header-section-number">4.1.5</span> Use your judgment to decide when to stop</h3>
 <p>If we take this process to the extreme, we could end up with dozens of tables, each describing a unique entity and linked to dozens of other tables. Indeed, if you look up “database normalization”, you will find there are extensive and detailed definitions of different degrees of normalization and the properties required of tables in each.</p>
 <p>We can exercise our judgment to determine the amount of normalization required; real-world applications rarely have perfectly normalized tables. For example, if you’re building a database of songs for your own use to track your record collection, you probably don’t care too much that <code>RecordLabel</code> has both a <code>state_name</code> and a <code>state_abbrev</code>; you don’t care too much about the label, and for the queries you’re doing, it’s not important that these could be moved to their own <code>State</code> table. It’s convenient to just have them in <code>RecordLabel</code> and be able to get them without a join.</p>
 <p>But if you were building an authoritative song database for a music streaming service, you may need your database schema to be much more robust and detailed: you need to track enough information to know where to send royalty checks, you have millions of songs, you deal with thousands of record labels with similar-sounding names that change owners and locations, and the cost of messing up is high; so you’d like your database to be as accurate and consistent as possible at all times. Structuring the database in normal form lets the RDB software help you ensure it is consistent.</p>
 <div id="exr-songs-schema" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1 (Schema for songs)</strong></span> Based on the discussion above, write a series of <code>CREATE TABLE</code> commands to create a set of tables for tracking songs. Your schema should support songs that appear on multiple albums, basic information about artists (such as their name and year of birth), information about record labels, song titles and duration, and other things from the discussion above.</p>
-</div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>Here’s one example schema; names and details may vary:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> artist (</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    name TEXT,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    birthdate <span class="dt">DATE</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> record_label (</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    name TEXT,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    street_address TEXT,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    state_abbrev <span class="dt">CHAR</span>(<span class="dv">2</span>),</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    zip <span class="dt">CHAR</span>(<span class="dv">5</span>) <span class="co">-- ZIPs aren't integers; they can begin with 0</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> album (</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    title TEXT,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    label_id <span class="dt">INTEGER</span> <span class="kw">REFERENCES</span> record_label (<span class="kw">id</span>),</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    artist_id <span class="dt">INTEGER</span> <span class="kw">REFERENCES</span> artist (<span class="kw">id</span>)</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> song (</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    name TEXT,</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    duration <span class="dt">INTERVAL</span> <span class="co">-- represents time interval</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> track (</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    song_id <span class="dt">INTEGER</span> <span class="kw">REFERENCES</span> song (<span class="kw">id</span>),</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    album_id <span class="dt">INTEGER</span> <span class="kw">REFERENCES</span> album (<span class="kw">id</span>)</span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The important parts are that songs, tracks, and albums are separate entities; that reasonable types (like text and char) are used; and that <code>REFERENCES</code> is used to enforce foreign key relationships.</p>
+<p><span class="theorem-title"><strong>Exercise 4.1 (Schema for songs)</strong></span> Based on the discussion above, write a series of <code>CREATE TABLE</code> commands to create a set of tables for tracking songs. Your schema should support songs that appear on multiple albums, basic information about artists (such as their name and year of birth), information about record labels, song titles and duration, and other things from the discussion above.</p>
 </div>
 <div id="exr-sport-schema" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2 (Schema for sports)</strong></span> Pick your favorite sport (or, at least, a sport you know something about). Consider designing a database to track players, teams, and games. Write a schema (as a series of <code>CREATE TABLE</code> statements) to store information about them. Your schema should support queries that:</p>
+<p><span class="theorem-title"><strong>Exercise 4.2 (Schema for sports)</strong></span> Pick your favorite sport (or, at least, a sport you know something about). Consider designing a database to track players, teams, and games. Write a schema (as a series of <code>CREATE TABLE</code> statements) to store information about them. Your schema should support queries that:</p>
 <ul>
 <li>Identify which players were on a team at a particular time (as players can move between teams)</li>
 <li>Identify which team won a particular game, and where that game was played</li>
@@ -316,36 +420,36 @@ Note
 </div>
 </section>
 </section>
-<section id="sec-transactions" class="level2">
-<h2 class="anchored" data-anchor-id="sec-transactions">Transactions</h2>
+<section id="sec-transactions" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-transactions"><span class="header-section-number">4.2</span> Transactions</h2>
 <p><em>Transactions</em> are the fundamental mechanism relational databases use to manage both atomicity and concurrency. How do we ensure multiple queries run atomically (either all succeed or all fail), and how do we allow multiple people to be changing the database at the same time? To see the problem, consider an example.</p>
 <div id="exm-transaction-needed" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2 (The need for transactions)</strong></span> Suppose we’re working with an R data frame, except it is shared: multiple people can edit it at once, and their edits instantaneously change the data frame. (There’s no easy way to do this in base R; we’re just using R syntax to illustrate the problem a SQL database faces.)</p>
+<p><span class="theorem-title"><strong>Example 4.2 (The need for transactions)</strong></span> Suppose we’re working with an R data frame, except it is shared: multiple people can edit it at once, and their edits instantaneously change the data frame. (There’s no easy way to do this in base R; we’re just using R syntax to illustrate the problem a SQL database faces.)</p>
 <p>User 1 and user 2 are both working with the <code>bank_accounts</code> data frame, which stores bank balances and information. User 1 needs to record that account 777 transferred $500 to account 778; user 2 needs to record that account 777 withdrew $50 in cash.</p>
 <p>Each column shows one user’s operations; each line is one time point, so two side-by-side lines occur at the same time:</p>
 <div class="quarto-layout-panel" data-layout-ncol="2">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># User 1:</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># User 1:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>a777 <span class="ot">&lt;-</span> bank_accounts <span class="sc">|&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="at">account_id =</span> <span class="dv">777</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> a777<span class="sc">$</span>balance</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>a778 <span class="ot">&lt;-</span> bank_accounts <span class="sc">|&gt;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="at">account_id =</span> <span class="dv">778</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>a777<span class="sc">$</span>balance <span class="ot">&lt;-</span> start <span class="sc">-</span> <span class="dv">500</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>a778<span class="sc">$</span>balance <span class="ot">&lt;-</span> a778<span class="sc">$</span>balance <span class="sc">+</span> <span class="dv">500</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># User 2:</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>a777 <span class="ot">&lt;-</span> bank_accounts <span class="sc">|&gt;</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="at">account_id =</span> <span class="dv">777</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> a777<span class="sc">$</span>balance</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>amount <span class="ot">&lt;-</span> a777<span class="sc">$</span>balance</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>a778 <span class="ot">&lt;-</span> bank_accounts <span class="sc">|&gt;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="at">account_id =</span> <span class="dv">778</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>a777<span class="sc">$</span>balance <span class="ot">&lt;-</span> start <span class="sc">-</span> <span class="dv">500</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>a778<span class="sc">$</span>balance <span class="ot">&lt;-</span> a778<span class="sc">$</span>balance <span class="sc">+</span> <span class="dv">500</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;">
-<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># User 2:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>a777 <span class="ot">&lt;-</span> bank_accounts <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="at">account_id =</span> <span class="dv">777</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>amount <span class="ot">&lt;-</span> a777<span class="sc">$</span>balance</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>a777<span class="sc">$</span>balance <span class="ot">&lt;-</span> amount <span class="sc">-</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>a777<span class="sc">$</span>balance <span class="ot">&lt;-</span> amount <span class="sc">-</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -362,29 +466,29 @@ Note
 <p>PostgreSQL uses Multiversion Concurrency Control, which means that each database user sees a snapshot of the database as it was at some specific point in time. If someone else is changing the database at the same time, this does not affect queries that are currently running, so the data they see remains self-consistent.</p>
 <p>The basic mechanism is straightforward, though the implementation is complicated. Queries are grouped into transactions using <code>BEGIN</code> and <code>COMMIT</code> statements. The queries within a transaction do not update the data seen by other users until <code>COMMIT</code> “commits” the changes. An error in any query in the transaction halts the entire transaction and “rolls back” its changes, so it is as if it never happened.</p>
 <div id="exm-transaction-fixed" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3 (Concurrency with transactions)</strong></span> Suppose we’re implementing <a href="#exm-transaction-needed" class="quarto-xref">Example&nbsp;2</a> using PostgreSQL and its default concurrency settings. Each user submits a transaction:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- User 1:</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span>;</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> bank_accounts</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> balance <span class="op">=</span> balance <span class="op">-</span> <span class="dv">500</span>:<span class="ch">:money</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> account_id <span class="op">=</span> <span class="dv">777</span>;</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> bank_accounts</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> balance <span class="op">=</span> balance <span class="op">+</span> <span class="dv">500</span>:<span class="ch">:money</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> account_id <span class="op">=</span> <span class="dv">778</span>;</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMIT</span>;</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- User 2</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span>;</span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> bank_accounts</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> balance <span class="op">=</span> balance <span class="op">-</span> <span class="dv">50</span>:<span class="ch">:money</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> account_id <span class="op">=</span> <span class="dv">777</span>;</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMIT</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Internally, PostgreSQL must do the same work as in <a href="#exm-transaction-needed" class="quarto-xref">Example&nbsp;2</a>—but it prevents any problems from occurring:</p>
+<p><span class="theorem-title"><strong>Example 4.3 (Concurrency with transactions)</strong></span> Suppose we’re implementing <a href="#exm-transaction-needed" class="quarto-xref">Example&nbsp;<span>4.2</span></a> using PostgreSQL and its default concurrency settings. Each user submits a transaction:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- User 1:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span>;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> bank_accounts</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> balance <span class="op">=</span> balance <span class="op">-</span> <span class="dv">500</span>:<span class="ch">:money</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> account_id <span class="op">=</span> <span class="dv">777</span>;</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> bank_accounts</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> balance <span class="op">=</span> balance <span class="op">+</span> <span class="dv">500</span>:<span class="ch">:money</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> account_id <span class="op">=</span> <span class="dv">778</span>;</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMIT</span>;</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- User 2</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="cf">BEGIN</span>;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> bank_accounts</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> balance <span class="op">=</span> balance <span class="op">-</span> <span class="dv">50</span>:<span class="ch">:money</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> account_id <span class="op">=</span> <span class="dv">777</span>;</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="kw">COMMIT</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Internally, PostgreSQL must do the same work as in <a href="#exm-transaction-needed" class="quarto-xref">Example&nbsp;<span>4.2</span></a>—but it prevents any problems from occurring:</p>
 <ol type="1">
 <li>User 1 begins by changing account 777. This locks the row, preventing other changes until user 1’s transaction is complete.</li>
 <li>User 2 then attempts to change it. The <code>UPDATE</code> query must wait for the lock to be released, so their query is stalled.</li>
@@ -396,63 +500,52 @@ Note
 <p>PostgreSQL’s locking system automatically locks individual rows or entire tables when <code>UPDATE</code>, <code>INSERT</code>, or other commands make it necessary. The locks are released when the transaction is committed, allowing other changes to be made to the same row or table. <code>SELECT</code> does not lock anything, but PostgreSQL does ensure that a <code>SELECT</code> only sees the version of the database as it was when the query began: if a <code>SELECT</code> involves complicated joins and aggregations that take some time to execute, and the database is changed by another user while those happen, the <code>SELECT</code>’s results will not be affected by those changes. This prevents strange inconsistencies where rows change while they’re being sorted and joined.</p>
 <p>Transactions also provide the atomicity required by the ACID guarantees: PostgreSQL ensures that either all queries in a transaction succeed or none of them do.</p>
 <p>For example, suppose a transaction involves 10 queries doing various updates, but the 6th query causes an error. The entire transaction will be aborted and PostgreSQL will refuse to execute any further queries until you send a <code>ROLLBACK</code> command, which reverts the database back to its state before the transaction started.</p>
-<p>In <a href="#exm-transaction-fixed" class="quarto-xref">Example&nbsp;3</a>, atomicity is important for user 1: if an error occurs between the two <code>UPDATE</code> queries, we would have subtracted $500 from one account but not added it to the other, and the $500 would be lost. Grouping the queries into a transaction makes this impossible.</p>
+<p>In <a href="#exm-transaction-fixed" class="quarto-xref">Example&nbsp;<span>4.3</span></a>, atomicity is important for user 1: if an error occurs between the two <code>UPDATE</code> queries, we would have subtracted $500 from one account but not added it to the other, and the $500 would be lost. Grouping the queries into a transaction makes this impossible.</p>
 <p>PostgreSQL also supports “savepoints”, which are like checkpoints inside a transaction. (Or quicksaves, if you play video games.) Within one transaction, we can make multiple savepoints, and revert back to a specific changepoint instead of rolling back the entire transaction. Again, the changes only become visible to other users when the entire transaction is committed, but this gives us flexibility in dealing with errors and selectively undoing changes. See the <a href="https://www.postgresql.org/docs/current/sql-savepoint.html">SAVEPOINT reference</a> for examples.</p>
 </section>
-<section id="subqueries" class="level2">
-<h2 class="anchored" data-anchor-id="subqueries">Subqueries</h2>
+<section id="subqueries" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="subqueries"><span class="header-section-number">4.3</span> Subqueries</h2>
 <p>SQL allows <em>subqueries</em>, where part of a query is itself defined by another query.</p>
-<p>The simplest case is in <code>FROM</code> clauses. Normally a <code>FROM</code> clause specifies a table, or multiple tables combined with joins. But we can also select from the table of results of another query. Here’s a trivial example using the tables defined in <strong>?@sec-example-db</strong>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> moment, persona, score</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a> <span class="kw">FROM</span> <span class="kw">events</span>) <span class="kw">AS</span> e</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> <span class="kw">id</span>, firstname, lastname</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a> <span class="kw">FROM</span> personae) <span class="kw">AS</span> p</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> e.persona <span class="op">=</span> p.<span class="kw">id</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The simplest case is in <code>FROM</code> clauses. Normally a <code>FROM</code> clause specifies a table, or multiple tables combined with joins. But we can also select from the table of results of another query. Here’s a trivial example using the tables defined in <a href="sql.html#sec-example-db" class="quarto-xref"><span>Section 3.2</span></a>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> moment, persona, score</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a> <span class="kw">FROM</span> <span class="kw">events</span>) <span class="kw">AS</span> e</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> <span class="kw">id</span>, firstname, lastname</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> <span class="kw">FROM</span> personae) <span class="kw">AS</span> p</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> e.persona <span class="op">=</span> p.<span class="kw">id</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The subqueries are given in parentheses. Note they can’t refer to things outside of the subqueries; essentially, Postgres runs the subqueries first, gets the tables of results, and then uses them like it would use any other table in the outer query.</p>
 <p>This query, of course, could be written easily without the subequeries. But often in complicated queries with <code>WHERE</code>, <code>GROUP BY</code>, and <code>HAVING</code> clauses, it can be easier to understand when written with subqueries than when written as one large query.</p>
 <p>You can also use subqueries within a <code>WHERE</code> clause. These are called <a href="https://www.postgresql.org/docs/current/functions-subquery.html">subquery expressions</a>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> moment, persona, score <span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> persona <span class="kw">IN</span> (<span class="kw">SELECT</span> <span class="kw">id</span> <span class="kw">FROM</span> personae</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="kw">WHERE</span> account_balance <span class="op">&lt;</span> <span class="dv">0</span>:<span class="ch">:money</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> moment, persona, score <span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> persona <span class="kw">IN</span> (<span class="kw">SELECT</span> <span class="kw">id</span> <span class="kw">FROM</span> personae</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                  <span class="kw">WHERE</span> account_balance <span class="op">&lt;</span> <span class="dv">0</span>:<span class="ch">:money</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here the subquery returns exactly one column (<code>id</code>), and so <code>IN</code> checks if each event’s <code>persona</code> is contained in that column. This query could be written equivalently as a join, but sometimes it’s easier to work with subqueries to put together a larger query out of pieces, instead of writing one large query to do everything.</p>
 <p>There are various other functions/operators that can be used on subqueries as well, such as <code>IN</code>, <code>NOT IN</code>, <code>EXISTS</code>, <code>ANY</code>, <code>ALL</code>, and <code>SOME</code>.</p>
 <p>For example, this looks like an inner join:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> moment, persona, score <span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> personae <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> <span class="kw">events</span>.persona);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> moment, persona, score <span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> personae <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> <span class="kw">events</span>.persona);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here <code>EXISTS</code> is an operator that looks for there to be at least one row in the subquery. The subquery <em>does</em> refer to the outer tables and variables, so you can think of this subquery as being run once per row in <code>events</code>, to determine if there is a matching persona. If the subquery does not return any rows, that event is not included in the final results.</p>
 <div id="exr-translate-subqueries" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 3 (Translating subqueries)</strong></span> Translate the following queries to <code>JOIN</code> queries without any subqueries.</p>
+<p><span class="theorem-title"><strong>Exercise 4.3 (Translating subqueries)</strong></span> Translate the following queries to <code>JOIN</code> queries without any subqueries.</p>
 <ol type="1">
+<li><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">SELECT</span> moment, persona, score <span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">WHERE</span> persona <span class="kw">IN</span> (<span class="kw">SELECT</span> <span class="kw">id</span> <span class="kw">FROM</span> personae</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                     <span class="kw">WHERE</span> account_balance <span class="op">&lt;</span> <span class="dv">0</span>:<span class="ch">:money</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">SELECT</span> moment, persona, score <span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">WHERE</span> persona <span class="kw">IN</span> (<span class="kw">SELECT</span> <span class="kw">id</span> <span class="kw">FROM</span> personae</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                     <span class="kw">WHERE</span> account_balance <span class="op">&lt;</span> <span class="dv">0</span>:<span class="ch">:money</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>   <span class="kw">SELECT</span> moment, persona, score <span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">WHERE</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> personae</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> <span class="kw">events</span>.persona);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">WHERE</span> <span class="kw">EXISTS</span> (<span class="kw">SELECT</span> <span class="dv">1</span> <span class="kw">FROM</span> personae</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                 <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">=</span> <span class="kw">events</span>.persona);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ol>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>These examples don’t really illustrate the power of subqueries, but nevertheless.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> moment, persona, score</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> personae <span class="kw">ON</span> <span class="kw">events</span>.persona <span class="op">=</span> personae.<span class="kw">id</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> personae.account_balance <span class="op">&lt;</span> <span class="dv">0</span>;</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> moment, persona, score</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">INNER</span> <span class="kw">JOIN</span> personae <span class="kw">ON</span> <span class="kw">events</span>.persona <span class="op">=</span> personae.<span class="kw">id</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
-<section id="more-advanced-grouping" class="level2">
-<h2 class="anchored" data-anchor-id="more-advanced-grouping">More advanced grouping</h2>
-<p><strong>?@sec-grouping-aggregate</strong> introduced aggregate functions and the <code>GROUP BY</code> clause, which allowed us to split data into groups and summarize the groups with aggregates. <code>GROUP BY</code> is fairly restrictive, however: we can only split the data into disjoint groups by unique values of a column, or unique combinations of several columns.</p>
+<section id="more-advanced-grouping" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="more-advanced-grouping"><span class="header-section-number">4.4</span> More advanced grouping</h2>
+<p><a href="sql.html#sec-grouping-aggregate" class="quarto-xref"><span>Section 3.3.3</span></a> introduced aggregate functions and the <code>GROUP BY</code> clause, which allowed us to split data into groups and summarize the groups with aggregates. <code>GROUP BY</code> is fairly restrictive, however: we can only split the data into disjoint groups by unique values of a column, or unique combinations of several columns.</p>
 <p>Sometimes we want grouping and aggregation over overlapping groups. For example, if I have data on students at CMU, I might want averages by their department, by college, and overall averages for the university. With <code>GROUP BY</code> that requires running three different queries.</p>
 <p>Instead, we can provide <em>grouping sets</em>, where we provide multiple sets of variables to group by and aggregate over. For example:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> element, persona, <span class="fu">AVG</span>(score), <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="fu">GROUPING</span> SETS ((element), (persona), ());</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> element, persona, <span class="fu">AVG</span>(score), <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="fu">GROUPING</span> SETS ((element), (persona), ());</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This query asks Postgres to group by three different sets of grouping variables: <code>element</code>, <code>persona</code>, and <code>()</code>, which represents no grouping (aggregate all the data). The result looks like this:</p>
 <pre><code> element | persona |         avg          | count
 ---------+---------+----------------------+-------
@@ -472,9 +565,9 @@ Note
 <p>The blanks here represent <code>NULL</code>s. The first row is the overall average score of all events. The next rows are averages for specific elements, followed by averages for specific personas. Rows grouped by <code>element</code> have a <code>NULL</code> for <code>persona</code> and vice versa.</p>
 <p>Notice the <code>SELECT</code> could list both the <code>element</code> and <code>persona</code> columns. If we simply did <code>GROUP BY element</code>, we couldn’t list <code>persona</code> in the <code>SELECT</code> column list because it’s not the grouping column or an aggregate—but here, Postgres is smart enough to understand that it’s in some of the grouping sets, so it will fill it in for those rows and leave it <code>NULL</code> otherwise.</p>
 <p>There are other shortcuts. Often we do hierarchical aggregates, like the CMU example above. If we had a <code>students</code> table with columns for <code>department</code> and <code>college</code>, we could write</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> department, college, <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> students</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="kw">ROLLUP</span> (college, department);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> department, college, <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> students</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="kw">ROLLUP</span> (college, department);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This will first group by <code>(college, department)</code>, producing one row per department in each college, then group by <code>college</code>, then group by <code>()</code>, producing (hypothetical) results like</p>
 <pre><code> college | department | count
 ---------+------------+-------
@@ -487,76 +580,54 @@ Dietrich |            |  2310
 [...]</code></pre>
 <p>Finally, we can group by every combination of a set of variables. <code>GROUP BY CUBE (a, b, c)</code> will group by <code>(a, b, c)</code>; then by <code>(a, b)</code>, <code>(a, c)</code>, and <code>(b, c)</code>; then by <code>a</code>, and so on, all the way up to <code>()</code>.</p>
 </section>
-<section id="sec-sql-window" class="level2">
-<h2 class="anchored" data-anchor-id="sec-sql-window">Window functions</h2>
-<p>In <strong>?@sec-grouping-aggregate</strong>, we saw how <code>GROUP BY</code> and aggregate functions allowed us to calculate aggregate values across many rows. We could, for instance, get the average score per student, or the maximum latency per student, or the earliest event, or…</p>
+<section id="sec-sql-window" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="sec-sql-window"><span class="header-section-number">4.5</span> Window functions</h2>
+<p>In <a href="sql.html#sec-grouping-aggregate" class="quarto-xref"><span>Section 3.3.3</span></a>, we saw how <code>GROUP BY</code> and aggregate functions allowed us to calculate aggregate values across many rows. We could, for instance, get the average score per student, or the maximum latency per student, or the earliest event, or…</p>
 <p>In each of those uses, we were limited to getting one row per group. We had to write our <code>SELECT</code> clauses to ensure each column we requested had one result per group.</p>
-<p>But sometimes I want to get individual rows of data, with additional information attached about the group. For example, using the <code>events</code> table from <strong>?@sec-example-db</strong>, how could we get the score for every individual event, compared to that student’s average score for all events?</p>
-<p>We could do this with a clever subquery (<a href="#exr-window-subquery" class="quarto-xref">Exercise&nbsp;4</a>), but an alternative is a <em>window function</em>. While an aggregate function takes a group and produces a single row for that group, a window function can calculate an aggregate for <em>every</em> row.</p>
+<p>But sometimes I want to get individual rows of data, with additional information attached about the group. For example, using the <code>events</code> table from <a href="sql.html#sec-example-db" class="quarto-xref"><span>Section 3.2</span></a>, how could we get the score for every individual event, compared to that student’s average score for all events?</p>
+<p>We could do this with a clever subquery (<a href="#exr-window-subquery" class="quarto-xref">Exercise&nbsp;<span>4.4</span></a>), but an alternative is a <em>window function</em>. While an aggregate function takes a group and produces a single row for that group, a window function can calculate an aggregate for <em>every</em> row.</p>
 <p>For example, let’s get each event’s score, and the z-score of that event relative to the student’s average:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span>, persona, element, score,</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  ((score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona)) <span class="op">/</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stddev_samp</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona)) <span class="kw">AS</span> z_score</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span>, persona, element, score,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  ((score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona)) <span class="op">/</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stddev_samp</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona)) <span class="kw">AS</span> z_score</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><code>avg()</code> and <code>stddev_samp()</code> are aggregate functions, but <code>OVER</code> turns them into a window function. The <code>OVER</code> clause tells Postgres which rows to calculate the aggregate for. Here we’ve told it to <code>PARTITION BY</code> persona, so each row gets the average and standard deviation calculated from rows with the same persona.</p>
 <p>Window functions don’t have to operate on the entire partition. For instance, if we specify <code>ORDER BY</code> in the <code>OVER</code> clause, the window is (by default) the first row in the partition up to the current row, but not the following rows. For instance, this query gets the z score relative to all <em>previous</em> events by the user, but not future ones:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span>, persona, element, score, moment,</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  ((score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)) <span class="op">/</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stddev_samp</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)) <span class="kw">AS</span> z_score</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span>, persona, element, score, moment,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  ((score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)) <span class="op">/</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stddev_samp</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)) <span class="kw">AS</span> z_score</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Instead of repeating the <code>PARTITION BY</code> clause, we can name a window:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span>, persona, element, score, moment,</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  ((score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> p) <span class="op">/</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stddev_samp</span>(score) <span class="kw">OVER</span> p) <span class="kw">AS</span> z_score</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>WINDOW p <span class="kw">AS</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span>, persona, element, score, moment,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  ((score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> p) <span class="op">/</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">stddev_samp</span>(score) <span class="kw">OVER</span> p) <span class="kw">AS</span> z_score</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>WINDOW p <span class="kw">AS</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> persona <span class="kw">ORDER</span> <span class="kw">BY</span> moment)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Naturally, there are many additional options to customize this; you could have the window be the following rows, exclude the current row (like a studentized z score), be only some of the rows in the partition (by including a <code>FILTER</code> before <code>OVER</code>), or many other complicated variations.</p>
 <p>Window functions can only be used in the <code>SELECT</code> column list and in <code>ORDER BY</code>, but not in <code>GROUP BY</code>, <code>HAVING</code>, or <code>WHERE</code> clauses, because they’re calculated after these are run.</p>
 <p>There are also <a href="https://www.postgresql.org/docs/current/functions-window.html#FUNCTIONS-WINDOW-TABLE">specific window functions</a> that are not aggregate functions. For example, <code>rank()</code> gives the rank of each row within the partition.</p>
 <p>See the <a href="https://www.postgresql.org/docs/current/tutorial-window.html">window function tutorial</a> and <a href="https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-WINDOW-FUNCTIONS">reference manual page</a> for details.</p>
 <div id="exr-window-subquery" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4 (Writing window functions with a subquery)</strong></span> Write a query to get the z-score for every event score, relative to the student’s overall average score. Write this using a join and a subquery, rather than by using a window function.</p>
+<p><span class="theorem-title"><strong>Exercise 4.4 (Writing window functions with a subquery)</strong></span> Write a query to get the z-score for every event score, relative to the student’s overall average score. Write this using a join and a subquery, rather than by using a window function.</p>
 <p>The result should have the same columns as the first version in the window function example above.</p>
 <p><em>Note:</em> Once you write the query, it’s worth thinking about how much more difficult it would be to do the second window function example above, where we included <code>ORDER BY</code>. The simple aggregation approach that worked here would not work for that query.</p>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>Here’s one way:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> e.<span class="kw">id</span>, e.persona, e.score, (e.score <span class="op">-</span> z.avg_score) <span class="op">/</span> z.sd_score <span class="kw">AS</span> z_score</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span> <span class="kw">AS</span> e</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> persona, <span class="fu">avg</span>(score) <span class="kw">AS</span> avg_score, <span class="fu">stddev_samp</span>(score) <span class="kw">AS</span> sd_score</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a> <span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a> <span class="kw">GROUP</span> <span class="kw">BY</span> persona) <span class="kw">AS</span> z</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> e.persona <span class="op">=</span> z.persona;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Notice we’re using a <code>LEFT JOIN</code> so we get one row per event, rather than one row per persona (as in a <code>RIGHT JOIN</code>).</p>
-</div>
 <div id="exr-window-fns" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5 (Window functions)</strong></span> Write each of the following queries using window functions.</p>
+<p><span class="theorem-title"><strong>Exercise 4.5 (Window functions)</strong></span> Write each of the following queries using window functions.</p>
 <ol type="1">
 <li><p>For each event, report the difference between the student’s score and the average score of all students who did that element. (<code>element</code> identifies the specific quiz question or instructional item being scored.) Report columns for the student ID, element ID, score, and difference from average.</p></li>
 <li><p>For each event, give the rank of the student’s score out of all students who completed that element, where 1 means they got the highest score. Report columns for the student, element, score, and rank.</p>
 <p><em>Hint:</em> The <code>rank()</code> function, described in <a href="https://www.postgresql.org/docs/current/functions-window.html#FUNCTIONS-WINDOW-TABLE">table 9.63 of the manual</a>, will be useful here. There are examples in the <a href="https://www.postgresql.org/docs/current/tutorial-window.html">official tutorial</a>.</p></li>
 </ol>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>Here’s one way:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, element, score,</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>       score <span class="op">-</span> <span class="fu">avg</span>(score) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> element) <span class="kw">AS</span> score_diff</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span>;</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, element, score,</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rank</span>() <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> element <span class="kw">ORDER</span> <span class="kw">BY</span> score <span class="kw">DESC</span>)</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -959,6 +1030,18 @@ Dietrich |            |  2310
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering/sql.html" class="pagination-link" aria-label="SQL Basics">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../data-engineering/sql-code.html" class="pagination-link" aria-label="Using SQL from Code">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

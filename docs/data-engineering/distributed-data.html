@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>distributed-data</title>
+<title>8&nbsp; Distributed Data and Computation – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,11 +24,14 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/project.html" rel="next">
+<link href="../data-engineering/cloud.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -38,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -97,24 +100,156 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/distributed-data.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-distributing-data" id="toc-sec-distributing-data" class="nav-link active" data-scroll-target="#sec-distributing-data"><span class="header-section-number">8.1</span> Distributing data</a></li>
+  <li><a href="#distributing-computation" id="toc-distributing-computation" class="nav-link" data-scroll-target="#distributing-computation"><span class="header-section-number">8.2</span> Distributing computation</a></li>
+  <li><a href="#mapreduce" id="toc-mapreduce" class="nav-link" data-scroll-target="#mapreduce"><span class="header-section-number">8.3</span> MapReduce</a>
+  <ul class="collapse">
+  <li><a href="#apache-hadoop" id="toc-apache-hadoop" class="nav-link" data-scroll-target="#apache-hadoop"><span class="header-section-number">8.3.1</span> Apache Hadoop</a></li>
+  <li><a href="#limitations" id="toc-limitations" class="nav-link" data-scroll-target="#limitations"><span class="header-section-number">8.3.2</span> Limitations</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/distributed-data.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-distributed-data" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="sec-distributed-data" class="level1">
-<h1>Distributed Data and Computation</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p>In large companies or large scientific projects, there’s problem of scale: the amount of data we want to process is very large, so we divide it up to process on multiple machines. This is Big Data.</p>
 <p>Think of it this way: if you have one server with loads of RAM, a big hard drive, and a top-of-the-line CPU with many cores, and your data fits easily on that server, you’re probably best off writing parallel code and using that server. But if the data is going to be too large—or you’re receiving new data all the time—instead of buying an even bigger server, it might make more sense to buy a fleet of many smaller servers.</p>
 <p>Computing on many independent machines is <em>distributed computing</em>. It brings many challenges over just using a single machine:</p>
@@ -126,8 +261,8 @@ window.Quarto = {
 <li>With more machines, the chance of one crashing or having a hardware failure increases–how do you recover from this?</li>
 </ul>
 <p>Each of these is a difficult problem. There is an ecosystem of software built to solve these problems, from the Hadoop Distributed File System to Spark to Hive to Mahout. But before we learn what the buzzwords mean, let’s talk about the structure of the problems.</p>
-<section id="sec-distributing-data" class="level2">
-<h2 class="anchored" data-anchor-id="sec-distributing-data">Distributing data</h2>
+<section id="sec-distributing-data" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-distributing-data"><span class="header-section-number">8.1</span> Distributing data</h2>
 <p>Statisticians tend to think of datasets as simple things: maybe a few CSV files, a folder full of text files, or a big pile of images. Usually our biggest storage challenge is that we have to pay for extra Dropbox storage space to share the dataset with our collaborators. If datasets change, we usually just get some new data files or a few corrections.</p>
 <p>But this is not what happens in industry. Consider a few examples:</p>
 <ul>
@@ -168,8 +303,8 @@ window.Quarto = {
 <p>Fortunately for users, these distributed file systems are designed to look like any other file system you might use, and work in much the same way.</p>
 <p>A common block-based file system is the <a href="https://hadoop.apache.org/docs/current1/hdfs_design.html">Hadoop Distributed File System</a>, HDFS, though there are many others. Amazon S3 (Simple Storage Service) is a distributed object-based file system as a service, letting you send arbitrary objects to be stored on Amazon’s servers and retrieved whenever you want.</p>
 </section>
-<section id="distributing-computation" class="level2">
-<h2 class="anchored" data-anchor-id="distributing-computation">Distributing computation</h2>
+<section id="distributing-computation" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="distributing-computation"><span class="header-section-number">8.2</span> Distributing computation</h2>
 <p>Reading the above, you might think: Why not use a big relational database? As we discussed, these are designed to keep large amounts of data coherent and consistent, and to make the data available quickly on request.</p>
 <p>The simplest answer is that sometimes, the data volume is more than any one database server can handle.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> But the better answer is that sometimes the <em>computation</em> is more than any one server can handle.</p>
 <p>As we have seen, relational databases can do surprisingly complex calculations. But those calculations are limited by the size of the server (try writing a SQL query that aggregates 100GB of data on a server with 16GB of RAM!), and of course are limited by what can be expressed in the SQL language. If you want to write a calculation that works on several terabytes of data, be prepared for your relational database server to grind to a halt for hours while it processes the query.</p>
@@ -178,8 +313,8 @@ window.Quarto = {
 <p>So how do we divide up computing tasks to be run on multiple machines, loading their input data from a distributed file system?</p>
 <p>There are several conceptual models we could use. The first is MapReduce.</p>
 </section>
-<section id="mapreduce" class="level2">
-<h2 class="anchored" data-anchor-id="mapreduce">MapReduce</h2>
+<section id="mapreduce" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="mapreduce"><span class="header-section-number">8.3</span> MapReduce</h2>
 <p>MapReduce dates to 2004, when Google engineers published <a href="https://ai.google/research/pubs/pub62">a paper</a> advertising the MapReduce concept as “Simplified Data Processing on Large Clusters”. By 2006 the Hadoop project existed to make an open-source implementation of the MapReduce ideas, and Hadoop soon exploded: it was the single largest buzzword of the early 2010s, being the canonical Big Data system.</p>
 <p>Let’s talk about the conceptual ideas before we discuss the implementation details.</p>
 <p>MapReduce uses the Map and Reduce operations you may have learned in functional programming, but with an extra twist: Shuffle. A MapReduce system has many “nodes”—different servers running the software—that are connected to some kind of distributed file system.</p>
@@ -192,7 +327,7 @@ window.Quarto = {
 <p>The Map and Reduce steps are parallelized: each node processes the Map function simultaneously, and each node processes the Reduce function on each key simultaneously.</p>
 <p>The Shuffle step lets us do reductions that aren’t completely associative.</p>
 <div id="exm-mapreduce-wc" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (Counting words)</strong></span> The standard MapReduce example is counting words in a huge set of documents. Stealing pseudocode from Wikipedia,</p>
+<p><span class="theorem-title"><strong>Example 8.1 (Counting words)</strong></span> The standard MapReduce example is counting words in a huge set of documents. Stealing pseudocode from Wikipedia,</p>
 <pre><code>function map(String name, String document):
     // name: document name
     // document: document contents
@@ -210,7 +345,7 @@ function reduce(String word, Iterator partialCounts):
 <p>If we supply these to a MapReduce system that has many documents on many nodes, each node can apply <code>map()</code> to each document it stores. The emitted results are shuffled so each node contains all the output for specific words. Then each node runs <code>reduce()</code> for each word, and gets a word count.</p>
 </div>
 <div id="exr-k-means-mapreduce" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1 (k-means clustering)</strong></span> Word counting doesn’t really give you a sense of the scale of MapReduce, so let’s consider a more statistical example: <a href="https://link.springer.com/chapter/10.1007/978-3-642-10665-1_71">parallel K-means clustering</a>.</p>
+<p><span class="theorem-title"><strong>Exercise 8.1 (k-means clustering)</strong></span> Word counting doesn’t really give you a sense of the scale of MapReduce, so let’s consider a more statistical example: <a href="https://link.springer.com/chapter/10.1007/978-3-642-10665-1_71">parallel K-means clustering</a>.</p>
 <p>First, a brief review of K-means. We have <span class="math inline">\(n\)</span> points (in some <span class="math inline">\(d\)</span>-dimensional space) we want to cluster into <span class="math inline">\(k\)</span> clusters. We randomly select <span class="math inline">\(k\)</span> points and use their locations as cluster centers. Then:</p>
 <ol type="1">
 <li>Assign each point to a cluster, based on the distance between it and the cluster centers.</li>
@@ -220,18 +355,15 @@ function reduce(String word, Iterator partialCounts):
 <p>The distance calculations are the scaling problem here: each iteration requires calculating the distance between all <span class="math inline">\(n\)</span> points and all <span class="math inline">\(k\)</span> cluster centers.</p>
 <p>How could we do K-means as a <em>sequence</em> of MapReduce operations?</p>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>TODO</p>
-</div>
-<section id="apache-hadoop" class="level3">
-<h3 class="anchored" data-anchor-id="apache-hadoop">Apache Hadoop</h3>
+<section id="apache-hadoop" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="apache-hadoop"><span class="header-section-number">8.3.1</span> Apache Hadoop</h3>
 <p><a href="https://hadoop.apache.org/">Apache Hadoop</a> is an implementation of the MapReduce idea, in the same way that PostgreSQL or SQLite are implementations of the SQL idea. It’s built in Java.</p>
 <p>Hadoop handles the details: it splits up the data, assigns data chunks to compute nodes, calls the Map function with the right data chunks, collects together output with the same key, provides output to the Reduce function, and handles all the communication between nodes. You need only write the Map and Reduce functions and let Hadoop do the hard work.</p>
 <p>It’s easiest to write map and reduce functions in Java, but Hadoop also <a href="https://hadoop.apache.org/docs/current1/streaming.html">provides ways</a> to specify “run this arbitrary program to do the Map”, so you can have your favorite R or Python code do the analysis.</p>
 <p>Hadoop can be used to coordinate clusters of hundreds or thousands of servers running the Hadoop software, to which MapReduce tasks will be distributed.</p>
 </section>
-<section id="limitations" class="level3">
-<h3 class="anchored" data-anchor-id="limitations">Limitations</h3>
+<section id="limitations" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="limitations"><span class="header-section-number">8.3.2</span> Limitations</h3>
 <p>Hadoop was incredibly popular for quite a while, but it has its limitations.</p>
 <ul>
 <li>Hadoop relies heavily on the distributed file system, storing all its intermediate results on disk. That can make it slow.</li>
@@ -244,15 +376,14 @@ function reduce(String word, Iterator partialCounts):
 
 </section>
 </section>
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
 <ol>
 <li id="fn1"><p>The cynical answer is that software engineers need to put more things on their résumés, so they adopt new technologies every month.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section></div></main> <!-- /main -->
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -652,6 +783,18 @@ function reduce(String word, Iterator partialCounts):
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering/cloud.html" class="pagination-link" aria-label="Cloud Computing">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../data-engineering/project.html" class="pagination-link" aria-label="Project: Data Pipeline">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

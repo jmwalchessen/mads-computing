@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>text-search</title>
+<title>6&nbsp; Full Text Search – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,11 +59,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/cloud.html" rel="next">
+<link href="../data-engineering/sql-code.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -73,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,22 +135,158 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/text-search.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#text-searching-tasks" id="toc-text-searching-tasks" class="nav-link active" data-scroll-target="#text-searching-tasks"><span class="header-section-number">6.1</span> Text searching tasks</a></li>
+  <li><a href="#character-encoding" id="toc-character-encoding" class="nav-link" data-scroll-target="#character-encoding"><span class="header-section-number">6.2</span> Character encoding</a>
+  <ul class="collapse">
+  <li><a href="#character-encoding-mishaps" id="toc-character-encoding-mishaps" class="nav-link" data-scroll-target="#character-encoding-mishaps"><span class="header-section-number">6.2.1</span> Character encoding mishaps</a></li>
+  <li><a href="#converting" id="toc-converting" class="nav-link" data-scroll-target="#converting"><span class="header-section-number">6.2.2</span> Converting</a></li>
+  <li><a href="#sec-utf8" id="toc-sec-utf8" class="nav-link" data-scroll-target="#sec-utf8"><span class="header-section-number">6.2.3</span> UTF-8: the only acceptable encoding</a></li>
+  <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization"><span class="header-section-number">6.2.4</span> Normalization</a></li>
+  <li><a href="#language-differences" id="toc-language-differences" class="nav-link" data-scroll-target="#language-differences"><span class="header-section-number">6.2.5</span> Language differences</a></li>
+  </ul></li>
+  <li><a href="#basic-text-operations-in-postgresql" id="toc-basic-text-operations-in-postgresql" class="nav-link" data-scroll-target="#basic-text-operations-in-postgresql"><span class="header-section-number">6.3</span> Basic text operations in PostgreSQL</a>
+  <ul class="collapse">
+  <li><a href="#pattern-matching" id="toc-pattern-matching" class="nav-link" data-scroll-target="#pattern-matching"><span class="header-section-number">6.3.1</span> Pattern matching</a></li>
+  <li><a href="#regular-expression-matching" id="toc-regular-expression-matching" class="nav-link" data-scroll-target="#regular-expression-matching"><span class="header-section-number">6.3.2</span> Regular expression matching</a></li>
+  <li><a href="#regular-expression-replacement" id="toc-regular-expression-replacement" class="nav-link" data-scroll-target="#regular-expression-replacement"><span class="header-section-number">6.3.3</span> Regular expression replacement</a></li>
+  <li><a href="#regular-expressions-in-python" id="toc-regular-expressions-in-python" class="nav-link" data-scroll-target="#regular-expressions-in-python"><span class="header-section-number">6.3.4</span> Regular expressions in Python</a></li>
+  </ul></li>
+  <li><a href="#language-aware-text-search" id="toc-language-aware-text-search" class="nav-link" data-scroll-target="#language-aware-text-search"><span class="header-section-number">6.4</span> Language-aware text search</a>
+  <ul class="collapse">
+  <li><a href="#lexing-text" id="toc-lexing-text" class="nav-link" data-scroll-target="#lexing-text"><span class="header-section-number">6.4.1</span> Lexing text</a></li>
+  <li><a href="#querying-documents" id="toc-querying-documents" class="nav-link" data-scroll-target="#querying-documents"><span class="header-section-number">6.4.2</span> Querying documents</a></li>
+  <li><a href="#indexing-lexed-text" id="toc-indexing-lexed-text" class="nav-link" data-scroll-target="#indexing-lexed-text"><span class="header-section-number">6.4.3</span> Indexing lexed text</a></li>
+  <li><a href="#searching-with-indices" id="toc-searching-with-indices" class="nav-link" data-scroll-target="#searching-with-indices"><span class="header-section-number">6.4.4</span> Searching with indices</a></li>
+  <li><a href="#ranking-matches" id="toc-ranking-matches" class="nav-link" data-scroll-target="#ranking-matches"><span class="header-section-number">6.4.5</span> Ranking matches</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">6.5</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/text-search.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Full Text Search</h1>
+<h1 class="title"><span id="sec-fts" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></h1>
 </div>
 
 
@@ -166,29 +305,29 @@ window.Quarto = {
 
 <p>So far our searching, grouping, and aggregation has focused on numerical columns and numerical summaries of them. But text data is quite common. We can easily store text in PostgreSQL by using the <code>TEXT</code> column type, but often we want ways to efficiently <em>search</em> through text. This problem is known as <em>full text search</em>, because you’d like to search using the entire contents of the text, not just features or tags attached to it.</p>
 <p>Full text search requires special consideration because doing it well is a lot of work. A naive approach—looping through every row of data and checking if the text matches a search query—would be impossibly slow and wouldn’t even be very good at searching, so we must plan ahead to make full text search effective.</p>
-<section id="text-searching-tasks" class="level2">
-<h2 class="anchored" data-anchor-id="text-searching-tasks">Text searching tasks</h2>
+<section id="text-searching-tasks" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="text-searching-tasks"><span class="header-section-number">6.1</span> Text searching tasks</h2>
 <p>Text is complicated. As you can imagine, there are many ways you might want to search it.</p>
 <div id="exm-search-titles" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (Movie titles)</strong></span> You run a website that hosts movie information and reviews. Users type the title of a movie—or parts of it—into a search box, and your system must find the matching movies to list for them.</p>
+<p><span class="theorem-title"><strong>Example 6.1 (Movie titles)</strong></span> You run a website that hosts movie information and reviews. Users type the title of a movie—or parts of it—into a search box, and your system must find the matching movies to list for them.</p>
 <p>If you have a <code>movies</code> table with a <code>title</code> column, a simple query is</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> movies</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> title <span class="op">=</span> %s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>filling in the user’s entry for the placeholder. But they may type in only part of the title (<em>everything everywhere</em> to find <em>Everything Everywhere All at Once</em>), they might misspell it (<em>the avngers</em>), or they might misremember it and get parts wrong (<em>star wars the return of the sith</em>). How do you find the best match?</p>
 </div>
 <div id="exm-search-regex" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2 (Citation search)</strong></span> You’re analyzing a database of scientific papers to find out which ones cite each other. Each paper has a Digital Object Identifier (DOI), a unique ID in the form <code>doi:10.NNNN/suffix</code>, where <code>NNNN</code> is a four-digit (or longer) number and the suffix can be any string of characters not including spaces.</p>
+<p><span class="theorem-title"><strong>Example 6.2 (Citation search)</strong></span> You’re analyzing a database of scientific papers to find out which ones cite each other. Each paper has a Digital Object Identifier (DOI), a unique ID in the form <code>doi:10.NNNN/suffix</code>, where <code>NNNN</code> is a four-digit (or longer) number and the suffix can be any string of characters not including spaces.</p>
 <p>Reference lists for papers often give the DOI for the papers they cite, so you’d like to find all papers with DOIs in them. How do you search for text matching this pattern?</p>
 </div>
 <div id="exm-search-docs" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3 (Legal documents)</strong></span> You’re suing a large tech company because you believe they violate antitrust law. Through subpoenas, you have obtained millions of their internal emails, and you want to search the emails for ones mentioning <em>monopoly</em>, <em>competition</em>, <em>collusion</em>, and other such words and phrases. But those words have many variations: <em>monopolies</em>, <em>monopolistic</em>, <em>competitive</em>, <em>competitors</em>, <em>colluding</em>, etc.</p>
+<p><span class="theorem-title"><strong>Example 6.3 (Legal documents)</strong></span> You’re suing a large tech company because you believe they violate antitrust law. Through subpoenas, you have obtained millions of their internal emails, and you want to search the emails for ones mentioning <em>monopoly</em>, <em>competition</em>, <em>collusion</em>, and other such words and phrases. But those words have many variations: <em>monopolies</em>, <em>monopolistic</em>, <em>competitive</em>, <em>competitors</em>, <em>colluding</em>, etc.</p>
 <p>If the emails are in a table with <code>subject</code> and <code>body</code> columns containing their contents, how do you effectively search them?</p>
 </div>
 <p>There are a variety of basic text operators that can help with simple tasks, and we’ll address those first. Then we’ll move on to more advanced full-text search.</p>
 <p>But first: What <em>is</em> text, and how is it stored?</p>
 </section>
-<section id="character-encoding" class="level2">
-<h2 class="anchored" data-anchor-id="character-encoding">Character encoding</h2>
+<section id="character-encoding" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="character-encoding"><span class="header-section-number">6.2</span> Character encoding</h2>
 <p>Computer memory is binary: it stores only 0s and 1s. It follows that text must be stored as numbers, not as text. That requires a <em>character encoding</em>: a system to number each character in a given alphabet, so they can be stored as numbers and then displayed as the correct characters.</p>
 <p>Since the 1960s, the common standard has been the American Standard Code for Information Interchange (ASCII). ASCII reflects the biases of American computer engineers in the 1960s: it uses only 7 bits to encode each number, allowing only <span class="math inline">\(2^7 = 128\)</span> possible characters.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> These were used to encode the upper- and lowercase Latin alphabet, spaces, newlines, punctuation marks, and a variety of control characters that tell a teletype machine to do something rather than displaying text. (For example, there’s a character that tells the machine to ring a bell to alert the operator to do something.)</p>
 <p>Notably, ASCII does not include any accented characters (like é, ñ, or ö), characters from any other alphabet (Cyrillic, Arabic, Devanagari, Hangul, etc.), or symbols from any other writing system (Chinese, Japanese, etc.).</p>
@@ -199,15 +338,15 @@ window.Quarto = {
 <li>Shift JIS, used for Japanese.</li>
 <li>Windows-1251, used for Cyrillic.</li>
 </ul>
-<p>Nowadays, the most common encoding is UTF-8, which is designed to cover almost every script used in the world (and many historic ones no longer in use). We’ll discuss it in more detail in <a href="#sec-utf8" class="quarto-xref">Section&nbsp;2.3</a>.</p>
-<section id="character-encoding-mishaps" class="level3">
-<h3 class="anchored" data-anchor-id="character-encoding-mishaps">Character encoding mishaps</h3>
+<p>Nowadays, the most common encoding is UTF-8, which is designed to cover almost every script used in the world (and many historic ones no longer in use). We’ll discuss it in more detail in <a href="#sec-utf8" class="quarto-xref"><span>Section 6.2.3</span></a>.</p>
+<section id="character-encoding-mishaps" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="character-encoding-mishaps"><span class="header-section-number">6.2.1</span> Character encoding mishaps</h3>
 <p>Character encoding problems occur when text in one encoding is interpreted as being from another encoding.</p>
 <p>For example, the string <code>can’t</code> (notice the right curly apostrophe) can be encoded in UTF-8, which has a character for the right single quotation mark. But that character is represented as three bytes. In Windows-1252, those three bytes are read as â, €, and ™, so the string appears <code>canâ€™t</code>. If you don’t know the encoding of the text and pick the wrong one, you will display it incorrectly.</p>
 <p>This is also annoying for searching: if you’re searching for a string that you’ve written in one encoding, but the data you’ve stored is in a different encoding, a naive search that checks the bytes stored will not find it.</p>
 </section>
-<section id="converting" class="level3">
-<h3 class="anchored" data-anchor-id="converting">Converting</h3>
+<section id="converting" class="level3" data-number="6.2.2">
+<h3 data-number="6.2.2" class="anchored" data-anchor-id="converting"><span class="header-section-number">6.2.2</span> Converting</h3>
 <p>Old programming languages like C do not require strings to be in any specific encoding—you can shove any bytes you want into a string, and it’s your problem if the encoding is wrong.</p>
 <p>Modern systems like Python (since Python 3) enforce a consistent encoding. In Python, every string must be read in with a defined encoding, so Python can convert it automatically when doing any operations. For example, if I try to read a file that is not UTF-8-encoded:</p>
 <pre><code>In [5]: f = open("/bin/ls", "r")
@@ -229,8 +368,8 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xca in position 0: invalid 
 <p>The file <code>/bin/ls</code> is a compiled program, not text, so when Python tries to interpret the bytes as UTF-8 text, it finds some of them are not valid characters and immediately complains.</p>
 <p>This is why <code>open()</code> has an <code>encoding</code> argument: so you can tell it which encoding to read, and it can automatically translate the encoding as you operate on the text.</p>
 </section>
-<section id="sec-utf8" class="level3">
-<h3 class="anchored" data-anchor-id="sec-utf8">UTF-8: the only acceptable encoding</h3>
+<section id="sec-utf8" class="level3" data-number="6.2.3">
+<h3 data-number="6.2.3" class="anchored" data-anchor-id="sec-utf8"><span class="header-section-number">6.2.3</span> UTF-8: the only acceptable encoding</h3>
 <p>Unicode is a standard that attempts to list the characters in all the world’s writing systems, assigning each a unique identifying number. (Right now nearly 155,000 characters are defined and numbered.) These are called <em>code points</em>. Each code point is, conceptually, one “thing” in the writing system.</p>
 <p>Unicode code points are commonly written with the notation U+NNNN. For example, U+0065 is the code point <code>LATIN SMALL LETTER E</code>, i.e.&nbsp;<code>e</code>. The number is written in hexadecimal.</p>
 <p>There are several encodings defined in the Unicode standard, which give ways to encode the code points in binary. The most popular, now used by around 99% of websites and applications, is UTF-8.</p>
@@ -243,8 +382,8 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xca in position 0: invalid 
 Out[8]: 1</code></pre>
 <p>Despite its quirks, UTF-8 is now almost universally supported by software and is widely used across the Internet. If you are creating text data, you should encode it as UTF-8.</p>
 </section>
-<section id="normalization" class="level3">
-<h3 class="anchored" data-anchor-id="normalization">Normalization</h3>
+<section id="normalization" class="level3" data-number="6.2.4">
+<h3 data-number="6.2.4" class="anchored" data-anchor-id="normalization"><span class="header-section-number">6.2.4</span> Normalization</h3>
 <p>Another quick is that Unicode provides two ways to encode many common characters. For example, the code point <code>U+0301</code> represents the <code>COMBINING ACUTE ACCENT</code>. Place it after any character and it puts an acute accent on that character. Hence we can write é as U+0065 U+0301 (e plus an acute accent).</p>
 <p>(This combining feature is also used for encoding emojis that can be displayed in different skin tones: 👍🏽 is 👍 plus the U+1F3FD medium skin tone modifier.)</p>
 <p>But Unicode also provides <em>precomposed</em> forms of common characters, so U+00E9 is <code>LATIN SMALL LETTER E WITH ACUTE</code>. Consequently:</p>
@@ -257,15 +396,15 @@ Out[15]: 2</code></pre>
 <p>To solve this, Unicode defines <em>normalization</em> procedures that take text and turn it into a single canonical form. For instance, NFC (Normalization Form Canonical Composition) composes every character when possible, so é is always one byte, not two. (There are three other normalization schemes that produce different normalized forms, but NFC is the most commonly used.)</p>
 <p>To effectively search text, then, we must both know its encoding and ensure it is normalized consistently.</p>
 </section>
-<section id="language-differences" class="level3">
-<h3 class="anchored" data-anchor-id="language-differences">Language differences</h3>
+<section id="language-differences" class="level3" data-number="6.2.5">
+<h3 data-number="6.2.5" class="anchored" data-anchor-id="language-differences"><span class="header-section-number">6.2.5</span> Language differences</h3>
 <p>Some operations depend not just on the encoding but on the language.</p>
 <p>For example: what is the uppercase version of i? In many languages, I; but in Turkish, it’s İ. What’s the lowercase version of I? In Turkish, it’s ı. (Turkish scores a point for logical consistency.)</p>
 <p>Operations like uppercasing and lowercasing hence depend on the language! Even Python doesn’t handle this automatically, and so if you’re serious about text, you’ll need a library like <a href="https://icu.unicode.org/">ICU</a> (International Components for Unicode) that provides all the necessary procedures.</p>
 </section>
 </section>
-<section id="basic-text-operations-in-postgresql" class="level2">
-<h2 class="anchored" data-anchor-id="basic-text-operations-in-postgresql">Basic text operations in PostgreSQL</h2>
+<section id="basic-text-operations-in-postgresql" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="basic-text-operations-in-postgresql"><span class="header-section-number">6.3</span> Basic text operations in PostgreSQL</h2>
 <p>In PostgreSQL, every database has a default encoding (hopefully UTF-8), and PostgreSQL uses that encoding to store all text and character columns. Since it knows the encoding, it can do text operations. Here are a few common ones:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">trim</span>(<span class="st">' foo bar   '</span>); <span class="co">-- deletes whitespace at beginning and end</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -281,9 +420,9 @@ Out[15]: 2</code></pre>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">substr</span>(<span class="st">'doi:10.1073/pnas.2111454118'</span>, <span class="dv">5</span>);</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">length</span>(<span class="st">'💩'</span>); <span class="co">-- Azure Data Studio bug</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<section id="pattern-matching" class="level3">
-<h3 class="anchored" data-anchor-id="pattern-matching">Pattern matching</h3>
-<p>Often, as in <a href="#exm-search-titles" class="quarto-xref">Example&nbsp;1</a>, it’s sufficient to search a text column for values matching a certain pattern. SQL provides the <code>LIKE</code> operator to do this. <code>LIKE</code> uses a special pattern syntax to define what to look for. In the patterns, <code>%</code> represents any sequence of zero or more characters, so we can write:</p>
+<section id="pattern-matching" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="pattern-matching"><span class="header-section-number">6.3.1</span> Pattern matching</h3>
+<p>Often, as in <a href="#exm-search-titles" class="quarto-xref">Example&nbsp;<span>6.1</span></a>, it’s sufficient to search a text column for values matching a certain pattern. SQL provides the <code>LIKE</code> operator to do this. <code>LIKE</code> uses a special pattern syntax to define what to look for. In the patterns, <code>%</code> represents any sequence of zero or more characters, so we can write:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'doi:10.1073/pnas.2111454118'</span> <span class="kw">LIKE</span> <span class="st">'doi%'</span>;</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'Gone with the Wind'</span> <span class="kw">LIKE</span> <span class="st">'%with the%'</span>;</span>
@@ -301,17 +440,11 @@ Out[15]: 2</code></pre>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'foooo'</span> <span class="kw">LIKE</span> <span class="st">'_o_'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Instead of <code>LIKE</code> and <code>ILIKE</code>, you can also write <code>~~</code> or <code>~~*</code>, as in <code>'Gone with the Wind' ~~ '%with the%'</code>. This is not part of the SQL standard, but PostgreSQL supports them internally.</p>
 <div id="exr-i-like-ike" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1 (Like, totally)</strong></span> In the <code>events</code> table, the <code>feedback</code> column gives a textual description of the feedback to the student. Produce a query that counts how many events have the string “you” in their feedback, in upper- or lowercase.</p>
-</div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> feedback ILIKE <span class="st">'%you%'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="theorem-title"><strong>Exercise 6.1 (Like, totally)</strong></span> In the <code>events</code> table, the <code>feedback</code> column gives a textual description of the feedback to the student. Produce a query that counts how many events have the string “you” in their feedback, in upper- or lowercase.</p>
 </div>
 </section>
-<section id="regular-expression-matching" class="level3">
-<h3 class="anchored" data-anchor-id="regular-expression-matching">Regular expression matching</h3>
+<section id="regular-expression-matching" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="regular-expression-matching"><span class="header-section-number">6.3.2</span> Regular expression matching</h3>
 <p><code>LIKE</code> provides simple patterns, but its pattern matching is quite limited. What if you want to, say, find strings containing only the digits 0-9 repeated at most 4 times, followed by at least one uppercase letter? What if you want to check if every password has at least one uppercase letter, one symbol, a Pokémon character name, and a Mersenne prime?<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>To match more complex passwords, we can use regular expressions. There are multiple ways to write regular expressions; the SQL standard provides the <code>SIMILAR TO</code> operator, which uses a syntax no other software uses, but most database systems also support POSIX regular expressions. These follow a standard syntax widely used by many different systems; even software that varies typically only varies in the details and not the general picture.</p>
 <p>A regular expression is a specially formatted string that defines the pattern we would like to match. Basic patterns are simple: the regular expression <code>ducks</code> matches any portion of text containing the substring <code>"ducks"</code>. But other syntax in patterns produces more complex behavior. Let’s work through basic syntax with some examples:</p>
@@ -348,111 +481,106 @@ Out[15]: 2</code></pre>
 <p>If you need to literally match parentheses, brackets, or other syntax, you must escape them with a backslash: <code>\(</code> matches an open parenthesis.</p>
 <p>There are many additional options and syntax features we can define, but it’s best to master the basics first.</p>
 <p>Regular expressions can be used within Postgres using the <code>~</code> operator. Regular expressions are specified as strings, so we must be careful with string escaping. For example:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'foo'</span> ~ <span class="st">'foo'</span>;</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'ducks'</span> ~ <span class="st">'du.ks'</span>;</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'&lt;foo&gt;bar&lt;/foo&gt;'</span> ~ <span class="st">'&lt;([a-zA-Z]+)&gt;(.*)&lt;/\1&gt;'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'foo'</span> ~ <span class="st">'foo'</span>;</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'ducks'</span> ~ <span class="st">'du.ks'</span>;</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="st">'&lt;foo&gt;bar&lt;/foo&gt;'</span> ~ <span class="st">'&lt;([a-zA-Z]+)&gt;(.*)&lt;/\1&gt;'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Using <code>regexp_match()</code>, we can see the portion of the string that matches, or the capture groups that match:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> regexp_match(<span class="st">'the mighty ducks'</span>, <span class="st">'du.ks'</span>);</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> regexp_match(<span class="st">'&lt;foo&gt;bar&lt;/foo&gt;'</span>, <span class="st">'&lt;([a-zA-Z]+)&gt;(.*)&lt;/\1&gt;'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> regexp_match(<span class="st">'the mighty ducks'</span>, <span class="st">'du.ks'</span>);</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> regexp_match(<span class="st">'&lt;foo&gt;bar&lt;/foo&gt;'</span>, <span class="st">'&lt;([a-zA-Z]+)&gt;(.*)&lt;/\1&gt;'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>There are also functions count how many matches there are; see <a href="https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP">section 9.7.3 of the manual</a> for details.</p>
 <p><a href="https://regexr.com/">RegExr</a> is a great tool to visualize your regular expressions and see what they match. There are slight syntactic differences between TODO</p>
 <div id="exr-regexp-practice" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2 (Practice regular expressions)</strong></span> For each pattern below, use <code>regexp_match()</code> to confirm the expression matches what you intend it to.</p>
+<p><span class="theorem-title"><strong>Exercise 6.2 (Practice regular expressions)</strong></span> For each pattern below, use <code>regexp_match()</code> to confirm the expression matches what you intend it to.</p>
 <ol type="1">
 <li>Write a regular expression that matches strings of the form <code>doi:10.</code>, followed by one or more numbers, then a forward slash, then one or more alphanumeric characters. Capture the part after <code>doi:</code> in a capture group.</li>
 <li>Match strings like <code>[tag]text[/tag]</code>, where the two tags match and the text does <em>not</em> contain <code>[/tag]</code>. For instance, in the string <code>"[foo]text[/foo]bar[/foo]"</code>, the match should only be <code>"[foo]text[/foo]"</code>.</li>
 <li>Match strings like <code>key=value</code>, capturing both the key name and the value. The key should be alphabetical and the value should be a decimal number, like <code>3.14</code>. For example, <code>pi=3.1415</code> should capture <code>pi</code> and <code>3.1415</code>, but <code>4=7.2.4</code> should not match.</li>
 </ol>
 </div>
-<p>Finally, there is one use case that often comes up: If you’re parsing HTML (to scrape a website, for instance), it’s tempting to use regular expressions to match the element you need. Don’t! <a href="https://stackoverflow.com/a/1732454">You can’t parse HTML with regex.</a> The syntax of HTML is too complicated for it to be possible to write a regular expression that always correctly matches HTML tags. See <strong>?@sec-scraping</strong> for the correct approach.</p>
+<p>Finally, there is one use case that often comes up: If you’re parsing HTML (to scrape a website, for instance), it’s tempting to use regular expressions to match the element you need. Don’t! <a href="https://stackoverflow.com/a/1732454">You can’t parse HTML with regex.</a> The syntax of HTML is too complicated for it to be possible to write a regular expression that always correctly matches HTML tags. See <span class="quarto-unresolved-ref">?sec-scraping</span> for the correct approach.</p>
 </section>
-<section id="regular-expression-replacement" class="level3">
-<h3 class="anchored" data-anchor-id="regular-expression-replacement">Regular expression replacement</h3>
+<section id="regular-expression-replacement" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="regular-expression-replacement"><span class="header-section-number">6.3.3</span> Regular expression replacement</h3>
 <p>One common use of regular expressions is to replace certain patterns in text with others. Frequently this is used inside text editors to do sophisticated find-and-replace, and it gets used in many other applications processing text that needs to be reformatted to match some specification.</p>
 <div id="exm-bbcode" class="theorem example">
-<p><span class="theorem-title"><strong>Example 4 (BBCode)</strong></span> You may be familiar with <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a>, the simple text markup language used in systems like R Markdown and in comment boxes on many websites. Before Markdown was widely used, forum software often used <a href="https://en.wikipedia.org/wiki/BBCode">BBCode</a>, a system based on a restricted set of “tags” similar to HTML.</p>
+<p><span class="theorem-title"><strong>Example 6.4 (BBCode)</strong></span> You may be familiar with <a href="https://en.wikipedia.org/wiki/Markdown">Markdown</a>, the simple text markup language used in systems like R Markdown and in comment boxes on many websites. Before Markdown was widely used, forum software often used <a href="https://en.wikipedia.org/wiki/BBCode">BBCode</a>, a system based on a restricted set of “tags” similar to HTML.</p>
 <p>For example, <code>[b]some phrase[/b]</code> represents bolding the text, and might be translated into the HTML for <code>&lt;b&gt;some phrase&lt;/b&gt;</code> or <code>&lt;strong&gt;some phrase&lt;/strong&gt;</code>.</p>
 <p>Using BBCode prevents users from writing HTML directly (and hence messing with the site’s formatting) and restricts them to only tags supported by the forum software.</p>
 <p>A simple implementation of BBCode might use regular expressions to match a set of tags and convert them to the corresponding HTML tags.</p>
 </div>
 <p>Most regular expression systems support regular expression-based text replacement. In PostgreSQL this is called <code>regexp_replace()</code>, and takes a regular expression (to choose what to replace) and a replacement pattern. In the simplest form, the replacement is just a static string:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Filter naughty words</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">regexp_replace</span>(<span class="st">'recrudescent'</span>, <span class="st">'dang|crud'</span>, <span class="st">'****'</span>) <span class="kw">AS</span> clean;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Filter naughty words</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">regexp_replace</span>(<span class="st">'recrudescent'</span>, <span class="st">'dang|crud'</span>, <span class="st">'****'</span>) <span class="kw">AS</span> clean;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>    clean
 --------------
  re****escent
 (1 row)</code></pre>
 <p>But the pattern can also refer to the capture groups in the regular expression. For instance, we can make text dirtier:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">--- Emphasize naughty words</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">regexp_replace</span>(<span class="st">'dang recrudescents!'</span>, <span class="st">'(dang|crud)'</span>, <span class="st">'\1!!!'</span>) <span class="kw">AS</span> dirty;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">--- Emphasize naughty words</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">regexp_replace</span>(<span class="st">'dang recrudescents!'</span>, <span class="st">'(dang|crud)'</span>, <span class="st">'\1!!!'</span>) <span class="kw">AS</span> dirty;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>         dirty
 ------------------------
  dang!!! recrudescents!</code></pre>
 <p>Note only the first match was replaced. That’s the default behavior, but <code>regexp_replace()</code> takes additional arguments to control it. A <code>flags</code> argument gives a string of characters setting options, such as <code>i</code> for case-insensitive matching and <code>g</code> for global matching, meaning replacing everything in the string:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">regexp_replace</span>(<span class="st">'dAnG ReCruDeSCeNts!'</span>, <span class="st">'(dang|crud)'</span>, <span class="st">'\1!!!'</span>, <span class="st">'ig'</span>) <span class="kw">AS</span> dirty;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">regexp_replace</span>(<span class="st">'dAnG ReCruDeSCeNts!'</span>, <span class="st">'(dang|crud)'</span>, <span class="st">'\1!!!'</span>, <span class="st">'ig'</span>) <span class="kw">AS</span> dirty;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>           dirty
 ---------------------------
  dAnG!!! ReCruD!!!eSCeNts!
 (1 row)</code></pre>
 </section>
-<section id="regular-expressions-in-python" class="level3">
-<h3 class="anchored" data-anchor-id="regular-expressions-in-python">Regular expressions in Python</h3>
+<section id="regular-expressions-in-python" class="level3" data-number="6.3.4">
+<h3 data-number="6.3.4" class="anchored" data-anchor-id="regular-expressions-in-python"><span class="header-section-number">6.3.4</span> Regular expressions in Python</h3>
 <p>Besides PostgreSQL, you can do regular expressions in most languages, including Python. In Python they are supported by the <a href="https://docs.python.org/3/library/re.html"><code>re</code> module</a> of the standard library.</p>
-<div id="17e15266" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># list all matches</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'(dang|crud)'</span>, <span class="st">'dang recrudescents!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="91454490" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># list all matches</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>re.findall(<span class="st">'(dang|crud)'</span>, <span class="st">'dang recrudescents!'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>['dang', 'crud']</code></pre>
 </div>
 </div>
-<div id="1be7814a" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if entire string matches</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>re.fullmatch(<span class="vs">r"&lt;</span><span class="kw">(</span><span class="pp">[a-zA-Z]</span><span class="op">+</span><span class="kw">)</span><span class="vs">&gt;</span><span class="kw">(</span><span class="dv">.</span><span class="op">*</span><span class="kw">)</span><span class="vs">&lt;/</span><span class="ch">\1</span><span class="vs">&gt;"</span>, <span class="st">"&lt;foo&gt;bar&lt;/foo&gt;"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="39e86e8a" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if entire string matches</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>re.fullmatch(<span class="vs">r"&lt;</span><span class="kw">(</span><span class="pp">[a-zA-Z]</span><span class="op">+</span><span class="kw">)</span><span class="vs">&gt;</span><span class="kw">(</span><span class="dv">.</span><span class="op">*</span><span class="kw">)</span><span class="vs">&lt;/</span><span class="ch">\1</span><span class="vs">&gt;"</span>, <span class="st">"&lt;foo&gt;bar&lt;/foo&gt;"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>&lt;re.Match object; span=(0, 14), match='&lt;foo&gt;bar&lt;/foo&gt;'&gt;</code></pre>
 </div>
 </div>
-<div id="c98b27ff" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># substitute (replace) text</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>re.sub(<span class="st">"(dang|crud)"</span>, <span class="vs">r"</span><span class="ch">\1</span><span class="vs">!!!"</span>, <span class="st">"dAnG ReCruDeSCeNts!"</span>,</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>       flags<span class="op">=</span>re.IGNORECASE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="87f47d1b" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># substitute (replace) text</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>re.sub(<span class="st">"(dang|crud)"</span>, <span class="vs">r"</span><span class="ch">\1</span><span class="vs">!!!"</span>, <span class="st">"dAnG ReCruDeSCeNts!"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>       flags<span class="op">=</span>re.IGNORECASE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>'dAnG!!! ReCruD!!!eSCeNts!'</code></pre>
 </div>
 </div>
 <p>Notice we’re using raw string syntax (<code>r"string"</code>) to avoid needing to escape backslashes.</p>
 <div id="exr-bbcode" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 3 (BBCode with regexp)</strong></span> Suppose you’re building a simple forum software and want to support BBCode (<a href="#exm-bbcode" class="quarto-xref">Example&nbsp;4</a>). Write a single <code>re.sub()</code> call that supports <code>i</code>, <code>b</code>, and <code>u</code> tags, converting them to the HTML tags <code>&lt;i&gt;</code>, <code>&lt;b&gt;</code>, and <code>&lt;u&gt;</code> (italic, bold, and underline).</p>
+<p><span class="theorem-title"><strong>Exercise 6.3 (BBCode with regexp)</strong></span> Suppose you’re building a simple forum software and want to support BBCode (<a href="#exm-bbcode" class="quarto-xref">Example&nbsp;<span>6.4</span></a>). Write a single <code>re.sub()</code> call that supports <code>i</code>, <code>b</code>, and <code>u</code> tags, converting them to the HTML tags <code>&lt;i&gt;</code>, <code>&lt;b&gt;</code>, and <code>&lt;u&gt;</code> (italic, bold, and underline).</p>
 <p>For example, <code>[i]This[/i] is a [b]test![/b]</code> should be converted to <code>&lt;i&gt;This&lt;/i&gt; is a &lt;b&gt;test!&lt;/b&gt;</code>, but <code>Your mother is a [duck]hamster[/duck]</code> should be unchanged. However, when tags are not nested, they should not match: <code>[b]This [i]is[/b] a test[/i]</code> should not be replaced with anything.</p>
 </div>
 <div id="exr-sql-syntax-replace" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4 (Syntax adaptation)</strong></span> Different SQL engines generally support the SQL standard but add variations and special features, causing problems when you use SQL code written for one engine in another. MySQL uses backticks to delimit column and table names so they are not interpreted as SQL syntax (e.g.&nbsp;if you have a table named <code>select</code>).</p>
+<p><span class="theorem-title"><strong>Exercise 6.4 (Syntax adaptation)</strong></span> Different SQL engines generally support the SQL standard but add variations and special features, causing problems when you use SQL code written for one engine in another. MySQL uses backticks to delimit column and table names so they are not interpreted as SQL syntax (e.g.&nbsp;if you have a table named <code>select</code>).</p>
 <p>For example, a file full of MySQL queries might contain</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> `employeelist` (</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  eid <span class="dt">INTEGER</span>,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  firstName <span class="dt">varchar</span>(<span class="dv">31</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">''</span>,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>. <span class="co">-- more columns go here</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> `employeelist` (</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  eid <span class="dt">INTEGER</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  firstName <span class="dt">varchar</span>(<span class="dv">31</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">''</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>. <span class="co">-- more columns go here</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>But PostgreSQL does not support backtick syntax.</p>
 <p>Write a Python regular expression to take a string containing the MySQL <code>CREATE TABLE</code> syntax, returning a form without the backticks around the table name.</p>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>Here’s a solution:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>re.sub(<span class="vs">r"</span><span class="dv">^</span><span class="vs">CREATE</span><span class="dv">\s</span><span class="op">+</span><span class="vs">TABLE</span><span class="dv">\s</span><span class="op">+</span><span class="vs">`</span><span class="kw">(</span><span class="dv">\w</span><span class="op">+</span><span class="kw">)</span><span class="vs">`"</span>, <span class="vs">r"CREATE TABLE </span><span class="ch">\1</span><span class="vs">"</span>, text,</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>       flags<span class="op">=</span>re.IGNORECASE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 </section>
-<section id="language-aware-text-search" class="level2">
-<h2 class="anchored" data-anchor-id="language-aware-text-search">Language-aware text search</h2>
-<p>Despite all this fancy pattern-matching, we’re still not done searching text. Recall <a href="#exm-search-docs" class="quarto-xref">Example&nbsp;3</a>: we wanted to search emails for words like <em>monopoly</em>, while also including variations like <em>monopolies</em>, <em>monopolistic</em>, and so on. We could write many patterns to do this, of course:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> subject, <span class="kw">body</span> <span class="kw">FROM</span> emails</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">body</span> <span class="kw">LIKE</span> <span class="st">'%monopoly%'</span> <span class="kw">OR</span> <span class="kw">body</span> <span class="kw">LIKE</span> <span class="st">'%monopolies%'</span> <span class="kw">OR</span> <span class="op">..</span>.;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="language-aware-text-search" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="language-aware-text-search"><span class="header-section-number">6.4</span> Language-aware text search</h2>
+<p>Despite all this fancy pattern-matching, we’re still not done searching text. Recall <a href="#exm-search-docs" class="quarto-xref">Example&nbsp;<span>6.3</span></a>: we wanted to search emails for words like <em>monopoly</em>, while also including variations like <em>monopolies</em>, <em>monopolistic</em>, and so on. We could write many patterns to do this, of course:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> subject, <span class="kw">body</span> <span class="kw">FROM</span> emails</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">body</span> <span class="kw">LIKE</span> <span class="st">'%monopoly%'</span> <span class="kw">OR</span> <span class="kw">body</span> <span class="kw">LIKE</span> <span class="st">'%monopolies%'</span> <span class="kw">OR</span> <span class="op">..</span>.;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>But that gets boring to write. And inefficient: to search the text, PostgreSQL must load every row of text and search through it—potentially many megabytes or gigabytes of text. (My CMU email account contains 12 gigabytes of messages, for instance.) So: We’d like to automatically handle word variants, and we’d like to index our text so we can quickly find words and phrases.</p>
-<section id="lexing-text" class="level3">
-<h3 class="anchored" data-anchor-id="lexing-text">Lexing text</h3>
+<section id="lexing-text" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="lexing-text"><span class="header-section-number">6.4.1</span> Lexing text</h3>
 <p>To handle word variants, we need two pieces:</p>
 <ol type="1">
 <li>A <em>tokenizer</em> that splits text up into discrete <em>tokens</em>, such as words, numbers, links, and so on. Then we can operate on tokens, rather than on individual characters.</li>
@@ -460,7 +588,7 @@ Out[15]: 2</code></pre>
 </ol>
 <p>Building good tokenizers and lexers is hard. They must be specialized to the language and grammar. Languages are often irregular, so they need lots of special-case rules and dictionaries. Fortunately PostgreSQL already has lexers for popular languages (and you can probably find lexers for uncommon languages if you need them).</p>
 <p>PostgreSQL’s lexer system turns strings into <code>tsvectors</code> (for <em>text search vectors</em>). Here’s what they look like:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsvector(<span class="st">'english'</span>, <span class="st">'the quick brown fox jumps over the lazy dog'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsvector(<span class="st">'english'</span>, <span class="st">'the quick brown fox jumps over the lazy dog'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>                      to_tsvector
 -------------------------------------------------------
  'brown':3 'dog':9 'fox':4 'jump':5 'lazi':8 'quick':2
@@ -471,56 +599,56 @@ Out[15]: 2</code></pre>
 'equal':30 'father':8 'forth':10 'four':1 'liberti':19 'men':27
 'nation':16 'new':15 'proposit':24 'score':2 'seven':4 'upon':11 'year':5</code></pre>
 </section>
-<section id="querying-documents" class="level3">
-<h3 class="anchored" data-anchor-id="querying-documents">Querying documents</h3>
+<section id="querying-documents" class="level3" data-number="6.4.2">
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="querying-documents"><span class="header-section-number">6.4.2</span> Querying documents</h3>
 <p>Next, Postgres has a <code>tsquery</code> type for queries. Queries consist of lexed words, optionally in a specific order. The <code>to_tsquery()</code> function converts strings into this format:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsquery(<span class="st">'english'</span>, <span class="st">'the &amp; quick &amp; brown &amp; fox &amp; jumps'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsquery(<span class="st">'english'</span>, <span class="st">'the &amp; quick &amp; brown &amp; fox &amp; jumps'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>              to_tsquery
 ------------------------------------
  'quick' &amp; 'brown' &amp; 'fox' &amp; 'jump'
 (1 row)</code></pre>
 <p>The query string is written using the <code>&amp;</code> operator to indicate we want all of the words; notice that <code>the</code> was dropped (it’s a stopword) and <code>jumps</code> was lexed to <code>jump</code>. This will match the words in any order. We use the <code>@@</code> operator to match a <code>tsvector</code> to a <code>tsquery</code>:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsvector(<span class="st">'the fox brown jumps quickly'</span>) @@</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  to_tsquery(<span class="st">'the &amp; quick &amp; brown &amp; fox &amp; jumps'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsvector(<span class="st">'the fox brown jumps quickly'</span>) @@</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  to_tsquery(<span class="st">'the &amp; quick &amp; brown &amp; fox &amp; jumps'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The query syntax supports all logical operators, not just <code>&amp;</code>; we can use <code>|</code> (OR) and <code>!</code> (negation) to express complex queries.</p>
 <p>Alternately, Postgres supports queries written in a way you may be more familiar with from Google and other search systems. Phrases are searched as individual words with <code>&amp;</code>; phrases inside quotation marks must match exactly; writing OR between words allows any to match; and <code>-</code> acts as NOT. For instance:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsvector(<span class="st">'the fox brown jumps quickly'</span>) @@</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  websearch_to_tsquery(<span class="st">'"the quick brown" -dog'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> to_tsvector(<span class="st">'the fox brown jumps quickly'</span>) @@</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  websearch_to_tsquery(<span class="st">'"the quick brown" -dog'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="indexing-lexed-text" class="level3">
-<h3 class="anchored" data-anchor-id="indexing-lexed-text">Indexing lexed text</h3>
+<section id="indexing-lexed-text" class="level3" data-number="6.4.3">
+<h3 data-number="6.4.3" class="anchored" data-anchor-id="indexing-lexed-text"><span class="header-section-number">6.4.3</span> Indexing lexed text</h3>
 <p>It’s clearly inconvenient to use <code>to_tsvector</code> on a text column every time we want to search it. Postgres must go through the entire column, tokenize and lex the text, and then prepare to search it. We can instead ask Postgres to create an index of the <code>tsvector</code> version:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> name_of_index <span class="kw">ON</span> tablename</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">USING</span> GIN (ts_tsvector(<span class="st">'english'</span>, columnname));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> name_of_index <span class="kw">ON</span> tablename</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">USING</span> GIN (ts_tsvector(<span class="st">'english'</span>, columnname));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now, whenever we do <code>to_tsvector()</code> on the column in a query, Postgres will use the index instead. A <code>GIN</code> index is an “inverted” index: the index will contain all the lexemes in the column and, for each lexeme, a list of all the rows containing it. The lexemes are organized in a tree so they can quickly be found in a search.</p>
 <p>Alternately, we can ask Postgres to store the <code>tsvector</code>s in a separate column. PostgreSQL can automatically generate columns that are updated whenever a row is changed:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> tablename</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> <span class="kw">COLUMN</span> column_index_col tsvector</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GENERATED</span> ALWAYS <span class="kw">AS</span> (to_tsvector(<span class="st">'english'</span>, columname)) STORED;</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> column_idx <span class="kw">ON</span> tablename <span class="kw">USING</span> GIN (column_index_col);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> tablename</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> <span class="kw">COLUMN</span> column_index_col tsvector</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GENERATED</span> ALWAYS <span class="kw">AS</span> (to_tsvector(<span class="st">'english'</span>, columname)) STORED;</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> column_idx <span class="kw">ON</span> tablename <span class="kw">USING</span> GIN (column_index_col);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Now we can write our search queries in terms of <code>column_index_col</code> instead of writing <code>to_tsvector()</code> out every time.</p>
 </section>
-<section id="searching-with-indices" class="level3">
-<h3 class="anchored" data-anchor-id="searching-with-indices">Searching with indices</h3>
+<section id="searching-with-indices" class="level3" data-number="6.4.4">
+<h3 data-number="6.4.4" class="anchored" data-anchor-id="searching-with-indices"><span class="header-section-number">6.4.4</span> Searching with indices</h3>
 <p>In the <code>examples</code> database, I have loaded several tables containing emails from <a href="https://en.wikipedia.org/wiki/Enron">Enron</a>. In brief, Enron was a major electricity, gas, and communications company with revenues of $100 billion dollars in 2000—until, in 2001, it was discovered that its executives used accounting fraud to fake its revenues, and the company collapsed. During the various lawsuits and criminal trails afterward, many of Enron’s internal emails were released, and they are still often used as example data in data analysis. (Often the emails between executives are treated as a social network and used in social network analysis examples, for instance.)</p>
 <p>The <code>message</code> table contains several hundred thousand emails. I have indexed the <code>subject</code> and <code>body</code> columns containing the email contents, so we can quickly search it:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> sender, subject <span class="kw">FROM</span> message</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> subject_index_col @@ websearch_to_tsquery(<span class="st">'monopoly'</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> sender, subject <span class="kw">FROM</span> message</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> subject_index_col @@ websearch_to_tsquery(<span class="st">'monopoly'</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This query is blazing fast despite the size of the database. Even searching the bodies is fast:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> sender, subject <span class="kw">FROM</span> message</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> body_index_col @@ websearch_to_tsquery(<span class="st">'monopoly'</span>)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> sender, subject <span class="kw">FROM</span> message</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> body_index_col @@ websearch_to_tsquery(<span class="st">'monopoly'</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>One approach is to parse the query in the <code>FROM</code> clause, allowing it to be used repeatedly throughout the query. This will be useful when we discuss ranking:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> sender, subject</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> message, websearch_to_tsquery(<span class="st">'monopoly'</span>) <span class="kw">AS</span> <span class="kw">query</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> body_index_col @@ <span class="kw">query</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> sender, subject</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> message, websearch_to_tsquery(<span class="st">'monopoly'</span>) <span class="kw">AS</span> <span class="kw">query</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> body_index_col @@ <span class="kw">query</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The query has one row and <code>message</code> has many; implicitly, listing two tables in <code>FROM</code> does a full join, so every row of <code>message</code> has the same <code>query</code> attached to it.</p>
 </section>
-<section id="ranking-matches" class="level3">
-<h3 class="anchored" data-anchor-id="ranking-matches">Ranking matches</h3>
+<section id="ranking-matches" class="level3" data-number="6.4.5">
+<h3 data-number="6.4.5" class="anchored" data-anchor-id="ranking-matches"><span class="header-section-number">6.4.5</span> Ranking matches</h3>
 <p>Usually, when we search a database we want the results to be listed in some kind of useful order. Intuitively, the closest match (containing all the words in our query in roughly the same order) should be on top, as should be documents that contain the query terms many times. A document containing the query terms, but very far apart from each other and only once each, should appear near the end of the list of results.</p>
 <p>We might also want to weight parts of the text differently. Perhaps a search query should apply to both the title and the text of a document, but matches in the title should be more important than matches in the text.</p>
 <p>In short, we need a ranking function that supports weights. PostgreSQL provides two:</p>
@@ -529,46 +657,43 @@ Out[15]: 2</code></pre>
 <li><code>ts_rank_cd()</code> also accounts for how close the matching lexemes are to each other</li>
 </ul>
 <p>The ranks are calculated so that larger ranks mean more relevant matches, so we sort in descending order. For example,</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> mid, sender, subject, ts_rank_cd(body_index_col, <span class="kw">query</span>) <span class="kw">AS</span> <span class="fu">rank</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> message, websearch_to_tsquery(<span class="st">'monopoly competition'</span>) <span class="kw">AS</span> <span class="kw">query</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> body_index_col @@ <span class="kw">query</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fu">rank</span> <span class="kw">DESC</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> mid, sender, subject, ts_rank_cd(body_index_col, <span class="kw">query</span>) <span class="kw">AS</span> <span class="fu">rank</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> message, websearch_to_tsquery(<span class="st">'monopoly competition'</span>) <span class="kw">AS</span> <span class="kw">query</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> body_index_col @@ <span class="kw">query</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fu">rank</span> <span class="kw">DESC</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>These ranks do not account for the length of the document. If the document is long and hence includes the matching lexemes many times, it will rank higher than a shorter document that includes them at the same rate. That may not be desirable, so the optional third argument to <code>ts_rank()</code> and <code>ts_rank_cd()</code> selects a normalization method. The default is 0, which does no normalization, 1 normalizes by the log of the document length while 2 normalizes by the length. (There are several additional options and combinations of normalizations can be used; see <a href="https://www.postgresql.org/docs/current/textsearch-controls.html">section 12.3.3 of the manual</a> for details).</p>
 <p>To make a search index column that does a weighted search of multiple fields, such as the subject and body of an email, we can change how we define the index column:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> tablename</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> <span class="kw">COLUMN</span> column_index_col tsvector</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GENERATED</span> ALWAYS <span class="kw">AS</span> (</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  setweight(to_tsvector(<span class="st">'english'</span>, <span class="fu">coalesce</span>(important_column, <span class="st">''</span>)), <span class="st">'A'</span>) <span class="op">||</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  setweight(to_tsvector(<span class="st">'english'</span>, <span class="fu">coalesce</span>(less_important_column, <span class="st">''</span>)), <span class="st">'D'</span>)</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>STORED;</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> column_idx <span class="kw">ON</span> tablename <span class="kw">USING</span> GIN (column_index_col);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> tablename</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> <span class="kw">COLUMN</span> column_index_col tsvector</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GENERATED</span> ALWAYS <span class="kw">AS</span> (</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  setweight(to_tsvector(<span class="st">'english'</span>, <span class="fu">coalesce</span>(important_column, <span class="st">''</span>)), <span class="st">'A'</span>) <span class="op">||</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  setweight(to_tsvector(<span class="st">'english'</span>, <span class="fu">coalesce</span>(less_important_column, <span class="st">''</span>)), <span class="st">'D'</span>)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>STORED;</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> column_idx <span class="kw">ON</span> tablename <span class="kw">USING</span> GIN (column_index_col);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Weights are the letters A through D, where A has highest weight and D has the lowest. Notice we use <code>coalesce()</code> so that if the column value is <code>NULL</code>, it’s replaced with the empty string; and we can use the <code>||</code> operator to concatenate <code>tsvector</code> values, so the index column contains the combined results for both columns.</p>
 </section>
 </section>
-<section id="exercises" class="level2">
-<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<section id="exercises" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">6.5</span> Exercises</h2>
 <div id="exr-enron-search" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5 (Find the incriminating evidence)</strong></span> Part of Enron’s fraud involved recording transactions early so the revenue would be included in the current quarter’s financial reports, increasing the reported quarterly revenue. (Some of that revenue wasn’t real either.) Search the Enron messages for emails by employees containing topics about revenue, quarters, and loans. Present your results in a table with the name of the sender, the subject line of the email, and its date. You can adjust your query to give what you think are the most interesting results.</p>
+<p><span class="theorem-title"><strong>Exercise 6.5 (Find the incriminating evidence)</strong></span> Part of Enron’s fraud involved recording transactions early so the revenue would be included in the current quarter’s financial reports, increasing the reported quarterly revenue. (Some of that revenue wasn’t real either.) Search the Enron messages for emails by employees containing topics about revenue, quarters, and loans. Present your results in a table with the name of the sender, the subject line of the email, and its date. You can adjust your query to give what you think are the most interesting results.</p>
 <p>(Employee names are available in the <code>employeelist</code> table, which lists names and email addresses for known Enron employees.)</p>
-</div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>TODO</p>
 </div>
 
 
 </section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
 <ol>
 <li id="fn1"><p>Aren’t bytes 8 bits each? Yes. But ASCII’s designers were worried about data transmission and storage, which both were expensive. Dropping a bit cut costs by 1/8th. Using 7 bits also allowed use of the 8th bit as an error correcting code to detect errors when text was transmitted between computers.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>In case your company ever considers this, consider NIST SP 800-63A, a government standard describing security practices. <a href="https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver">Section 3.1.1.2</a> states that government login systems “SHALL NOT impose other composition rules (e.g., requiring mixtures of different character types) for passwords”, because (as Appendix A.3 notes) these rules usually result in people picking dumb passwords like “password1”.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section></div></main> <!-- /main -->
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -968,6 +1093,18 @@ Out[15]: 2</code></pre>
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering/sql-code.html" class="pagination-link" aria-label="Using SQL from Code">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../data-engineering/cloud.html" class="pagination-link" aria-label="Cloud Computing">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

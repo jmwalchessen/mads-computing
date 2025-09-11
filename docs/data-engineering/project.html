@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>project</title>
+<title>9&nbsp; Project: Data Pipeline – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,11 +59,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/distributed-data.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -73,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -103,24 +105,171 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/project.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#logistics" id="toc-logistics" class="nav-link active" data-scroll-target="#logistics"><span class="header-section-number">9.1</span> Logistics</a></li>
+  <li><a href="#part-1-designing-the-database" id="toc-part-1-designing-the-database" class="nav-link" data-scroll-target="#part-1-designing-the-database"><span class="header-section-number">9.2</span> Part 1: Designing the database</a>
+  <ul class="collapse">
+  <li><a href="#hhs-data" id="toc-hhs-data" class="nav-link" data-scroll-target="#hhs-data"><span class="header-section-number">9.2.1</span> HHS data</a></li>
+  <li><a href="#college-scorecard" id="toc-college-scorecard" class="nav-link" data-scroll-target="#college-scorecard"><span class="header-section-number">9.2.2</span> College Scorecard</a></li>
+  </ul></li>
+  <li><a href="#part-2-loading-data" id="toc-part-2-loading-data" class="nav-link" data-scroll-target="#part-2-loading-data"><span class="header-section-number">9.3</span> Part 2: Loading data</a>
+  <ul class="collapse">
+  <li><a href="#hhs-data-1" id="toc-hhs-data-1" class="nav-link" data-scroll-target="#hhs-data-1"><span class="header-section-number">9.3.1</span> HHS data</a></li>
+  <li><a href="#college-scorecard-1" id="toc-college-scorecard-1" class="nav-link" data-scroll-target="#college-scorecard-1"><span class="header-section-number">9.3.2</span> College Scorecard</a></li>
+  <li><a href="#data-processing-requirements" id="toc-data-processing-requirements" class="nav-link" data-scroll-target="#data-processing-requirements"><span class="header-section-number">9.3.3</span> Data processing requirements</a></li>
+  <li><a href="#formatting-and-style-requirements" id="toc-formatting-and-style-requirements" class="nav-link" data-scroll-target="#formatting-and-style-requirements"><span class="header-section-number">9.3.4</span> Formatting and style requirements</a></li>
+  <li><a href="#submission-details" id="toc-submission-details" class="nav-link" data-scroll-target="#submission-details"><span class="header-section-number">9.3.5</span> Submission details</a></li>
+  </ul></li>
+  <li><a href="#part-3-analytics-and-reporting" id="toc-part-3-analytics-and-reporting" class="nav-link" data-scroll-target="#part-3-analytics-and-reporting"><span class="header-section-number">9.4</span> Part 3: Analytics and reporting</a>
+  <ul class="collapse">
+  <li><a href="#report-contents" id="toc-report-contents" class="nav-link" data-scroll-target="#report-contents"><span class="header-section-number">9.4.1</span> Report contents</a></li>
+  <li><a href="#report-format" id="toc-report-format" class="nav-link" data-scroll-target="#report-format"><span class="header-section-number">9.4.2</span> Report format</a></li>
+  <li><a href="#mechanical-requirements" id="toc-mechanical-requirements" class="nav-link" data-scroll-target="#mechanical-requirements"><span class="header-section-number">9.4.3</span> Mechanical requirements</a></li>
+  <li><a href="#format-requirements" id="toc-format-requirements" class="nav-link" data-scroll-target="#format-requirements"><span class="header-section-number">9.4.4</span> Format requirements</a></li>
+  <li><a href="#submission-details-1" id="toc-submission-details-1" class="nav-link" data-scroll-target="#submission-details-1"><span class="header-section-number">9.4.5</span> Submission details</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/project.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-data-eng-project" class="quarto-section-identifier"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="sec-data-eng-project" class="level1">
-<h1>Project: Data Pipeline</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p>In this project, you will develop a data pipeline for ingesting messy, unstructured data, producing a nice and structured SQL database, and automatically generating reports.</p>
 <p>There are two datasets to choose between. For each, the source data is somewhat messy, so you will work to organize it into a convenient format to facilitate reporting and querying. The project is meant to imitate a common situation you will face in industry: your product or business will be spewing a firehose of messy data, and it’ll be your job to turn it into a sprinkler of insight.</p>
 <p>The two datasets:</p>
@@ -128,22 +277,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Data from the US Department of Health and Human Services (HHS) about hospitals throughout the US, with weekly updates on how many patients have been admitted with COVID, how many hospital beds are currently available, how many staff are vaccinated, and related factors. You can find the data and descriptions <a href="https://healthdata.gov/d/uqq2-txqb">here on HealthData.gov</a>.</li>
 <li>Data from the Department of Education’s College Scorecard about the performance of colleges and universities throughout the US. This data is updated annually. The Department of Education provides <a href="https://collegescorecard.ed.gov/data/documentation/">detailed data dictionaries</a>.</li>
 </ol>
-<section id="logistics" class="level2">
-<h2 class="anchored" data-anchor-id="logistics">Logistics</h2>
+<section id="logistics" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="logistics"><span class="header-section-number">9.1</span> Logistics</h2>
 <p>This project will be completed in assigned groups of 2 or 3 students. Group assignments will be posted on Canvas. There will be several milestones throughout the semester when you will turn in parts of the work; at the end of the semester, you will turn in the completed project.</p>
 <p>The groups will be paired: your group is matched with another group. You must use a different dataset from your matched group.</p>
 <p>While completing the project, you will also be working on a knowledge transfer activity in 36-611 based on this project. Just as in 36-613, I’ll be grading your technical work, and the knowledge transfer activity will be part of your 36-611 grade. The knowledge transfer will be with your paired group.</p>
 </section>
-<section id="part-1-designing-the-database" class="level2">
-<h2 class="anchored" data-anchor-id="part-1-designing-the-database">Part 1: Designing the database</h2>
+<section id="part-1-designing-the-database" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="part-1-designing-the-database"><span class="header-section-number">9.2</span> Part 1: Designing the database</h2>
 <p>This part is due Wednesday, November 6 at 5pm.</p>
-<p>In Part 1 of the project, your team must design a table schema for the data. By “table schema” I mean the <code>CREATE TABLE</code> statements necessary to create database tables that fit the data. You should follow the design principles in <strong>?@sec-schema-design</strong> to build a normalized structure for the database that minimizes redundant information. Include primary keys, foreign keys, column types, and any appropriate constraints. It is up to you to decide how many tables you need, their names, and their contents.</p>
+<p>In Part 1 of the project, your team must design a table schema for the data. By “table schema” I mean the <code>CREATE TABLE</code> statements necessary to create database tables that fit the data. You should follow the design principles in <a href="advanced-sql.html#sec-schema-design" class="quarto-xref"><span>Section 4.1</span></a> to build a normalized structure for the database that minimizes redundant information. Include primary keys, foreign keys, column types, and any appropriate constraints. It is up to you to decide how many tables you need, their names, and their contents.</p>
 <p>Write your <code>CREATE TABLE</code> statements in a notebook. Test them out on Azure to ensure they work correctly. <strong>You do not need to load any real data into the database yet.</strong></p>
-<p>In the notebook, write comments explaining the following: What are the basic entities in your schema? (In <strong>?@exm-songs-schema</strong>, entities were things like songs, record labels, and albums, that each had their own database table.) How did you choose them and what did you do to ensure there is not redundant information in your database?</p>
+<p>In the notebook, write comments explaining the following: What are the basic entities in your schema? (In <a href="advanced-sql.html#exm-songs-schema" class="quarto-xref">Example&nbsp;<span>4.1</span></a>, entities were things like songs, record labels, and albums, that each had their own database table.) How did you choose them and what did you do to ensure there is not redundant information in your database?</p>
 <p>You may find it useful to make a Git repository to share with your project team, though this is not required. Instead you will turn in your schema and explanation on Gradescope.</p>
 <p>The rest of the instructions are split up by the dataset your group is using:</p>
-<section id="hhs-data" class="level3">
-<h3 class="anchored" data-anchor-id="hhs-data">HHS data</h3>
+<section id="hhs-data" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="hhs-data"><span class="header-section-number">9.2.1</span> HHS data</h3>
 <p>The <a href="https://healthdata.gov/d/uqq2-txqb">HHS data files</a> have many columns; we won’t be interested in all of them here. The data contains the following information:</p>
 <ul>
 <li>A unique ID for each hospital (<code>hospital_pk</code>, a string)</li>
@@ -168,8 +317,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The hospital’s overall quality rating. This quality rating is updated several times a year, and we want to be able to track each version of the quality rating. For instance, we might ask “What was the quality rating of this hospital in 2020?” and compare it to the rating in 2022.</li>
 </ul>
 </section>
-<section id="college-scorecard" class="level3">
-<h3 class="anchored" data-anchor-id="college-scorecard">College Scorecard</h3>
+<section id="college-scorecard" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="college-scorecard"><span class="header-section-number">9.2.2</span> College Scorecard</h3>
 <p>The College Scorecard data files cover dozens of variables per institution; we won’t be interested in all of them here. The <a href="https://collegescorecard.ed.gov/assets/CollegeScorecardDataDictionary.xlsx">Data Dictionary</a> lists all variables, their column names (<code>VARIABLE NAME</code>), a human readable description, and the meaning of each value. We care about the following columns:</p>
 <ul>
 <li><code>UNITID</code>, the institution ID</li>
@@ -199,8 +348,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The College Scorecard data also includes crosswalk files giving links between OPEIDs (in the College Scorecard data) and UNITIDs (in the IPEDS) data, so you can match between datasets.</p>
 </section>
 </section>
-<section id="part-2-loading-data" class="level2">
-<h2 class="anchored" data-anchor-id="part-2-loading-data">Part 2: Loading data</h2>
+<section id="part-2-loading-data" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="part-2-loading-data"><span class="header-section-number">9.3</span> Part 2: Loading data</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -216,10 +365,10 @@ Note
 </div>
 <p>Now we need to write Python code to load data each week. This code will handle any conversions, cleaning, and reformatting of the data, and then run the necessary <code>INSERT</code> commands.</p>
 <p>The necessary data files will be posted on Canvas. Do <strong>not</strong> use the original files from the sources; I am providing a few specific subsets to make your task easier.</p>
-<section id="hhs-data-1" class="level3">
-<h3 class="anchored" data-anchor-id="hhs-data-1">HHS data</h3>
-<section id="weekly-updates" class="level4">
-<h4 class="anchored" data-anchor-id="weekly-updates">Weekly updates</h4>
+<section id="hhs-data-1" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="hhs-data-1"><span class="header-section-number">9.3.1</span> HHS data</h3>
+<section id="weekly-updates" class="level4" data-number="9.3.1.1">
+<h4 data-number="9.3.1.1" class="anchored" data-anchor-id="weekly-updates"><span class="header-section-number">9.3.1.1</span> Weekly updates</h4>
 <p>I will provide the HHS data to you in the form of files containing new data for each week. Each CSV file will cover one week of data. Your first script will load one file into your SQL database.</p>
 <p>The script should be run from the command line like this:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> load-hhs.py 2022-01-04-hhs-data.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -230,16 +379,16 @@ Note
 <li>Execute a series of <code>INSERT</code> commands to insert the relevant data into the database.</li>
 </ol>
 </section>
-<section id="cms-quality-data" class="level4">
-<h4 class="anchored" data-anchor-id="cms-quality-data">CMS quality data</h4>
+<section id="cms-quality-data" class="level4" data-number="9.3.1.2">
+<h4 data-number="9.3.1.2" class="anchored" data-anchor-id="cms-quality-data"><span class="header-section-number">9.3.1.2</span> CMS quality data</h4>
 <p>Similarly, you will write a script to load the quality data whenever it may be updated. I’ll provide you several example files you will load. The script should run from the command line like this:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> load-quality.py 2021-07-01 Hospital_General_Information-2021-07.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here the first argument is the date of this quality data (<code>YYYY-mm-dd</code>) and the second argument is the CSV file name. Again, your Python script will do any necessary work and then <code>INSERT</code> the data.</p>
 <p>If you chose to have a separate hospitals table, referenced by the tables storing the weekly updates or quality data, it will need to be updated whenever there’s a new hospital. Your scripts should automatically insert new hospitals whenever they appear. If the new quality data changes key hospital metadata (like its location), you should update your hospital data.</p>
 </section>
 </section>
-<section id="college-scorecard-1" class="level3">
-<h3 class="anchored" data-anchor-id="college-scorecard-1">College Scorecard</h3>
+<section id="college-scorecard-1" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="college-scorecard-1"><span class="header-section-number">9.3.2</span> College Scorecard</h3>
 <p>I will provide you College Scorecard and IPEDS data files containing data for each year.</p>
 <p>You should create two Python scripts that can be run from the command line, like so:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> load-scorecard.py TODO-name-of-file.csv</span>
@@ -251,8 +400,8 @@ Note
 <li>Execute a series of <code>INSERT</code> commands to insert the relevant data into the database.</li>
 </ol>
 </section>
-<section id="data-processing-requirements" class="level3">
-<h3 class="anchored" data-anchor-id="data-processing-requirements">Data processing requirements</h3>
+<section id="data-processing-requirements" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="data-processing-requirements"><span class="header-section-number">9.3.3</span> Data processing requirements</h3>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -273,8 +422,8 @@ Note
 <li>If a row is invalid and rejected by Postgres (because a constraint failed, for instance), your script should print an error message identifying which row failed and giving information about it (such as the hospital or college affected) that helps the user figure out what’s wrong. Then your script should stop so the user can fix the issue in the data before re-running the script.</li>
 </ul>
 </section>
-<section id="formatting-and-style-requirements" class="level3">
-<h3 class="anchored" data-anchor-id="formatting-and-style-requirements">Formatting and style requirements</h3>
+<section id="formatting-and-style-requirements" class="level3" data-number="9.3.4">
+<h3 data-number="9.3.4" class="anchored" data-anchor-id="formatting-and-style-requirements"><span class="header-section-number">9.3.4</span> Formatting and style requirements</h3>
 <p>Additionally, this work will be part of your knowledge transfer activity in 611. To facilitate transfer, you should ensure that:</p>
 <ul>
 <li>your code is clearly written, separated into small understandable functions, as discussed in 36-650</li>
@@ -284,13 +433,13 @@ Note
 </ul>
 <p>If you choose, you may create additional Python files containing functions and classes used by your data loading scripts.</p>
 </section>
-<section id="submission-details" class="level3">
-<h3 class="anchored" data-anchor-id="submission-details">Submission details</h3>
+<section id="submission-details" class="level3" data-number="9.3.5">
+<h3 data-number="9.3.5" class="anchored" data-anchor-id="submission-details"><span class="header-section-number">9.3.5</span> Submission details</h3>
 <p>To submit your code, create a private GitHub repository shared with your classmates. We will ask you to add us (capnrefsmmat and aerosengart) as collaborators, and you will submit a link to the repository as your Canvas submission for this part of the project.</p>
 </section>
 </section>
-<section id="part-3-analytics-and-reporting" class="level2">
-<h2 class="anchored" data-anchor-id="part-3-analytics-and-reporting">Part 3: Analytics and reporting</h2>
+<section id="part-3-analytics-and-reporting" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="part-3-analytics-and-reporting"><span class="header-section-number">9.4</span> Part 3: Analytics and reporting</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -305,11 +454,11 @@ Note
 </div>
 </div>
 <p>Your final task for this semester is to develop an automatic reporting system. A user should be able to run the reporting system, specify a date of interest, and obtain a report or dashboard summarizing the data as of the selected date.</p>
-<section id="report-contents" class="level3">
-<h3 class="anchored" data-anchor-id="report-contents">Report contents</h3>
+<section id="report-contents" class="level3" data-number="9.4.1">
+<h3 data-number="9.4.1" class="anchored" data-anchor-id="report-contents"><span class="header-section-number">9.4.1</span> Report contents</h3>
 <p>Your reports should be graphical dashboards summarizing the data and interesting features it contains. You do <em>not</em> need to do any statistical modeling, although you can if you want. Descriptive tables and graphs are sufficient, since the purpose of this project is to give you experience working with real data in SQL.</p>
-<section id="hhs-data-2" class="level4">
-<h4 class="anchored" data-anchor-id="hhs-data-2">HHS data</h4>
+<section id="hhs-data-2" class="level4" data-number="9.4.1.1">
+<h4 data-number="9.4.1.1" class="anchored" data-anchor-id="hhs-data-2"><span class="header-section-number">9.4.1.1</span> HHS data</h4>
 <p>The HHS report should summarize the COVID situation suggested by the data on hospital beds: how full are hospitals in each state? What states have the fewest open beds? Where are beds filling up the fastest?</p>
 <p>Your report/dashboard should include:</p>
 <ol type="1">
@@ -329,8 +478,8 @@ Note
 <p>You are free to think of other interesting plots, tables, and maps, as long as you think they could be useful to the Department of Health and Human Services for some health-related purpose.</p>
 <p>If it helps, imagine sending this report to the Assistant to the Deputy Director of the Department of Health and Human Services. The Assistant is a doctor, not a statistician or programmer, so make your report accordingly.</p>
 </section>
-<section id="college-scorecard-2" class="level4">
-<h4 class="anchored" data-anchor-id="college-scorecard-2">College Scorecard</h4>
+<section id="college-scorecard-2" class="level4" data-number="9.4.1.2">
+<h4 data-number="9.4.1.2" class="anchored" data-anchor-id="college-scorecard-2"><span class="header-section-number">9.4.1.2</span> College Scorecard</h4>
 <p>The College Scorecard report should summarize the current data, highlighting the best- and worst-performing colleges according to financial results, and also summarize how the data has changed since the previous year. The user should be able to select a year of interest and get the report generated for that year.</p>
 <p>Your report/dashboard should include:</p>
 <ol type="1">
@@ -349,12 +498,12 @@ Note
 <p>If it helps, imagine sending this report to the Assistant to the Deputy Director of the Department of Education. The Assistant has a degree in educational administration, not in statistics, so make your report accordingly.</p>
 </section>
 </section>
-<section id="report-format" class="level3">
-<h3 class="anchored" data-anchor-id="report-format">Report format</h3>
+<section id="report-format" class="level3" data-number="9.4.2">
+<h3 data-number="9.4.2" class="anchored" data-anchor-id="report-format"><span class="header-section-number">9.4.2</span> Report format</h3>
 <p>The report should be output in the form of a document with graphs, tables, and text. This could be an HTML file, a PDF, a Jupyter notebook (built automatically with the latest data), or even an interactive dashboard made with something like <a href="https://streamlit.io/">Streamlit</a>.</p>
 </section>
-<section id="mechanical-requirements" class="level3">
-<h3 class="anchored" data-anchor-id="mechanical-requirements">Mechanical requirements</h3>
+<section id="mechanical-requirements" class="level3" data-number="9.4.3">
+<h3 data-number="9.4.3" class="anchored" data-anchor-id="mechanical-requirements"><span class="header-section-number">9.4.3</span> Mechanical requirements</h3>
 <p>Your reporting system must be <em>automated</em>. This means it <strong>cannot require the user to manually edit a file or notebook</strong> every week. Ideally, it could be run with a single command:</p>
 <pre class="shell"><code>python weekly-report.py 2022-09-30 # for HHS data
 python education-report.py 2021 # for College Scorecard</code></pre>
@@ -366,27 +515,26 @@ jupyter nbconvert --no-input --to html 2022-09-30-report.ipynb </code></pre>
 <p>Your reporting system must be built on SQL, using a SQL connection to generate the results. The calculations must be primarily done in SQL, with a minimum of post-processing in Python to format the results for display. You should not, at any point, load the entire database table into Python so you can do your analysis in Python alone.</p>
 <p>Your reporting system should assume the user has already run your data loading scripts from Part 2; it does not need to load all the data.</p>
 </section>
-<section id="format-requirements" class="level3">
-<h3 class="anchored" data-anchor-id="format-requirements">Format requirements</h3>
+<section id="format-requirements" class="level3" data-number="9.4.4">
+<h3 data-number="9.4.4" class="anchored" data-anchor-id="format-requirements"><span class="header-section-number">9.4.4</span> Format requirements</h3>
 <p>The report must be designed for an end-user: to the extent you can, it should hide the code and technical details, and present useful tables and graphs of results. Format the output nicely! Do not simply print out lists of Python output. Make graphs and tables. If you’re printing a data frame, consider the <a href="https://pandas.pydata.org/docs/user_guide/style.html">Pandas data frame formatting options</a> that let you print it as a nice table.</p>
 </section>
-<section id="submission-details-1" class="level3">
-<h3 class="anchored" data-anchor-id="submission-details-1">Submission details</h3>
+<section id="submission-details-1" class="level3" data-number="9.4.5">
+<h3 data-number="9.4.5" class="anchored" data-anchor-id="submission-details-1"><span class="header-section-number">9.4.5</span> Submission details</h3>
 <p>Add your code to the GitHub repository you created in previous part. Make sure this code is committed and pushed by the deadline.</p>
 <p>Load all the data files provided on Canvas and then generate a report for the final week of data. Convert this report to a PDF and submit it on Gradescope. This serves as an example of what your code produces.</p>
 
 
 </section>
 </section>
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
 <ol>
 <li id="fn1"><p>The coolest option would be to use <a href="http://www.postgis.net/">PostGIS</a>, which extends Postgres to understand geographic coordinate systems. But that is overkill for us here, and is not installed on our server, so you can’t use it. A couple simple columns would be fine.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section></div></main> <!-- /main -->
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -786,6 +934,15 @@ jupyter nbconvert --no-input --to html 2022-09-30-report.ipynb </code></pre>
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering/distributed-data.html" class="pagination-link" aria-label="Distributed Data and Computation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

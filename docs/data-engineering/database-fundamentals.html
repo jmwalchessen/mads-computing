@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>database-fundamentals</title>
+<title>2&nbsp; Database Fundamentals – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,11 +24,14 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/sql.html" rel="next">
+<link href="../data-engineering/data-pipeline.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -38,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -68,24 +71,158 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/database-fundamentals.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#relational-databases" id="toc-relational-databases" class="nav-link active" data-scroll-target="#relational-databases"><span class="header-section-number">2.1</span> Relational databases</a>
+  <ul class="collapse">
+  <li><a href="#tables" id="toc-tables" class="nav-link" data-scroll-target="#tables"><span class="header-section-number">2.1.1</span> Tables</a></li>
+  <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types"><span class="header-section-number">2.1.2</span> Data types</a></li>
+  <li><a href="#relationships-between-tables" id="toc-relationships-between-tables" class="nav-link" data-scroll-target="#relationships-between-tables"><span class="header-section-number">2.1.3</span> Relationships between tables</a></li>
+  </ul></li>
+  <li><a href="#the-client-server-model" id="toc-the-client-server-model" class="nav-link" data-scroll-target="#the-client-server-model"><span class="header-section-number">2.2</span> The client-server model</a></li>
+  <li><a href="#querying-databases" id="toc-querying-databases" class="nav-link" data-scroll-target="#querying-databases"><span class="header-section-number">2.3</span> Querying databases</a></li>
+  <li><a href="#sec-acid-guarantees" id="toc-sec-acid-guarantees" class="nav-link" data-scroll-target="#sec-acid-guarantees"><span class="header-section-number">2.4</span> ACID guarantees</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/database-fundamentals.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-database-fundamentals" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="sec-database-fundamentals" class="level1">
-<h1>Database Fundamentals</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -109,20 +246,20 @@ Note
 <p>All of these would involve building a system that runs constantly and gets updated with the latest data. That data may come from many sources at once: in a large company, you might have sales data from in-person stores, billing data from the online store, analytics data tracking visitors to the website, marketing data from ad campaigns, product inventory data from the company logistics system, visitor data from a company that uses cell phones to track how many people visit your stores, and many other things besides.</p>
 <p>Worse, all of that data comes from systems run by entirely different parts of the company, all using different software sold by different companies. And all of that data is being constantly changed by many people at the same time. Using a CSV file would be impossible: how do you let hundreds of people work on the same CSV at once, ensuring their work is always using the latest version of the file even as other people edit it?</p>
 <p>This is why we use databases.</p>
-<section id="relational-databases" class="level2">
-<h2 class="anchored" data-anchor-id="relational-databases">Relational databases</h2>
+<section id="relational-databases" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="relational-databases"><span class="header-section-number">2.1</span> Relational databases</h2>
 <p>A <em>database</em> is a system for organizing information so it can be efficiently accessed, updated, and managed, even when the data is large and the updates are frequent. Relational databases (RDBs) have been the most common type of database since the 1970s and are still very important. They are organized around data tables with fixed columns and rows for each record or observation.</p>
 <p>Relational databases tend to be design-first systems. First, you specify a <em>schema</em> for your data—giving the tables, the columns they contain, and the types of data stored in each column—and then you enter data that conforms to that schema. A properly designed schema can provide very flexible and powerful queries.</p>
 <p>Once you have a schema and data, RDBs make it easy to select, filter, and order data, and are particularly suited for combining data from multiple tables—their explicit modeling of the relationships between tables is the source of their name. This is commonly done using a (mostly) standardized language called <em>SQL</em>, which stands for Structured Query Language. Requests written in SQL are called <em>queries</em>.</p>
 <p>Many of the fundamental relational query operations will be familiar to you, since they are supported in many packages for working with data. For example, in R, the <a href="https://dplyr.tidyverse.org/">dplyr package</a> provides a set of functions for querying, modifying, and joining data frames, and these are very similar to the operations supported by relational databases.</p>
-<section id="tables" class="level3">
-<h3 class="anchored" data-anchor-id="tables">Tables</h3>
+<section id="tables" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="tables"><span class="header-section-number">2.1.1</span> Tables</h3>
 <p>The basic unit of data storage in an RDB is the <em>table</em>. Tables are also sometimes called <em>relations</em>, <em>schemas</em>, and <em>entities</em> in an RDB context. There may be many tables in a single database, so a database is a collection of related tables. A table is defined by its <em>attributes</em>, or <em>columns</em>, each of which has a <em>name</em> and a <em>type</em>.</p>
 <p>You can think of tables as being much like data frames in R or Python, since each row defines a mapping from attribute names (the columns) to values (stored in that column). Unlike data frames in R or Python, the rows <em>do not have an order</em>; there is no notion of row indices unless you create a column for that purpose.</p>
 <p>Also unlike data frames in R or Python, tables in relational databases are designed in advance: the columns and their types are specified first, before creating data. While it is possible to modify a table, one does not add and delete columns from tables nearly as often as you do in R or Python.</p>
 </section>
-<section id="data-types" class="level3">
-<h3 class="anchored" data-anchor-id="data-types">Data types</h3>
+<section id="data-types" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="data-types"><span class="header-section-number">2.1.2</span> Data types</h3>
 <p>The <em>type</em> of a piece of data describes the set of possible values that data can have and the operations that can apply to it.</p>
 <p>In an RDB, we specify the type of each column in advance. PostgreSQL, for instance, supports a <a href="https://www.postgresql.org/docs/current/datatype.html">wide variety of data types</a>, including:</p>
 <ul>
@@ -137,16 +274,16 @@ Note
 </ul>
 <p>Database systems understand how to operate on these types, allowing you to search for all dates that are on a Wednesday, or all text containing particular substrings, and so on.</p>
 </section>
-<section id="relationships-between-tables" class="level3">
-<h3 class="anchored" data-anchor-id="relationships-between-tables">Relationships between tables</h3>
+<section id="relationships-between-tables" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="relationships-between-tables"><span class="header-section-number">2.1.3</span> Relationships between tables</h3>
 <p>We can think of tables as representing some entity that we are modeling in our problem. For example, a <code>students</code> table might contain enrollment information for a university, where each row represents a single student. Each row in the <code>courses</code> table might represent a single course offered in a specific semester.</p>
 <p>We link tables to define <em>relationships among entities</em>.</p>
 <p>For example, each course is linked to multiple students who are enrolled in it. A separate <code>enrollment</code> table may have one row per student per course, identifying the student and the course they are enrolled in.</p>
 <p>A good <em>design</em> of the database tables can make it more efficient to query these relationships, such as to list the students enrolled in a class.</p>
 </section>
 </section>
-<section id="the-client-server-model" class="level2">
-<h2 class="anchored" data-anchor-id="the-client-server-model">The client-server model</h2>
+<section id="the-client-server-model" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="the-client-server-model"><span class="header-section-number">2.2</span> The client-server model</h2>
 <p>So far, relational databases sound much like using a collection of data frames in Python or R. But there is a key difference. Most (but not all!) SQL database systems are based on a client-server model.</p>
 <ul>
 <li>Server: A program running continuously on some server. Accepts requests (potentially from many users at the same time) to update and query data, and stores the canonical version of the database.</li>
@@ -157,14 +294,14 @@ Note
 <p>And because the server is separate from the client, the server need not be written in the same programming language, and clients implemented in many different languages can access the same server. You can connect to database servers using code written in Python, R, C, Java, Ruby, PHP, or any one of dozens of languages that have the right packages. Because relational databases are so popular, almost any reasonable language you might use will have packages for connecting to popular relational database systems.</p>
 <p>The client-server model also means that the server can enforce rules about who is allowed to access, update, or delete any particular data. Each client has a username and password, and every table has a set of permissions defining which users are permitted to see it and what operations they are allowed to perform. These permissions can get very detailed, allowing only very specific types of queries for specific users. Companies commonly use this for internal security, and to ensure nobody accidentally deletes important data they did not intend to.</p>
 </section>
-<section id="querying-databases" class="level2">
-<h2 class="anchored" data-anchor-id="querying-databases">Querying databases</h2>
+<section id="querying-databases" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="querying-databases"><span class="header-section-number">2.3</span> Querying databases</h2>
 <p>To <em>query</em> a database means to send a request to the database server for data matching specific criteria, to send new data to add to the database, or to request deletions or updates. If a query alters the database by adding or changing data, the server automatically stores the updated data—you do not have to explicitly “save” the new data.</p>
 <p>Most relational databases use a (mostly) standardized language called SQL, or Structured Query Language. Your query is written in SQL and submitted directly to the database, which returns a table of matching results (or information about which records have been updated or deleted).</p>
 <p>Because the language is standardized, you can use SQL regardless of the database system your company has chosen to use. Many different relational database systems (PostgreSQL, MySQL, MariaDB, Oracle, Microsoft SQL Server, Firebird, …) exist, and while they all have unique features and quirks that mean SQL for one won’t work perfectly with another, the basic ideas translate between them all.</p>
 </section>
-<section id="sec-acid-guarantees" class="level2">
-<h2 class="anchored" data-anchor-id="sec-acid-guarantees">ACID guarantees</h2>
+<section id="sec-acid-guarantees" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-acid-guarantees"><span class="header-section-number">2.4</span> ACID guarantees</h2>
 <p>An RDB stores our data, and we read and operate on that data through requests sent to the database. These requests can be grouped into <em>transactions</em>. A transaction may be a group of multiple queries (insertions, updates, and so on) that complete a particular task.</p>
 <p>Modern RDBs may receive many transactions at once, often operating on the same pieces of data. Particular care is needed to ensure that transactions are performed reliably and consistently.</p>
 <p>For example, consider what would happen in the following cases:</p>
@@ -184,7 +321,6 @@ Note
 <p>This is another advantage of RDBs over ad hoc data storage.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -587,6 +723,18 @@ Note
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering/data-pipeline.html" class="pagination-link" aria-label="The Data Pipeline">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../data-engineering/sql.html" class="pagination-link" aria-label="SQL Basics">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

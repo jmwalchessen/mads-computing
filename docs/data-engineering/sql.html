@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>sql</title>
+<title>3&nbsp; SQL Basics – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,11 +59,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/advanced-sql.html" rel="next">
+<link href="../data-engineering/database-fundamentals.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -73,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,24 +135,178 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/sql.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#connecting-to-our-database-server" id="toc-connecting-to-our-database-server" class="nav-link active" data-scroll-target="#connecting-to-our-database-server"><span class="header-section-number">3.1</span> Connecting to our database server</a>
+  <ul class="collapse">
+  <li><a href="#azure-data-studio" id="toc-azure-data-studio" class="nav-link" data-scroll-target="#azure-data-studio"><span class="header-section-number">3.1.1</span> Azure Data Studio</a></li>
+  <li><a href="#entering-sql-statements" id="toc-entering-sql-statements" class="nav-link" data-scroll-target="#entering-sql-statements"><span class="header-section-number">3.1.2</span> Entering SQL statements</a></li>
+  <li><a href="#submitting-assignments" id="toc-submitting-assignments" class="nav-link" data-scroll-target="#submitting-assignments"><span class="header-section-number">3.1.3</span> Submitting assignments</a></li>
+  </ul></li>
+  <li><a href="#sec-example-db" id="toc-sec-example-db" class="nav-link" data-scroll-target="#sec-example-db"><span class="header-section-number">3.2</span> Our example database</a></li>
+  <li><a href="#selecting-data" id="toc-selecting-data" class="nav-link" data-scroll-target="#selecting-data"><span class="header-section-number">3.3</span> Selecting data</a>
+  <ul class="collapse">
+  <li><a href="#expressions-and-built-in-functions" id="toc-expressions-and-built-in-functions" class="nav-link" data-scroll-target="#expressions-and-built-in-functions"><span class="header-section-number">3.3.1</span> Expressions and built-in functions</a></li>
+  <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types"><span class="header-section-number">3.3.2</span> Data types</a></li>
+  <li><a href="#sec-grouping-aggregate" id="toc-sec-grouping-aggregate" class="nav-link" data-scroll-target="#sec-grouping-aggregate"><span class="header-section-number">3.3.3</span> Grouping and aggregate functions</a></li>
+  </ul></li>
+  <li><a href="#inserting-data" id="toc-inserting-data" class="nav-link" data-scroll-target="#inserting-data"><span class="header-section-number">3.4</span> Inserting data</a></li>
+  <li><a href="#updating-data" id="toc-updating-data" class="nav-link" data-scroll-target="#updating-data"><span class="header-section-number">3.5</span> Updating data</a></li>
+  <li><a href="#deleting-data" id="toc-deleting-data" class="nav-link" data-scroll-target="#deleting-data"><span class="header-section-number">3.6</span> Deleting data</a></li>
+  <li><a href="#sec-creating-schemas" id="toc-sec-creating-schemas" class="nav-link" data-scroll-target="#sec-creating-schemas"><span class="header-section-number">3.7</span> Creating and updating table schemas</a>
+  <ul class="collapse">
+  <li><a href="#selecting-the-schema" id="toc-selecting-the-schema" class="nav-link" data-scroll-target="#selecting-the-schema"><span class="header-section-number">3.7.1</span> Selecting the schema</a></li>
+  <li><a href="#creating-tables" id="toc-creating-tables" class="nav-link" data-scroll-target="#creating-tables"><span class="header-section-number">3.7.2</span> Creating tables</a></li>
+  <li><a href="#altering-tables" id="toc-altering-tables" class="nav-link" data-scroll-target="#altering-tables"><span class="header-section-number">3.7.3</span> Altering tables</a></li>
+  <li><a href="#deleting-tables" id="toc-deleting-tables" class="nav-link" data-scroll-target="#deleting-tables"><span class="header-section-number">3.7.4</span> Deleting tables</a></li>
+  </ul></li>
+  <li><a href="#sec-joins-and-foreign-keys" id="toc-sec-joins-and-foreign-keys" class="nav-link" data-scroll-target="#sec-joins-and-foreign-keys"><span class="header-section-number">3.8</span> Joins and foreign keys</a>
+  <ul class="collapse">
+  <li><a href="#sec-foreign-keys" id="toc-sec-foreign-keys" class="nav-link" data-scroll-target="#sec-foreign-keys"><span class="header-section-number">3.8.1</span> Foreign keys</a></li>
+  <li><a href="#sec-joins" id="toc-sec-joins" class="nav-link" data-scroll-target="#sec-joins"><span class="header-section-number">3.8.2</span> Joins</a></li>
+  </ul></li>
+  <li><a href="#indices" id="toc-indices" class="nav-link" data-scroll-target="#indices"><span class="header-section-number">3.9</span> Indices</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/sql.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-sql-basics" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="sec-sql-basics" class="level1">
-<h1>SQL Basics</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -165,11 +322,11 @@ Note
 </div>
 <p>Let’s learn how to write basic SQL queries. We’ll start by writing the queries by hand, and instead of using Python to submit them, we’ll use the <code>psql</code> command-line program. This program allows you to type queries and get responses back from the server.</p>
 <p>If you need help writing SQL queries, finding functions in Postgres, and so on, consult the <a href="https://www.postgresql.org/docs/current/">PostgreSQL manual</a>. It is among the best-written and most comprehensive manuals you can get for open-source software.</p>
-<section id="connecting-to-our-database-server" class="level2">
-<h2 class="anchored" data-anchor-id="connecting-to-our-database-server">Connecting to our database server</h2>
+<section id="connecting-to-our-database-server" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="connecting-to-our-database-server"><span class="header-section-number">3.1</span> Connecting to our database server</h2>
 <p>The Department runs a PostgreSQL server in Microsoft Azure for this course. You should receive an automated email with your username and password.</p>
-<section id="azure-data-studio" class="level3">
-<h3 class="anchored" data-anchor-id="azure-data-studio">Azure Data Studio</h3>
+<section id="azure-data-studio" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="azure-data-studio"><span class="header-section-number">3.1.1</span> Azure Data Studio</h3>
 <p>A simple way to work with PostgreSQL in Azure is Microsoft’s <a href="https://azure.microsoft.com/en-us/products/data-studio">Azure Data Studio</a>. Download and install it. Once you’ve installed it, find the Extensions button on the left and search for the PostgreSQL extension by Microsoft, and install it.</p>
 <p>You can now connect to our PostgreSQL server with the following information:</p>
 <table class="caption-top table">
@@ -211,8 +368,8 @@ Note
 <p>You can also create a notebook (based on Jupyter notebooks) to access a specific database. For example, open the list of databases on the left, right click on <code>examples</code>, and select “New Notebook”. You will use these notebooks for your homework.</p>
 <p><em>Note:</em> You will not be able to connect through the eduroam wireless network, since it blocks PostgreSQL connections. If you’re on campus, always use CMU-SECURE.</p>
 </section>
-<section id="entering-sql-statements" class="level3">
-<h3 class="anchored" data-anchor-id="entering-sql-statements">Entering SQL statements</h3>
+<section id="entering-sql-statements" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="entering-sql-statements"><span class="header-section-number">3.1.2</span> Entering SQL statements</h3>
 <p>SQL consists of a sequence of <em>statements</em>.</p>
 <p>Each statement is built around a specific command, like <code>SELECT</code> or <code>INSERT</code>, with a variety of modifiers and optional clauses (like <code>WHERE</code> or <code>LIMIT</code>).</p>
 <p>Command names and modifiers are <em>not</em> case-sensitive. You can write <code>SELECT</code>, <code>select</code>, or <code>sEleCt</code>. It is standard style to use upper case command names and lower case for table and column names.</p>
@@ -220,20 +377,20 @@ Note
 <p>Keep in mind: strings are delimited by single quotes <code>'like this'</code>, <em>not</em> double quotes <code>"like this"</code>. To write a single quote in a string, write it twice: <code>'can''t'</code> represents the string <code>can't</code>.</p>
 <p>SQL comments are lines starting with <code>--</code>.</p>
 </section>
-<section id="submitting-assignments" class="level3">
-<h3 class="anchored" data-anchor-id="submitting-assignments">Submitting assignments</h3>
+<section id="submitting-assignments" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="submitting-assignments"><span class="header-section-number">3.1.3</span> Submitting assignments</h3>
 <p>Your SQL homework assignments should be completed as notebooks in Azure Data Studio. Use File→New Notebook to create one, and connect it to the right database. (These are a lot like Jupyter notebooks, or the notebooks you may have used in Visual Studio Code in 36-650.)</p>
 <p>Use text cells to create headings labeling each problem, and to include text answers to any questions that ask for your comments. Use SQL cells for your queries. Use <code>LIMIT</code> clauses on queries returning lots of rows so the output isn’t enormous—we don’t want to scroll through 50 pages of results to find your next homework problem.</p>
 <p>Save the notebook as a Jupyter <code>.ipynb</code> file. When you’re ready to submit your homework, upload the notebook to Gradescope.</p>
 </section>
 </section>
-<section id="sec-example-db" class="level2">
-<h2 class="anchored" data-anchor-id="sec-example-db">Our example database</h2>
-<p>To learn how to write queries, we’ll start with a database already filled with example data. This database is for a hypothetical online learning platform where students see material and then take short quizzes. We’ll start by looking at the <code>events</code> table, which records every time a student interacted with some element of the system, such as a quiz item. <a href="#tbl-events-sample" class="quarto-xref">Table&nbsp;1</a> shows a few example rows.</p>
+<section id="sec-example-db" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-example-db"><span class="header-section-number">3.2</span> Our example database</h2>
+<p>To learn how to write queries, we’ll start with a database already filled with example data. This database is for a hypothetical online learning platform where students see material and then take short quizzes. We’ll start by looking at the <code>events</code> table, which records every time a student interacted with some element of the system, such as a quiz item. <a href="#tbl-events-sample" class="quarto-xref">Table&nbsp;<span>3.1</span></a> shows a few example rows.</p>
 <div id="tbl-events-sample" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-events-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: A few rows from the <code>events</code> table.
+Table&nbsp;3.1: A few rows from the <code>events</code> table.
 </figcaption>
 <div aria-describedby="tbl-events-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -328,8 +485,8 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
 </div>
 <p>You can load this data into your own database. Download <a href="../data/events.sql"><code>events.sql</code></a> and load it in Azure Data Studio. You will see a file full of SQL queries that create the table. At the top, select your database connection, then press Run to run all the queries and create the table.</p>
 </section>
-<section id="selecting-data" class="level2">
-<h2 class="anchored" data-anchor-id="selecting-data">Selecting data</h2>
+<section id="selecting-data" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="selecting-data"><span class="header-section-number">3.3</span> Selecting data</h2>
 <p>The <code>SELECT</code> command is how we query the database. It is versatile and powerful command.</p>
 <p>The simplest query is to look at all rows and columns of a table:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="kw">events</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -350,70 +507,59 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> element, score</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="exr-basic-select" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1 (Basic <code>SELECT</code> queries)</strong></span> Craft queries to do the following in the <code>events</code> table:</p>
+<p><span class="theorem-title"><strong>Exercise 3.1 (Basic <code>SELECT</code> queries)</strong></span> Craft queries to do the following in the <code>events</code> table:</p>
 <ol type="1">
 <li>List all ids, persona, score where a score &gt; 900 occurred.</li>
 <li>List all persona (sorted numerically) who score &gt; 900. Can you eliminate duplicates here? (Hint: Consider <code>SELECT DISTINCT</code>.)</li>
 </ol>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">id</span>, persona, score</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> score <span class="op">&gt;</span> <span class="dv">900</span>;</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> persona</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> score <span class="op">&gt;</span> <span class="dv">900</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> persona;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="expressions-and-built-in-functions" class="level3">
-<h3 class="anchored" data-anchor-id="expressions-and-built-in-functions">Expressions and built-in functions</h3>
+<section id="expressions-and-built-in-functions" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="expressions-and-built-in-functions"><span class="header-section-number">3.3.1</span> Expressions and built-in functions</h3>
 <p>SQL queries can contain <em>expressions</em>, such as multiplication and addition. For example:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="dv">2</span> <span class="op">*</span> score, element <span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> persona <span class="op">&lt;</span> <span class="dv">1201</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">2</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="dv">2</span> <span class="op">*</span> score, element <span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> persona <span class="op">&lt;</span> <span class="dv">1201</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">2</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Relational databases also typically have a library of built-in functions that can do various useful things. The <a href="https://www.postgresql.org/docs/current/functions.html">chapter on built-in functions and operators</a> in the PostgreSQL manual lists numerous such functions: mathematical functions, string concatenation and formatting, date and time operations, comparisons, …</p>
 <p>These functions can be used anywhere you’d expect a value. For example:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">log</span>(score) <span class="kw">AS</span> log_score, element,</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">upper</span>(feedback) <span class="kw">AS</span> shouty_feedback</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">log</span>(score) <span class="kw">AS</span> log_score, element,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">upper</span>(feedback) <span class="kw">AS</span> shouty_feedback</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can think of these functions as being inherently vectorized: given a column of data, they return an entire column of results, much like applying a function to a column of a Pandas data frame.</p>
 </section>
-<section id="data-types" class="level3">
-<h3 class="anchored" data-anchor-id="data-types">Data types</h3>
+<section id="data-types" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="data-types"><span class="header-section-number">3.3.2</span> Data types</h3>
 <p>Each value in a SQL database has a type controlling the operations you can perform with it: text, numbers, dates, and so on.</p>
 <p>Just as expressions in Python or R can “cast” data from one type to another (like <code>as.character(7)</code> in R, or <code>str(7)</code> in Python), in SQL you can cast to different data types. The <code>CAST()</code> function does this. For example, to convert a string specifying a timestamp to a timestamp object, we can write</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">CAST</span>(<span class="st">'2020-10-01 11:00:00'</span> <span class="kw">AS</span> <span class="dt">TIMESTAMP</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">CAST</span>(<span class="st">'2020-10-01 11:00:00'</span> <span class="kw">AS</span> <span class="dt">TIMESTAMP</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The string now has the timestamp type, so functions that work on timestamps (listed in the <a href="https://www.postgresql.org/docs/current/functions-datetime.html">chapter on date/time functions</a>) can work on it:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> date_part(<span class="st">'dow'</span>, <span class="fu">CAST</span>(<span class="st">'2020-10-01 11:00:00'</span> <span class="kw">AS</span> <span class="dt">TIMESTAMP</span>));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> date_part(<span class="st">'dow'</span>, <span class="fu">CAST</span>(<span class="st">'2020-10-01 11:00:00'</span> <span class="kw">AS</span> <span class="dt">TIMESTAMP</span>));</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The database will automatically reject operations on the wrong type of data, or that try to insert the wrong type into a column.</p>
-<p>One special value is <code>NULL</code>. Most data types can be <code>NULL</code>, which represents a missing value, must like <code>NA</code> in R or <code>None</code> in Python. By default, most types allow <code>NULL</code> values, so if you want to enforce that a value must always be provided, you must declare the column to be <code>NOT NULL</code> (see <a href="#sec-creating-schemas" class="quarto-xref">Section&nbsp;1.7</a> below).</p>
+<p>One special value is <code>NULL</code>. Most data types can be <code>NULL</code>, which represents a missing value, must like <code>NA</code> in R or <code>None</code> in Python. By default, most types allow <code>NULL</code> values, so if you want to enforce that a value must always be provided, you must declare the column to be <code>NOT NULL</code> (see <a href="#sec-creating-schemas" class="quarto-xref"><span>Section 3.7</span></a> below).</p>
 </section>
-<section id="sec-grouping-aggregate" class="level3">
-<h3 class="anchored" data-anchor-id="sec-grouping-aggregate">Grouping and aggregate functions</h3>
+<section id="sec-grouping-aggregate" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="sec-grouping-aggregate"><span class="header-section-number">3.3.3</span> Grouping and aggregate functions</h3>
 <p>Sometimes we want to calculate something from many rows, not just one row. For example, most databases have <code>count()</code>, <code>max()</code>, <code>min()</code>, and <code>sum()</code> functions. These are all <em>aggregate</em> functions, meaning they take many values and produce a single value.</p>
 <p>For example, let’s calculate the average score obtained by students:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">avg</span>(score) <span class="kw">FROM</span> <span class="kw">events</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">avg</span>(score) <span class="kw">FROM</span> <span class="kw">events</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This produces a single row: the average score. Any aggregate function takes many rows and reduces them to a single row. This is why you <em>can’t</em> write this:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, <span class="fu">avg</span>(score) <span class="kw">FROM</span> <span class="kw">events</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, <span class="fu">avg</span>(score) <span class="kw">FROM</span> <span class="kw">events</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Try it; why does Postgres complain?</p>
 <p>We often want to apply aggregate functions not just to whole columns but to <em>groups of rows</em> within columns. This is the province of the <code>GROUP BY</code> clause. It groups the data according to a specific value, and aggregate functions then produce a single result <em>per group</em>.</p>
 <p>For example, if I wanted the average score for each separate user, I could write:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, <span class="fu">avg</span>(score) <span class="kw">AS</span> mean_score</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> persona</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> mean_score <span class="kw">desc</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can apply conditions on the groups. While <code>WHERE</code> filters the individual rows, <code>HAVING</code> filters the groups after aggregation. For example, we can find groups with average score above 50:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, <span class="fu">avg</span>(score) <span class="kw">AS</span> mean_score</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> persona</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> mean_score <span class="kw">desc</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>You can apply conditions on the groups. While <code>WHERE</code> filters the individual rows, <code>HAVING</code> filters the groups after aggregation. For example, we can find groups with average score above 50:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, <span class="fu">avg</span>(score) <span class="kw">AS</span> mean_score</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> moment <span class="op">&gt;</span> <span class="fu">CAST</span>(<span class="st">'2014-10-01 11:00:00'</span> <span class="kw">AS</span> <span class="dt">timestamp</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">by</span> persona</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">avg</span>(score) <span class="op">&gt;</span> <span class="dv">300</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> mean_score <span class="kw">DESC</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> moment <span class="op">&gt;</span> <span class="fu">CAST</span>(<span class="st">'2014-10-01 11:00:00'</span> <span class="kw">AS</span> <span class="dt">timestamp</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">by</span> persona</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">avg</span>(score) <span class="op">&gt;</span> <span class="dv">300</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> mean_score <span class="kw">DESC</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="exr-basic-grouping" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2 (Grouping and aggregating)</strong></span> Using the <code>events</code> table,</p>
+<p><span class="theorem-title"><strong>Exercise 3.2 (Grouping and aggregating)</strong></span> Using the <code>events</code> table,</p>
 <ol type="1">
 <li><p>List all personas whose maximum latency is greater than 575, and calculate their average scores. Sort the results by increasing average score.</p></li>
 <li><p>List all persona whose average score &gt; 600. You will need to do a <code>GROUP BY</code> as above. (Hint: use <code>HAVING</code> instead of <code>WHERE</code> for the aggregate condition.)</p></li>
@@ -422,33 +568,10 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
 <p><em>Hint:</em> Check the PostgreSQL documentation on <a href="https://www.postgresql.org/docs/current/functions-formatting.html">data type formatting</a> to see how to convert a timestamp to a string, particularly tables 9.27 and 9.31.</p></li>
 </ol>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, <span class="fu">avg</span>(score) <span class="kw">AS</span> mean_score</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> persona</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">MAX</span>(latency) <span class="op">&gt;</span> <span class="dv">575</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> mean_score;</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> persona</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">avg</span>(score) <span class="op">&gt;</span> <span class="dv">600</span>;</span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> element, <span class="fu">count</span>(element)</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">by</span> element</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">by</span> element;</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> persona, <span class="fu">to_char</span>(<span class="fu">min</span>(moment), <span class="st">'FMMonth YYYY'</span>)</span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> persona</span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
 </section>
-<section id="inserting-data" class="level2">
-<h2 class="anchored" data-anchor-id="inserting-data">Inserting data</h2>
+<section id="inserting-data" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="inserting-data"><span class="header-section-number">3.4</span> Inserting data</h2>
 <p>The <code>INSERT</code> command specifies data to insert.</p>
 <p>The basic template is</p>
 <pre><code>INSERT INTO &lt;tablename&gt; (&lt;column1&gt;, ..., &lt;columnk&gt;)
@@ -461,33 +584,29 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
               ...
               (&lt;valuem1&gt;, ..., &lt;valuemk&gt;);</code></pre>
 <p>For example:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1211</span>, <span class="dv">29353</span>, <span class="dv">824</span>, <span class="st">'C'</span>, <span class="st">'How do the mean and median differ?'</span>);</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1207</span>, <span class="dv">29426</span>, <span class="dv">1000</span>, <span class="st">'A'</span>, <span class="st">'You got it!'</span>);</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1217</span>, <span class="dv">29433</span>,  <span class="dv">842</span>, <span class="st">'C'</span>, <span class="st">'Try simplifying earlier.'</span>),</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1199</span>, <span class="dv">29435</span>,    <span class="dv">0</span>, <span class="st">'B'</span>, <span class="st">'Your answer was blank'</span>),</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29413</span>, <span class="dv">1000</span>, <span class="st">'C'</span>, <span class="st">'You got it!'</span>),</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29359</span>,  <span class="dv">200</span>, <span class="st">'A'</span>, <span class="st">'A square cannot be negative'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1211</span>, <span class="dv">29353</span>, <span class="dv">824</span>, <span class="st">'C'</span>, <span class="st">'How do the mean and median differ?'</span>);</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1207</span>, <span class="dv">29426</span>, <span class="dv">1000</span>, <span class="st">'A'</span>, <span class="st">'You got it!'</span>);</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1217</span>, <span class="dv">29433</span>,  <span class="dv">842</span>, <span class="st">'C'</span>, <span class="st">'Try simplifying earlier.'</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1199</span>, <span class="dv">29435</span>,    <span class="dv">0</span>, <span class="st">'B'</span>, <span class="st">'Your answer was blank'</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29413</span>, <span class="dv">1000</span>, <span class="st">'C'</span>, <span class="st">'You got it!'</span>),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29359</span>,  <span class="dv">200</span>, <span class="st">'A'</span>, <span class="st">'A square cannot be negative'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>By default, <code>INSERT</code> does not return a table of results. But you can ask it to:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1217</span>, <span class="dv">29433</span>,  <span class="dv">842</span>, <span class="st">'C'</span>, <span class="st">'Try simplifying earlier.'</span>),</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1199</span>, <span class="dv">29435</span>,    <span class="dv">0</span>, <span class="st">'B'</span>, <span class="st">'Your answer was blank'</span>),</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29413</span>, <span class="dv">1000</span>, <span class="st">'C'</span>, <span class="st">'You got it!'</span>),</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29359</span>,  <span class="dv">200</span>, <span class="st">'A'</span>, <span class="st">'A square cannot be negative'</span>)</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RETURNING</span> <span class="kw">id</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score, answer, feedback)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="dv">1217</span>, <span class="dv">29433</span>,  <span class="dv">842</span>, <span class="st">'C'</span>, <span class="st">'Try simplifying earlier.'</span>),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1199</span>, <span class="dv">29435</span>,    <span class="dv">0</span>, <span class="st">'B'</span>, <span class="st">'Your answer was blank'</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29413</span>, <span class="dv">1000</span>, <span class="st">'C'</span>, <span class="st">'You got it!'</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>              (<span class="dv">1207</span>, <span class="dv">29359</span>,  <span class="dv">200</span>, <span class="st">'A'</span>, <span class="st">'A square cannot be negative'</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="kw">RETURNING</span> <span class="kw">id</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This query returns a table with 4 rows and 1 column: the <code>id</code> column that is automatically filled in (because it is <code>SERIAL</code>). You can return one or more columns or expressions in <code>RETURNING</code>: it takes a list of columns just like <code>SELECT</code>.</p>
 <div id="exr-insert-invalid" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 3 (Inserting invalid data)</strong></span> Write a query to insert data into the <code>events</code> table, but provide the wrong data type for one column (such as a string instead of an integer). Report the message you receive. Which of the ACID guarantees (<strong>?@sec-acid-guarantees</strong>) is the database enforcing here?</p>
-</div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>Postgres is enforcing <em>consistency</em>: the data must satisfy all defined constraints at all times.</p>
-<p>Any query that inserts invalid data is fine here. Note that Postgres will automatically do some kind of casts: for example, inserting the string <code>'100'</code> for the score is fine, because that string can be automatically converted to a number, and Postgres will not complain. Only if Postgres does not know how to do the conversion, or if the conversion fails, will it complain. Hence inserting <code>'ducks'</code> into a numeric column will not work.</p>
+<p><span class="theorem-title"><strong>Exercise 3.3 (Inserting invalid data)</strong></span> Write a query to insert data into the <code>events</code> table, but provide the wrong data type for one column (such as a string instead of an integer). Report the message you receive. Which of the ACID guarantees (<a href="database-fundamentals.html#sec-acid-guarantees" class="quarto-xref"><span>Section 2.4</span></a>) is the database enforcing here?</p>
 </div>
 </section>
-<section id="updating-data" class="level2">
-<h2 class="anchored" data-anchor-id="updating-data">Updating data</h2>
+<section id="updating-data" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="updating-data"><span class="header-section-number">3.5</span> Updating data</h2>
 <p>The <code>UPDATE</code> command allows us to modify existing entries in any way we like. The basic syntax looks like this:</p>
 <pre><code>UPDATE table
     SET col1 = expression1,
@@ -498,34 +617,24 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
 <p>The <code>UPDATE</code> command can update one or more columns at once.</p>
 <p>As with <code>INSERT</code>, you can use <code>RETURNING</code> with <code>UPDATE</code> queries. Here it returns one row per row that was modified, and you can choose the columns returned.</p>
 <div id="exr-basic-update" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4 (Updating data)</strong></span> In the <code>events</code> table,</p>
+<p><span class="theorem-title"><strong>Exercise 3.4 (Updating data)</strong></span> In the <code>events</code> table,</p>
 <ol type="1">
 <li><p>Set the answer for events with id &gt; 800 to the letter C.</p></li>
 <li><p>Update the scores to subtract 50 points for every hint taken (in the <code>hints</code> column). Ensure that the score stays above 0. Use <code>RETURNING</code> to get the <code>id</code> and the new score for each updated event.</p>
 <p><em>Hint:</em> The <code>GREATEST()</code> function returns the maximum of its arguments, so <code>GREATEST(-5, 0, -2)</code> is 0.</p></li>
 </ol>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> <span class="kw">events</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> answer <span class="op">=</span> <span class="st">'C'</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">&gt;</span> <span class="dv">800</span>;</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> <span class="kw">events</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> score <span class="op">=</span> <span class="fu">GREATEST</span>(score <span class="op">-</span> <span class="dv">50</span> <span class="op">*</span> hints, <span class="dv">0</span>)</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="kw">RETURNING</span> <span class="kw">id</span>, score <span class="kw">AS</span> new_score;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
-<section id="deleting-data" class="level2">
-<h2 class="anchored" data-anchor-id="deleting-data">Deleting data</h2>
+<section id="deleting-data" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="deleting-data"><span class="header-section-number">3.6</span> Deleting data</h2>
 <p>The <code>DELETE</code> command allows you to remove rows from a table that satisfy a condition. The basic syntax is:</p>
 <pre><code>DELETE FROM table WHERE condition;</code></pre>
 <p><strong>Beware:</strong> If you omit the <code>WHERE</code> clause, <em>all rows in the table</em> will be deleted immediately.</p>
 <p>As before, you can use <code>RETURNING</code> to get results from <code>DELETE</code>. There will be one row per deleted row.</p>
 <div id="exr-gems" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5 (Gems data)</strong></span> The file <a href="../data/gems.sql"><code>gems.sql</code></a> contains the commands needed to create a table called <code>gems</code> filled with some random data. Connect to your personal database. Open the file and run the queries inside to create the table.</p>
+<p><span class="theorem-title"><strong>Exercise 3.5 (Gems data)</strong></span> The file <a href="../data/gems.sql"><code>gems.sql</code></a> contains the commands needed to create a table called <code>gems</code> filled with some random data. Connect to your personal database. Open the file and run the queries inside to create the table.</p>
 <p>Try</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> gems <span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> gems <span class="kw">LIMIT</span> <span class="dv">10</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>to see a few examples of the data in the new <code>gems</code> table.</p>
 <p>Now try writing some queries:</p>
 <ol type="1">
@@ -535,33 +644,13 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
 <li><p>Delete all gems with fewer than four facets.</p></li>
 </ol>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>For reference, here is how the table was created:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> gems (<span class="kw">label</span> TEXT <span class="kw">DEFAULT</span> <span class="st">''</span>,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                   facets <span class="dt">INTEGER</span> <span class="kw">DEFAULT</span> <span class="dv">0</span>,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                   price MONEY);</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> gems</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>(<span class="kw">SELECT</span> <span class="st">''</span>, ceiling(<span class="dv">20</span> <span class="op">*</span> <span class="kw">random</span>() <span class="op">+</span> <span class="dv">1</span>), <span class="st">'1.00'</span>:<span class="ch">:money</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a> <span class="kw">FROM</span> generate_series(<span class="dv">1</span>, <span class="dv">20</span>) <span class="kw">AS</span> k);</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> gems <span class="kw">SET</span> <span class="kw">label</span> <span class="op">=</span> (<span class="st">'{thin,quality,wow}'</span>:<span class="ch">:text</span>[])[<span class="fu">ceil</span>(<span class="kw">random</span>() <span class="op">*</span> <span class="dv">3</span>)];</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Here are the queries:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> gems <span class="kw">SET</span> <span class="kw">label</span> <span class="op">=</span> <span class="st">'thin'</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> facets <span class="op">&lt;</span> <span class="dv">10</span>;</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> gems <span class="kw">SET</span> <span class="kw">label</span> <span class="op">=</span> <span class="st">'wow'</span>, price <span class="op">=</span> <span class="fu">CAST</span>(<span class="st">'100.00'</span> <span class="kw">AS</span> money)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> facets <span class="op">&gt;=</span> <span class="dv">20</span>;</span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> gems <span class="kw">WHERE</span> facets <span class="op">&lt;</span> <span class="dv">4</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
-<section id="sec-creating-schemas" class="level2">
-<h2 class="anchored" data-anchor-id="sec-creating-schemas">Creating and updating table schemas</h2>
-<section id="selecting-the-schema" class="level3">
-<h3 class="anchored" data-anchor-id="selecting-the-schema">Selecting the schema</h3>
+<section id="sec-creating-schemas" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="sec-creating-schemas"><span class="header-section-number">3.7</span> Creating and updating table schemas</h2>
+<section id="selecting-the-schema" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="selecting-the-schema"><span class="header-section-number">3.7.1</span> Selecting the schema</h3>
 <p>Before making a table, we must choose what columns it should have, what they will be named, and what types they have.</p>
-<p>We’ll discuss the selection of columns in more detail in <strong>?@sec-schema-design</strong>. Broadly, we choose the columns to describe whatever entity is in the table: if each row is a student, the columns should be features of the students. Their names should be reasonably descriptive without being so long as to make typing queries a pain.</p>
+<p>We’ll discuss the selection of columns in more detail in <a href="advanced-sql.html#sec-schema-design" class="quarto-xref"><span>Section 4.1</span></a>. Broadly, we choose the columns to describe whatever entity is in the table: if each row is a student, the columns should be features of the students. Their names should be reasonably descriptive without being so long as to make typing queries a pain.</p>
 <p>Types require careful choice. PostgreSQL supports <a href="https://www.postgresql.org/docs/current/datatype.html">dozens of types</a>. The most common are:</p>
 <ul>
 <li>Booleans: <code>boolean</code> can be either <code>true</code> or <code>false</code> (or <code>yes</code> and <code>no</code>, <code>on</code> or <code>off</code>, or 1 and 0)</li>
@@ -590,44 +679,44 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
 </ul>
 <p>There are many other types and options; view the <a href="https://www.postgresql.org/docs/current/datatype.html">full Postgres list</a> for more.</p>
 </section>
-<section id="creating-tables" class="level3">
-<h3 class="anchored" data-anchor-id="creating-tables">Creating tables</h3>
+<section id="creating-tables" class="level3" data-number="3.7.2">
+<h3 data-number="3.7.2" class="anchored" data-anchor-id="creating-tables"><span class="header-section-number">3.7.2</span> Creating tables</h3>
 <p>To create a new table, we use the <code>CREATE TABLE</code> command. In its most basic form, it looks like</p>
 <pre class="text"><code>CREATE TABLE name (attribute1 TYPE1, attribute2 TYPE2, ...);</code></pre>
 <p>A simple <code>products</code> table specifying products for sale is:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products (</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>       product_id <span class="dt">INTEGER</span>,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>       name TEXT,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>       price <span class="dt">DOUBLE</span>,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>       sale_price <span class="dt">DOUBLE</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products (</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>       product_id <span class="dt">INTEGER</span>,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>       name TEXT,</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>       price <span class="dt">DOUBLE</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>       sale_price <span class="dt">DOUBLE</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Here we have chosen five columns and specified their types, out of the list of types <a href="https://www.postgresql.org/docs/current/datatype.html">supported by PostgreSQL</a>.</p>
 <p>Here’s a fancier version:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products (</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>       product_id SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>       name TEXT,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>       price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>       sale_price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (sale_price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>       <span class="kw">CHECK</span> (price <span class="op">&gt;</span> sale_price)</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products (</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>       product_id SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>       name TEXT,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>       price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>       sale_price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (sale_price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>       <span class="kw">CHECK</span> (price <span class="op">&gt;</span> sale_price)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The <code>SERIAL</code> type specifies that <code>product_id</code> is automatically set to an increasing integer whenever we add a row. We have also specified it is the <em>primary key</em>, meaning it uniquely identifies rows in this table. We’ve also set constraints on price, sale price, and their relationship.</p>
 <p>PostgreSQL will reject any data of the wrong type or violating the constraints:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> products (name, price, sale_price)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">'duck'</span>, <span class="st">'duck'</span>, <span class="st">'goose'</span>);</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> products (name, price, sale_price)</span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">'kirk action figure'</span>, <span class="dv">50</span>, <span class="dv">52</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> products (name, price, sale_price)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">'duck'</span>, <span class="st">'duck'</span>, <span class="st">'goose'</span>);</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> products (name, price, sale_price)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">'kirk action figure'</span>, <span class="dv">50</span>, <span class="dv">52</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>We can also specify default values using <code>DEFAULT</code> and require entries to not be null. Here’s an even fancier products table:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products (</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>       product_id SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>       name TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>       quantity <span class="dt">INTEGER</span> <span class="kw">DEFAULT</span> <span class="dv">0</span>,</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>       price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>       sale_price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (sale_price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>       <span class="kw">CHECK</span> (price <span class="op">&gt;</span> sale_price)</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> products (</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>       product_id SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>       name TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>       quantity <span class="dt">INTEGER</span> <span class="kw">DEFAULT</span> <span class="dv">0</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>       price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>       sale_price <span class="dt">NUMERIC</span> <span class="kw">CHECK</span> (sale_price <span class="op">&gt;</span> <span class="dv">0</span>),</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>       <span class="kw">CHECK</span> (price <span class="op">&gt;</span> sale_price)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="exr-create-table" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 6 (Creating a table)</strong></span> Write the <code>CREATE TABLE</code> command for a table called <code>students</code> containing the following columns:</p>
+<p><span class="theorem-title"><strong>Exercise 3.6 (Creating a table)</strong></span> Write the <code>CREATE TABLE</code> command for a table called <code>students</code> containing the following columns:</p>
 <ul>
 <li>Student ID, a unique integer</li>
 <li>Student name, which cannot be null</li>
@@ -639,69 +728,40 @@ Table&nbsp;1: A few rows from the <code>events</code> table.
 <p>You may choose appropriate column names, and should choose appropriate data types from <a href="https://www.postgresql.org/docs/current/datatype.html">the many types supported by PostgreSQL</a>. <a href="https://www.postgresql.org/docs/current/ddl.html">Chapter 5 of the manual</a> gives great detail on defining tables, constraints, defaults, and other features.</p>
 <p>Write an <code>INSERT</code> query that adds four example students to the table. Write another <code>INSERT</code> query that attempts to insert invalid data, proving that your definition enforces the criteria above.</p>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>Names may differ, but the general idea is this:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> students (</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    name text <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    birthdate <span class="dt">date</span> <span class="kw">CHECK</span> (birthdate <span class="op">&lt;</span> now()),</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    completed_orientation <span class="dt">boolean</span> <span class="kw">DEFAULT</span> <span class="kw">FALSE</span>,</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    tuition money <span class="kw">CHECK</span> (tuition <span class="op">&gt;</span> <span class="fu">CAST</span>(<span class="dv">0</span> <span class="kw">AS</span> money)),</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    scholarship money,</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">CHECK</span> (scholarship <span class="op">&lt;=</span> tuition)</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The crucial parts are that</p>
-<ul>
-<li><code>id</code> is a serial primary key, so it is unique and increasing</li>
-<li><code>name</code> is marked <code>NOT NULL</code>,</li>
-<li><code>birthdate</code> has a check constraint</li>
-<li><code>completed_orientation</code> defaults to <code>FALSE</code></li>
-<li><code>tuition</code> has a check constraint</li>
-<li>a check constraint ensures the scholarship amount is valid.</li>
-</ul>
-<p>For example,</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> students (name, birthdate, completed_orientation, tuition, scholarship)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>(<span class="st">'Englebert Humperdinck'</span>, <span class="fu">CAST</span>(<span class="st">'1936-05-02'</span> <span class="kw">AS</span> <span class="dt">date</span>), <span class="kw">FALSE</span>, <span class="dv">36000</span>, <span class="dv">15000</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Whereas this doesn’t work:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> students (name, birthdate, completed_orientation, tuition, scholarship)</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>(<span class="st">'Daffy Duck'</span>, <span class="fu">CAST</span>(<span class="st">'2038-01-03'</span> <span class="kw">AS</span> <span class="dt">date</span>), <span class="kw">TRUE</span>, <span class="dv">39</span>, <span class="dv">40</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 </section>
-<section id="altering-tables" class="level3">
-<h3 class="anchored" data-anchor-id="altering-tables">Altering tables</h3>
+<section id="altering-tables" class="level3" data-number="3.7.3">
+<h3 data-number="3.7.3" class="anchored" data-anchor-id="altering-tables"><span class="header-section-number">3.7.3</span> Altering tables</h3>
 <p>The <code>ALTER TABLE</code> command allows you to change a variety of table features. This includes adding and removing columns, renaming attributes, changing constraints or attribute types, and setting column defaults. See the full <a href="https://www.postgresql.org/docs/current/static/sql-altertable.html">documentation</a> for more.</p>
 <p>A few examples using the most recent definition of <code>products</code>:</p>
 <ul>
 <li><p>Let’s rename <code>product_id</code> to just <code>id</code> for simplicity.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>      <span class="kw">RENAME</span> product_id <span class="kw">TO</span> <span class="kw">id</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb26"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>      <span class="kw">RENAME</span> product_id <span class="kw">TO</span> <span class="kw">id</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Let’s add a <code>brand_name</code> column.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products <span class="kw">ADD</span> brand_name TEXT <span class="kw">DEFAULT</span> <span class="st">'generic'</span> <span class="kw">NOT</span> <span class="kw">NULL</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products <span class="kw">ADD</span> brand_name TEXT <span class="kw">DEFAULT</span> <span class="st">'generic'</span> <span class="kw">NOT</span> <span class="kw">NULL</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Let’s drop the <code>discount</code> column</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products <span class="kw">DROP</span> discount;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb28"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products <span class="kw">DROP</span> discount;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p>Let’s set a default value for <code>brand_name</code>.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>      <span class="kw">ALTER</span> brand_name <span class="kw">SET</span> <span class="kw">DEFAULT</span> <span class="st">'generic'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb29"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> products</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>      <span class="kw">ALTER</span> brand_name <span class="kw">SET</span> <span class="kw">DEFAULT</span> <span class="st">'generic'</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 </section>
-<section id="deleting-tables" class="level3">
-<h3 class="anchored" data-anchor-id="deleting-tables">Deleting tables</h3>
+<section id="deleting-tables" class="level3" data-number="3.7.4">
+<h3 data-number="3.7.4" class="anchored" data-anchor-id="deleting-tables"><span class="header-section-number">3.7.4</span> Deleting tables</h3>
 <p>The command is <code>DROP TABLE</code>.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">TABLE</span> products;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">TABLE</span> products;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Try it, then type <code>\d</code> at the prompt.</p>
 <p><strong>Beware:</strong> This command is immediate and permanent (unless you have a backup).</p>
 </section>
 </section>
-<section id="sec-joins-and-foreign-keys" class="level2">
-<h2 class="anchored" data-anchor-id="sec-joins-and-foreign-keys">Joins and foreign keys</h2>
+<section id="sec-joins-and-foreign-keys" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="sec-joins-and-foreign-keys"><span class="header-section-number">3.8</span> Joins and foreign keys</h2>
 <p>As we will see shortly, principles of good database design tell us that tables represent distinct entities with a single authoritative copy of relevant data. This is the DRY principle (Don’t Repeat Yourself) in action, in this case eliminating <em>data redundancy</em>.</p>
-<p>An example of this in the <code>events</code> table are the <code>persona</code> and <code>element</code> columns, which point to information about students and components of the learning environment. We do <strong>not</strong> repeat the student’s information each time we refer to that student. Instead, we use a <strong>link</strong> to the student that points into a separate <code>personae</code> table. <a href="#tbl-personae-sample" class="quarto-xref">Table&nbsp;2</a> shows a few rows of this table.</p>
+<p>An example of this in the <code>events</code> table are the <code>persona</code> and <code>element</code> columns, which point to information about students and components of the learning environment. We do <strong>not</strong> repeat the student’s information each time we refer to that student. Instead, we use a <strong>link</strong> to the student that points into a separate <code>personae</code> table. <a href="#tbl-personae-sample" class="quarto-xref">Table&nbsp;<span>3.2</span></a> shows a few rows of this table.</p>
 <div id="tbl-personae-sample" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-personae-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: The first few rows of the <code>personae</code> table.
+Table&nbsp;3.2: The first few rows of the <code>personae</code> table.
 </figcaption>
 <div aria-describedby="tbl-personae-sample-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -754,96 +814,90 @@ Table&nbsp;2: The first few rows of the <code>personae</code> table.
 <li><p>An efficient way to combine information across these links.</p></li>
 </ol>
 <p>The former is supplied by <em>foreign keys</em> and the latter by <em>joins</em>. We will tackle both in turn.</p>
-<section id="sec-foreign-keys" class="level3">
-<h3 class="anchored" data-anchor-id="sec-foreign-keys">Foreign keys</h3>
+<section id="sec-foreign-keys" class="level3" data-number="3.8.1">
+<h3 data-number="3.8.1" class="anchored" data-anchor-id="sec-foreign-keys"><span class="header-section-number">3.8.1</span> Foreign keys</h3>
 <p>A <em>foreign key</em> is a field (or collection of fields) in one table that uniquely specifies a row in another table. We specify <em>foreign keys</em> in PostgreSQL using the <code>REFERENCES</code> keyword when we define a column or table. A foreign key that references another table must be the value of a unique key in that table, though it is most common to reference a <em>primary key</em>.</p>
 <p>For example, the <code>events</code> table was defined using <code>REFERENCES</code>:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="kw">events</span> (</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    moment <span class="dt">TIMESTAMP</span>,</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    persona <span class="dt">INTEGER</span> <span class="kw">REFERENCES</span> personae (<span class="kw">id</span>),</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- more columns go here:</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">..</span>.</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="kw">events</span> (</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    moment <span class="dt">TIMESTAMP</span>,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    persona <span class="dt">INTEGER</span> <span class="kw">REFERENCES</span> personae (<span class="kw">id</span>),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- more columns go here:</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">..</span>.</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Foreign keys can also be added (and altered) as <em>table constraints</em> that look like <code>FOREIGN KEY (&lt;key&gt;) REFERENCES &lt;table&gt;</code>.</p>
 <p>Now try this</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score)</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">123</span>, <span class="dv">1000</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">123</span>, <span class="dv">1000</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Notice that the insertion did not work—-and the entire transaction was rolled back—because the foreign key constraint was violated. There was no persona with ID -1.</p>
 <p>So let’s fix it. Try it!</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> personae <span class="kw">VALUES</span> (<span class="op">-</span><span class="dv">1</span>, <span class="st">'Englebert'</span>, <span class="st">'Humperdinck'</span>, <span class="st">'1936-05-02'</span>, <span class="fl">100.0</span>);</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score)</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">123</span>, <span class="dv">1000</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> personae <span class="kw">VALUES</span> (<span class="op">-</span><span class="dv">1</span>, <span class="st">'Englebert'</span>, <span class="st">'Humperdinck'</span>, <span class="st">'1936-05-02'</span>, <span class="fl">100.0</span>);</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> <span class="kw">events</span> (persona, element, score)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="op">-</span><span class="dv">1</span>, <span class="dv">123</span>, <span class="dv">1000</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>A foreign key is allowed to be <code>NULL</code>, meaning it points to nothing, unless you include a <code>NOT NULL</code> constraint in the column definition.</p>
 </section>
-<section id="sec-joins" class="level3">
-<h3 class="anchored" data-anchor-id="sec-joins">Joins</h3>
+<section id="sec-joins" class="level3" data-number="3.8.2">
+<h3 data-number="3.8.2" class="anchored" data-anchor-id="sec-joins"><span class="header-section-number">3.8.2</span> Joins</h3>
 <p>Suppose we want to display features of an event with the name and course of the student who generated it. If we’ve kept to DRY design and used a foreign key for the <code>persona</code> column, this seems inconvenient.</p>
 <p>That is the purpose of a <em>join</em>. For instance, we can write:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> personae.lastname, personae.firstname, <span class="kw">events</span>.score, <span class="kw">events</span>.moment</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> personae <span class="kw">ON</span> <span class="kw">events</span>.persona <span class="op">=</span> personae.<span class="kw">id</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> moment <span class="op">&gt;</span> <span class="fu">CAST</span>(<span class="st">'2015-03-26 08:00:00'</span> <span class="kw">AS</span> <span class="dt">timestamp</span>)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> moment;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> personae.lastname, personae.firstname, <span class="kw">events</span>.score, <span class="kw">events</span>.moment</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="kw">events</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> personae <span class="kw">ON</span> <span class="kw">events</span>.persona <span class="op">=</span> personae.<span class="kw">id</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> moment <span class="op">&gt;</span> <span class="fu">CAST</span>(<span class="st">'2015-03-26 08:00:00'</span> <span class="kw">AS</span> <span class="dt">timestamp</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> moment;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Joins incorporate additional tables into a select. This is done by appending to the <code>from</code> clause:</p>
 <p><code>FROM &lt;table&gt; JOIN &lt;table&gt; ON &lt;condition&gt; ...</code></p>
 <p>where the <code>on</code> condition specifies which rows of the different tables are included. And within the select, we can disambiguate columns by referring them to by <code>&lt;table&gt;.&lt;column&gt;</code>. Look at the example above with this in mind.</p>
 <p>You can think of <code>FROM &lt;table&gt; JOIN &lt;table&gt;</code> as producing a new virtual table formed by the two joined together, and the <code>SELECT</code> operates on this. You can join this virtual table to others: <code>FROM &lt;table&gt; JOIN &lt;table&gt; ON &lt;condition&gt; JOIN &lt;table&gt;</code> and so on.</p>
 <p>After joining two or more tables, you can operate on the resulting table just like in any other queries, with grouping, aggregates, and so on.</p>
 <p>We will start by seeing what joins mean in a simple case, using these tables:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> a (<span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, name TEXT);</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> a (name)</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="st">'Pirate'</span>),</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Monkey'</span>),</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Ninja'</span>),</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Flying Spaghetti Monster'</span>);</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> b (<span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, name TEXT);</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> b (name)</span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="st">'Rutabaga'</span>),</span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Pirate'</span>),</span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Darth Vader'</span>),</span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Ninja'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> a (<span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, name TEXT);</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> a (name)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="st">'Pirate'</span>),</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Monkey'</span>),</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Ninja'</span>),</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Flying Spaghetti Monster'</span>);</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> b (<span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>, name TEXT);</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> b (name)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>       <span class="kw">VALUES</span> (<span class="st">'Rutabaga'</span>),</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Pirate'</span>),</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Darth Vader'</span>),</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>              (<span class="st">'Ninja'</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Let’s look at several kinds of joins. (There are others, but this will get across the most common types.)</p>
-<section id="inner-join" class="level4">
-<h4 class="anchored" data-anchor-id="inner-join">Inner join</h4>
+<section id="inner-join" class="level4" data-number="3.8.2.1">
+<h4 data-number="3.8.2.1" class="anchored" data-anchor-id="inner-join"><span class="header-section-number">3.8.2.1</span> Inner join</h4>
 <p>An <em>inner join</em> produces the rows for which attributes in <em>both</em> tables match. (If you just say <code>JOIN</code> in SQL, you get an inner join; the word <code>INNER</code> is optional.)</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> a <span class="kw">INNER</span> <span class="kw">JOIN</span> b <span class="kw">on</span> a.name <span class="op">=</span> b.name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> a <span class="kw">INNER</span> <span class="kw">JOIN</span> b <span class="kw">on</span> a.name <span class="op">=</span> b.name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="full-outer-join" class="level4">
-<h4 class="anchored" data-anchor-id="full-outer-join">Full outer join</h4>
+<section id="full-outer-join" class="level4" data-number="3.8.2.2">
+<h4 data-number="3.8.2.2" class="anchored" data-anchor-id="full-outer-join"><span class="header-section-number">3.8.2.2</span> Full outer join</h4>
 <p>A full outer join produces the full set of rows in <strong>all</strong> tables, matching where possible but <code>NULL</code> otherwise.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> a <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> b <span class="kw">on</span> a.name <span class="op">=</span> b.name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> a <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> b <span class="kw">on</span> a.name <span class="op">=</span> b.name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="left-outer-join" class="level4">
-<h4 class="anchored" data-anchor-id="left-outer-join">Left outer join</h4>
+<section id="left-outer-join" class="level4" data-number="3.8.2.3">
+<h4 data-number="3.8.2.3" class="anchored" data-anchor-id="left-outer-join"><span class="header-section-number">3.8.2.3</span> Left outer join</h4>
 <p>A left outer join produces all the rows from A, the table on the “left” side of the <code>join</code> operator, along with matching rows from B if available, or <code>null</code> otherwise. (<code>LEFT JOIN</code> is a shorthand for <code>LEFT OUTER JOIN</code> in PostgreSQL.)</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> a <span class="kw">LEFT</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> b <span class="kw">ON</span> a.name <span class="op">=</span> b.name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> a <span class="kw">LEFT</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> b <span class="kw">ON</span> a.name <span class="op">=</span> b.name;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div id="exr-join-ops" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7 (Set operations)</strong></span> Write queries to:</p>
+<p><span class="theorem-title"><strong>Exercise 3.7 (Set operations)</strong></span> Write queries to:</p>
 <ol type="1">
 <li>Select all the rows of A that are <strong>not</strong> in B.</li>
 <li>Select the rows of A not in B <em>and</em> the rows of B not in A.</li>
 </ol>
 <p><em>Hint:</em> To check if a value is null, use <code>value IS NULL</code>.</p>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>We can use outer joins. When a row in one table does not match a row in the other, the second table’s entries are <code>NULL</code>, so we can check for null in the results:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> a <span class="kw">LEFT</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> b <span class="kw">on</span> a.name <span class="op">=</span> b.name <span class="kw">where</span> b.<span class="kw">id</span> <span class="kw">IS</span> <span class="kw">NULL</span>;</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> b <span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> b <span class="kw">on</span> a.name <span class="op">=</span> b.name</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">WHERE</span> b.<span class="kw">id</span> <span class="kw">IS</span> <span class="kw">NULL</span> <span class="kw">OR</span> b.<span class="kw">id</span> <span class="kw">IS</span> <span class="kw">NULL</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 <div id="exr-join-elements" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 8 (Joining educational data)</strong></span> Besides the <code>events</code> and <code>personae</code> tables, our database also contains an <code>elements</code> table providing information about each instructional element (such as a quiz question) within the system. Here is its schema:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> elements (</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>       <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>       content TEXT,</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>       points_max <span class="dt">INTEGER</span> <span class="kw">CHECK</span> (points_max <span class="op">&gt;=</span> <span class="dv">0</span>),</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>       module <span class="dt">INTEGER</span>, <span class="co">-- references a modules table, if we had one</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>       hint TEXT,</span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>       max_tries <span class="dt">INTEGER</span> <span class="kw">CHECK</span> (max_tries <span class="op">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="theorem-title"><strong>Exercise 3.8 (Joining educational data)</strong></span> Besides the <code>events</code> and <code>personae</code> tables, our database also contains an <code>elements</code> table providing information about each instructional element (such as a quiz question) within the system. Here is its schema:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> elements (</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>       <span class="kw">id</span> SERIAL <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>       content TEXT,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>       points_max <span class="dt">INTEGER</span> <span class="kw">CHECK</span> (points_max <span class="op">&gt;=</span> <span class="dv">0</span>),</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>       module <span class="dt">INTEGER</span>, <span class="co">-- references a modules table, if we had one</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>       hint TEXT,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>       max_tries <span class="dt">INTEGER</span> <span class="kw">CHECK</span> (max_tries <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Write queries to:</p>
 <ol type="1">
 <li>List all events, with the score they received, the name of the student completing the event, their birthdate, and the maximum number of points possible.</li>
@@ -853,22 +907,19 @@ Table&nbsp;2: The first few rows of the <code>personae</code> table.
 <li>Sum the scores for all students born after June 1, 1988.</li>
 </ol>
 </div>
-<div class="proof solution">
-<p><span class="proof-title"><em>Solution</em>. </span>TODO solutions</p>
-</div>
 </section>
 </section>
 </section>
-<section id="indices" class="level2">
-<h2 class="anchored" data-anchor-id="indices">Indices</h2>
+<section id="indices" class="level2" data-number="3.9">
+<h2 data-number="3.9" class="anchored" data-anchor-id="indices"><span class="header-section-number">3.9</span> Indices</h2>
 <p>When we know we will search on certain fields regularly, it can be helpful to create an <em>index</em>, which speeds up those particular searches. An index tells PostgreSQL to keep a data structure (typically a tree) for a particular column so that it can identify all rows matching a query without scanning the entire table.</p>
 <p>For example, PostgreSQL automatically indexes any column declared as a <code>PRIMARY KEY</code>. In the <code>events</code> table, the <code>id</code> column is the primary key, so a query like</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="kw">events</span> <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">&gt;</span> <span class="dv">200</span> <span class="kw">AND</span> <span class="kw">id</span> <span class="op">&lt;</span> <span class="dv">300</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> <span class="kw">events</span> <span class="kw">WHERE</span> <span class="kw">id</span> <span class="op">&gt;</span> <span class="dv">200</span> <span class="kw">AND</span> <span class="kw">id</span> <span class="op">&lt;</span> <span class="dv">300</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>will use the index. PostgreSQL will search the tree (in something like <span class="math inline">\(O(\log
 n)\)</span> time, where <span class="math inline">\(n\)</span> is the number of rows) and pull the matching rows of the table, rather than looping over the entire table and checking every row.</p>
 <p>While PostgreSQL automatically indexes primary keys, we can also tell it explicitly to add indexes for specific columns. For example, if we know we’ll often be searching events by start time, we could do</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> event_moment_index</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> <span class="kw">events</span> (moment);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> event_moment_index</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> <span class="kw">events</span> (moment);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Each index has a name so that we can identify it when we use <code>DROP INDEX</code> to remove it. Postgres also uses these names if we ask it to explain how it will conduct a query. By default, this index is based on a B-tree, but there are other index types that are useful for other things. Hash indices, for instance, are very fast for equality (<code>SELECT * FROM foo WHERE col == 'something'</code>). See the <a href="https://www.postgresql.org/docs/current/indexes.html">indexes chapter of the manual</a> for more information on the syntax and type of indexes.</p>
 <p>Indices are particularly important for tables with many thousands or millions of rows. Companies often have tables with gigabytes of data, and looping through every row to find matching results would be prohibitively slow. Worse, joining two large tables requires matching up rows from the two tables, and would be even slower. A clever selection of indices can make these operations much faster.</p>
 <p>Much of the engineering work in database software is in the so-called <em>query planner</em>, which takes your query, information about the size of each table, and the available indices to determine the most efficient way to execute the query. (Should it filter the data first, then join? Or join and then filter? Which of several indices should it use to filter first, so it has less work to do for subsequent operations?)</p>
@@ -876,15 +927,14 @@ n)\)</span> time, where <span class="math inline">\(n\)</span> is the number of 
 
 
 </section>
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
 <ol>
 <li id="fn1"><p>I once accidentally omitted the <code>WHERE</code> clause on an <code>UPDATE</code> query to change a user’s password in a database, and hence changed <em>everyone’s</em> password. On a live website with thousands of users. I had to very frantically get the previous day’s backup and figure out how to reset passwords to those contained in the backup.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section></div></main> <!-- /main -->
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1284,6 +1334,18 @@ n)\)</span> time, where <span class="math inline">\(n\)</span> is the number of 
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering/database-fundamentals.html" class="pagination-link" aria-label="Database Fundamentals">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../data-engineering/advanced-sql.html" class="pagination-link" aria-label="Advanced SQL">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

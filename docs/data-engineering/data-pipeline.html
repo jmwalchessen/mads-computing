@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>data-pipeline</title>
+<title>1&nbsp; The Data Pipeline – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,15 +20,38 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/database-fundamentals.html" rel="next">
+<link href="../data-engineering.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -38,7 +61,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -97,24 +120,163 @@ window.Quarto = {
 };
 </script>
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/data-pipeline.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#etl" id="toc-etl" class="nav-link active" data-scroll-target="#etl"><span class="header-section-number">1.1</span> ETL</a></li>
+  <li><a href="#feature-engineering" id="toc-feature-engineering" class="nav-link" data-scroll-target="#feature-engineering"><span class="header-section-number">1.2</span> Feature engineering</a></li>
+  <li><a href="#model-building" id="toc-model-building" class="nav-link" data-scroll-target="#model-building"><span class="header-section-number">1.3</span> Model building</a></li>
+  <li><a href="#model-deployment" id="toc-model-deployment" class="nav-link" data-scroll-target="#model-deployment"><span class="header-section-number">1.4</span> Model deployment</a>
+  <ul class="collapse">
+  <li><a href="#training" id="toc-training" class="nav-link" data-scroll-target="#training"><span class="header-section-number">1.4.1</span> Training</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="header-section-number">1.4.2</span> Prediction</a></li>
+  </ul></li>
+  <li><a href="#sec-pipeline-monitoring" id="toc-sec-pipeline-monitoring" class="nav-link" data-scroll-target="#sec-pipeline-monitoring"><span class="header-section-number">1.5</span> Monitoring</a>
+  <ul class="collapse">
+  <li><a href="#distribution-shift" id="toc-distribution-shift" class="nav-link" data-scroll-target="#distribution-shift"><span class="header-section-number">1.5.1</span> Distribution shift</a></li>
+  <li><a href="#feedback-loops" id="toc-feedback-loops" class="nav-link" data-scroll-target="#feedback-loops"><span class="header-section-number">1.5.2</span> Feedback loops</a></li>
+  <li><a href="#tracking-performance" id="toc-tracking-performance" class="nav-link" data-scroll-target="#tracking-performance"><span class="header-section-number">1.5.3</span> Tracking performance</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/data-pipeline.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="the-data-pipeline" class="level1">
-<h1>The Data Pipeline</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <div class="hidden">
 <p><span class="math display">\[
 \DeclareMathOperator{\E}{\mathbb{E}}
@@ -130,7 +292,7 @@ window.Quarto = {
 <p>But first, we must look at the entire process end-to-end: the <em>data pipeline</em>, following the data from when it arrives at the company to its storage, use, and reuse. As statisticians, we often gloss over most steps of the pipeline, and start our analysis with a nicely curated CSV containing all the relevant information. But in practice, someone must do the curation—and more importantly, someone must <em>design</em> the data pipeline, and think about the life of the data from beginning to end. What data should be collected, where should it be stored, and how can it be put to use?</p>
 <p>As we discuss data pipeline design, let’s consider a motivating example.</p>
 <div id="exm-hamstercard" class="theorem example">
-<p><span class="theorem-title"><strong>Example 1 (HamsterCard)</strong></span> Credit card companies work with large volumes of data: data about their customers, data about transactions made with their cards, data for marketing, data for fraud detection, and so on. There are many credit cards for specific audiences, like cards with rewards for travel, cards with special discounts for gas or groceries, and even <a href="https://en.wikipedia.org/wiki/Centurion_Card">luxury cards that come in titanium and help you flaunt your wealth</a>.</p>
+<p><span class="theorem-title"><strong>Example 1.1 (HamsterCard)</strong></span> Credit card companies work with large volumes of data: data about their customers, data about transactions made with their cards, data for marketing, data for fraud detection, and so on. There are many credit cards for specific audiences, like cards with rewards for travel, cards with special discounts for gas or groceries, and even <a href="https://en.wikipedia.org/wiki/Centurion_Card">luxury cards that come in titanium and help you flaunt your wealth</a>.</p>
 <p>So let’s consider the HamsterCard, a credit card for people who like hamsters. Benefits include hamster-themed card designs, 5% cash-back rewards at pet supply stores, and a quarterly magazine for hamster aficionados.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -148,12 +310,12 @@ window.Quarto = {
 </ol>
 <p>All of these will involve data.</p>
 </div>
-<section id="etl" class="level2">
-<h2 class="anchored" data-anchor-id="etl">ETL</h2>
+<section id="etl" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="etl"><span class="header-section-number">1.1</span> ETL</h2>
 <p>The first part of the process is to <em>get the data</em>. This is not as easy as it sounds. The data you need comes from many sources in many different formats, and you must work to get what you need.</p>
 <p>The usual acronym for this process is ETL: extract, transform, and load. You must <em>extract</em> the relevant data from various sources, <em>transform</em> it to be consistent and match whatever schema you use to store it, and <em>load</em> it into your choice of database or storage system. This might happen repeatedly as you obtain updated data, or when you decide you need to change what data is extracted and stored.</p>
 <div id="exr-hamstercard-leads" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 1 (Lead generation for HamsterCard)</strong></span> Credit card companies need to market their cards to prospective customers, since each customer is a potential source of revenue. That means finding new people who don’t have the card but could be interested in getting one. Prospective customers are called <em>leads</em>, and companies try to acquire leads so they can send them advertisements and convince them to sign up.</p>
+<p><span class="theorem-title"><strong>Exercise 1.1 (Lead generation for HamsterCard)</strong></span> Credit card companies need to market their cards to prospective customers, since each customer is a potential source of revenue. That means finding new people who don’t have the card but could be interested in getting one. Prospective customers are called <em>leads</em>, and companies try to acquire leads so they can send them advertisements and convince them to sign up.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../images/hamster-world.gif" class="img-fluid figure-img" style="width:100.0%"></p>
@@ -172,13 +334,13 @@ window.Quarto = {
 </div>
 <p>We can see that ETL can be very complicated in its own right. Data always seems to come in the wrong format, it’s frequently updated, and people want to use it for many different things. ETL involves designing a core storage system for the parts you want to keep, and writing all the necessary code to load data into that storage system. For this class, that storage system will often be a SQL database.</p>
 </section>
-<section id="feature-engineering" class="level2">
-<h2 class="anchored" data-anchor-id="feature-engineering">Feature engineering</h2>
+<section id="feature-engineering" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="feature-engineering"><span class="header-section-number">1.2</span> Feature engineering</h2>
 <p>When the ETL process is done, hopefully you have all the data you need in a convenient format. Now you need to solve some business questions using your data, and since you’re a statistician, you’ll probably have to fit some models.</p>
 <p>The variables we use in our models don’t always match the variables stored in our databases. Some differences are trivial: a categorical variable might be turned into a one-hot encoded vector, for instance. But some differences are more substantial.</p>
 <p><em>Feature engineering</em> refers to the process of manipulating data to extract new features (predictors) that can be used in fitted models. Let’s consider an example.</p>
 <div id="exm-hamstercard-fraud" class="theorem example">
-<p><span class="theorem-title"><strong>Example 2 (Fraud detection for HamsterCard)</strong></span> Credit card fraud is a major problem, and every credit card issuer must check transactions for signs of fraud so fraudulent transactions can be rejected or reversed. HamsterCard thus has an automated system that must make classifications: when each transaction is received, it gets features about that transaction, and it must classify it as “fraudulent”, “questionable”, or “valid”. Fraudulent transactions will be blocked, questionable ones may get checked by sending a text or email to the cardholder, and valid transactions will go through.</p>
+<p><span class="theorem-title"><strong>Example 1.2 (Fraud detection for HamsterCard)</strong></span> Credit card fraud is a major problem, and every credit card issuer must check transactions for signs of fraud so fraudulent transactions can be rejected or reversed. HamsterCard thus has an automated system that must make classifications: when each transaction is received, it gets features about that transaction, and it must classify it as “fraudulent”, “questionable”, or “valid”. Fraudulent transactions will be blocked, questionable ones may get checked by sending a text or email to the cardholder, and valid transactions will go through.</p>
 <p>For each transaction, HamsterCard receives the following information:</p>
 <ul>
 <li>The date and time</li>
@@ -198,49 +360,49 @@ window.Quarto = {
 <p>Part of being a data scientist in a large company, then, is feature engineering: identifying data that may be relevant for a statistical problem, and pulling out interesting features from it. These features may not be stored in the original data but instead are calculated from it. The challenge is knowing <em>what to calculate</em>, and this is why a good data scientist must understand their data sources and the problems they are trying to solve.</p>
 <p>In this course, a lot of feature engineering will involve writing SQL queries to fetch appropriate data from our database.</p>
 <div id="exr-hamstercard-fraud" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 2 (Feature engineering for fraud)</strong></span> Suggest three additional features that HamsterCard may want to extract from its data sources to assist in the fraud detection task in <a href="#exm-hamstercard-fraud" class="quarto-xref">Example&nbsp;2</a>.</p>
+<p><span class="theorem-title"><strong>Exercise 1.2 (Feature engineering for fraud)</strong></span> Suggest three additional features that HamsterCard may want to extract from its data sources to assist in the fraud detection task in <a href="#exm-hamstercard-fraud" class="quarto-xref">Example&nbsp;<span>1.2</span></a>.</p>
 </div>
 </section>
-<section id="model-building" class="level2">
-<h2 class="anchored" data-anchor-id="model-building">Model building</h2>
+<section id="model-building" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="model-building"><span class="header-section-number">1.3</span> Model building</h2>
 <p>You’ll spend plenty of time on this in your other classes, so we won’t discuss it here.</p>
 </section>
-<section id="model-deployment" class="level2">
-<h2 class="anchored" data-anchor-id="model-deployment">Model deployment</h2>
+<section id="model-deployment" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="model-deployment"><span class="header-section-number">1.4</span> Model deployment</h2>
 <p>Once you’ve built a model, it needs to be put to use. Sometimes this means you use the model to answer some research questions, write a report, and give a presentation about what you’ve learned, since the project goals were to answer some questions. This is what you’ve been learning to do in other courses, like when you write data analysis reports for 36-617.</p>
 <p>But in other cases, the model needs to be used in a product. Your model for recommending movies to streaming service subscribers has to be used to make recommendations; your model for fraud detection needs to be used to detect fraud in new data. This usually means applying your model to new data beyond the training dataset, and that means trouble.</p>
-<section id="training" class="level3">
-<h3 class="anchored" data-anchor-id="training">Training</h3>
+<section id="training" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="training"><span class="header-section-number">1.4.1</span> Training</h3>
 <p>A model put into production use may be used for many months or years. Over that time, additional training data may be collected. It may be useful to update the model with the new data as it’s collected, so the model is always trained with the largest and most up-to-date possible dataset.</p>
 <p>That implies you must choose: How often should the model be updated?</p>
 <div id="exr-hamstercard-retraining" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 3 (Re-training a HamsterCard fraud detector)</strong></span> Consider HamsterCard’s fraud detector in <a href="#exm-hamstercard-fraud" class="quarto-xref">Example&nbsp;2</a>. Each day, HamsterCard processes millions of new transactions, and in principle it could feed these transactions into its fraud detection model to retrain it.</p>
+<p><span class="theorem-title"><strong>Exercise 1.3 (Re-training a HamsterCard fraud detector)</strong></span> Consider HamsterCard’s fraud detector in <a href="#exm-hamstercard-fraud" class="quarto-xref">Example&nbsp;<span>1.2</span></a>. Each day, HamsterCard processes millions of new transactions, and in principle it could feed these transactions into its fraud detection model to retrain it.</p>
 <p>What reasons might there be to retrain the model as quickly as possible, say every day?</p>
 <p>Why might it be a problem to use the previous day’s data to train the fraud detector for the next day?</p>
 </div>
-<p>Now, it’s important not to automate this too much. If you retrain the model automatically every day or week, then immediately start using the new model, you may run into problems. What if the new data causes the model to perform <em>worse</em>? What if a batch of unusual data arrives and biases the model? You’re going to need a process to check the model every time it is updated, and only put it to use if it passes the checks. In fact, we’ll need to monitor the model’s performance even if we’re not updating it, as we’ll see in <a href="#sec-pipeline-monitoring" class="quarto-xref">Section&nbsp;1.5</a>.</p>
+<p>Now, it’s important not to automate this too much. If you retrain the model automatically every day or week, then immediately start using the new model, you may run into problems. What if the new data causes the model to perform <em>worse</em>? What if a batch of unusual data arrives and biases the model? You’re going to need a process to check the model every time it is updated, and only put it to use if it passes the checks. In fact, we’ll need to monitor the model’s performance even if we’re not updating it, as we’ll see in <a href="#sec-pipeline-monitoring" class="quarto-xref"><span>Section 1.5</span></a>.</p>
 </section>
-<section id="prediction" class="level3">
-<h3 class="anchored" data-anchor-id="prediction">Prediction</h3>
+<section id="prediction" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="prediction"><span class="header-section-number">1.4.2</span> Prediction</h3>
 <p>There are different ways to put a predictive model into production.</p>
 <p>One approach is batch prediction. Predictions are made in batches, say every week or every month, and in large quantity. That batch of predictions is then used to do various things until the next batch is produced. The predictions are produced by some automated system that runs periodically, and perhaps we can afford a slow system: if a batch takes a full day to produce, that’s fine if we’re only doing it once a month.</p>
 <p>The opposite is online prediction: predictions are made in real time as new observations come in. The predictions are immediately used in the product, and so it is often important for the predictions to be made very quickly. We can’t afford a slow, complicated model that takes many minutes to look up necessary data and make its prediction; we might deliberately use a simpler but less accurate model because we do not have time for a more accurate but slower model.</p>
 <p>The word “latency” is often used to describe the time between something being requested and it being delivered, and so we could define a model’s latency as the time between providing an observation and receiving a prediction for that observation. In batch predictions, we can tolerate high latency; in online predictions, we may need the latency to be as small as possible.</p>
 <div id="exr-hamstercard-prediction" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 4</strong></span> In <a href="#exm-hamstercard" class="quarto-xref">Example&nbsp;1</a>, we listed four tasks HamsterCard must do with data. Each of these would involve a model (or several).</p>
+<p><span class="theorem-title"><strong>Exercise 1.4</strong></span> In <a href="#exm-hamstercard" class="quarto-xref">Example&nbsp;<span>1.1</span></a>, we listed four tasks HamsterCard must do with data. Each of these would involve a model (or several).</p>
 <p>For each task, identify if predictions would be made in batches or online, and how much latency can be tolerated.</p>
 </div>
 </section>
 </section>
-<section id="sec-pipeline-monitoring" class="level2">
-<h2 class="anchored" data-anchor-id="sec-pipeline-monitoring">Monitoring</h2>
+<section id="sec-pipeline-monitoring" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="sec-pipeline-monitoring"><span class="header-section-number">1.5</span> Monitoring</h2>
 <p>We statisticians tend to think of models as static objects. We spend time carefully constructing a model, then we fit the final version, and then we use it. But models used for prediction on new data must face the real world, and the real world sucks.</p>
-<section id="distribution-shift" class="level3">
-<h3 class="anchored" data-anchor-id="distribution-shift">Distribution shift</h3>
-<p>Ever since you first learned to fit regression models, you were taught not to extrapolate beyond the range of your data. But whenever you use a model trained on the <em>past</em> to predict observations received in the present, you are implicitly extrapolating: you are assuming that the same relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is present now as was present when you fit the model <span class="citation" data-cites="Hume:1748">[@Hume:1748]</span>. You are also assuming the population distribution of <span class="math inline">\(X\)</span> is roughly the same as it was when you trained the model.</p>
+<section id="distribution-shift" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" class="anchored" data-anchor-id="distribution-shift"><span class="header-section-number">1.5.1</span> Distribution shift</h3>
+<p>Ever since you first learned to fit regression models, you were taught not to extrapolate beyond the range of your data. But whenever you use a model trained on the <em>past</em> to predict observations received in the present, you are implicitly extrapolating: you are assuming that the same relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is present now as was present when you fit the model <span class="citation" data-cites="Hume:1748">(<a href="#ref-Hume:1748" role="doc-biblioref">Hume 1748</a>)</span>. You are also assuming the population distribution of <span class="math inline">\(X\)</span> is roughly the same as it was when you trained the model.</p>
 <p>Let’s examine each of these in turn.</p>
 <div id="def-concept-drift" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 1 (Concept drift)</strong></span> Regression models typically try to approximate <span class="math inline">\(\E[Y \mid X = x]\)</span>, where <span class="math inline">\(Y \in
+<p><span class="theorem-title"><strong>Definition 1.1 (Concept drift)</strong></span> Regression models typically try to approximate <span class="math inline">\(\E[Y \mid X = x]\)</span>, where <span class="math inline">\(Y \in
 \R\)</span> and <span class="math inline">\(x \in \R^p\)</span>; classifiers try to approximate <span class="math inline">\(\Pr(Y = k \mid X = x)\)</span> for a class <span class="math inline">\(k\)</span>, or try to pick the class with the highest probability. When we train models using a sample, we are hoping that the estimate we obtain from that sample is a good approximation in the population.</p>
 <p>But what if the true relationship <span class="math inline">\(\E[Y \mid X = x]\)</span> changes? Our model is now an approximation to the wrong relationship. Depending on the change, our predictions could become much less accurate. The same applies for a change in the true classification probability <span class="math inline">\(\Pr(Y = k \mid X = x)\)</span>.</p>
 <p>This problem is called <em>concept drift</em>.</p>
@@ -248,42 +410,46 @@ window.Quarto = {
 <p>Another possibility is that the distribution of <span class="math inline">\(X\)</span> may change even while <span class="math inline">\(\E[Y
 \mid X = x]\)</span> stays the same.</p>
 <div id="def-covariate-shift" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 2 (Covariate shift)</strong></span> Suppose we obtained our training sample from some distribution <span class="math inline">\(F_\text{train}\)</span>, but over time, new observations begin to come from some different distribution <span class="math inline">\(F_\text{new}\)</span>.</p>
+<p><span class="theorem-title"><strong>Definition 1.2 (Covariate shift)</strong></span> Suppose we obtained our training sample from some distribution <span class="math inline">\(F_\text{train}\)</span>, but over time, new observations begin to come from some different distribution <span class="math inline">\(F_\text{new}\)</span>.</p>
 <p>This problem is called <em>covariate shift</em>.</p>
 </div>
 <p>This is much more akin to the extrapolation you’re familiar with. If <span class="math inline">\(F_\text{new}\)</span> produces values of <span class="math inline">\(X\)</span> that are very different from those drawn from <span class="math inline">\(F_\text{train}\)</span>, then your model will have to extrapolate beyond the range of <span class="math inline">\(X\)</span> it was trained on. This problem is more severe when <span class="math inline">\(X\)</span> is multidimensional (i.e.&nbsp;you are predicting using many covariates), because a new distribution could produce <em>combinations</em> of features your model was never trained on, even if individually they are within the same range.</p>
 <p>Both concept drift and covariate shift can cause the performance of a predictive model to decline over time.</p>
 <div id="exm-shift-real-estate" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3 (Predicting house prices)</strong></span> Consider a model that predicts a house’s value using features like its size, age, number of bedrooms, and so on—the kind of model that sites like Zillow and Redfin use to estimate values of houses that are not for sale.</p>
+<p><span class="theorem-title"><strong>Example 1.3 (Predicting house prices)</strong></span> Consider a model that predicts a house’s value using features like its size, age, number of bedrooms, and so on—the kind of model that sites like Zillow and Redfin use to estimate values of houses that are not for sale.</p>
 <p>If house prices suddenly go up in an area due to increased demand, this can cause concept drift: you have the same houses with the same <span class="math inline">\(X\)</span> values, but the value <span class="math inline">\(Y\)</span> is suddenly much higher. If you do not update your model, it will continue predicting the old prices.</p>
 <p>Similarly, if preferences change and people suddenly hate large, spacious homes because of how much time they have to spend sweeping the floors, this would be concept drift.</p>
 <p>On the other hand, if the model were trained on an area with mostly single-family homes, but then a developer came in and built hundreds of units of townhomes and condos, that could cause covariate shift: the new housing units are very different than those the model was trained on, and the model will have to extrapolate to predict their values.</p>
 </div>
 <div id="exr-hamstercard-shift" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 5</strong></span> Give examples of how concept drift and covariate shift could affect HamsterCard’s fraud detection system.</p>
+<p><span class="theorem-title"><strong>Exercise 1.5</strong></span> Give examples of how concept drift and covariate shift could affect HamsterCard’s fraud detection system.</p>
 </div>
 </section>
-<section id="feedback-loops" class="level3">
-<h3 class="anchored" data-anchor-id="feedback-loops">Feedback loops</h3>
+<section id="feedback-loops" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" class="anchored" data-anchor-id="feedback-loops"><span class="header-section-number">1.5.2</span> Feedback loops</h3>
 <p>We statisticians are used to think of our models as being separate from the world being modeled. The models live in our computer; the data comes from the world <em>out there</em>. Nothing we do in R or Python affects the real world.</p>
 <p>But if you’re building a product that uses your models to make decisions that do something in the real world—send advertising, block a user, purchase a stock, or whatever—those decisions may affect the world and affect future data you collect.</p>
 <p>A simple example: Many police departments keep extensive data on reported crimes and arrests, and use this data to predict locations where high crime or arrest rates are expected. They then send additional police patrols to those areas. If those patrols are more likely to conduct traffic stops, search suspicious pedestrians, and issue tickets for loitering, they are creating more reported events in the data—and hence contribute to the area being predicted to have more events in the future. Police may be sent to areas based on their own work in those areas, not because they have an intrinsically higher crime rate than other areas. This is a feedback loop: the model’s output is creating data that will affect its outputs.</p>
 <div id="exr-hamstercard-feedback" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 6</strong></span> Give an example of how HamsterCard’s marketing models—which choose potential customers to target with advertising—could create a feedback loop.</p>
+<p><span class="theorem-title"><strong>Exercise 1.6</strong></span> Give an example of how HamsterCard’s marketing models—which choose potential customers to target with advertising—could create a feedback loop.</p>
 </div>
 <p>Preventing feedback loops can be difficult. After all, the point of the model is often to make changes in the real world. There is no one strategy to prevent them, but in particular situations we may be able to.</p>
 <p>For example, recommender systems can easily have feedback. If you recommend movies to viewers based on what you think they’ll like, but estimate whether they’ll like movies based on how many other people watch and enjoy them, you may tend to make popular movies more popular while rarely recommending movies that people haven’t viewed yet. This creates a “rich get richer” situation: nobody watches unknown movies, so you don’t know if anyone will like them, so you don’t recommend them to anyone. This can be avoided by deliberately recommending a mix of movies highly rated by your algorithm and less well-known movies with high uncertainty.</p>
 </section>
-<section id="tracking-performance" class="level3">
-<h3 class="anchored" data-anchor-id="tracking-performance">Tracking performance</h3>
+<section id="tracking-performance" class="level3" data-number="1.5.3">
+<h3 data-number="1.5.3" class="anchored" data-anchor-id="tracking-performance"><span class="header-section-number">1.5.3</span> Tracking performance</h3>
 <p>Together, these problems suggest an important fact: We cannot simply train a model, deploy it, and never look back. We must periodically check that the model is still performing well and serving its intended purpose.</p>
 <p>What you monitor depends on what is available to you. If you eventually observe outcomes for your predictions, you can measure their accuracy or success rate and track it over time. You can also track metrics about the typical inputs to your model, the distribution of covariates, or other features relevant to your prediction.</p>
 <div id="exr-hamstercard-perf" class="theorem exercise">
-<p><span class="theorem-title"><strong>Exercise 7</strong></span> Give some examples of metrics HamsterCard might track for its marketing models.</p>
+<p><span class="theorem-title"><strong>Exercise 1.7</strong></span> Give some examples of metrics HamsterCard might track for its marketing models.</p>
 </div>
 
 
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Hume:1748" class="csl-entry" role="listitem">
+Hume, David. 1748. <em>An Enquiry Concerning Human Understanding</em>. London: A. Millar.
+</div>
+</div>
 </section>
 </section>
 
@@ -687,6 +853,18 @@ window.Quarto = {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering.html" class="pagination-link" aria-label="Data Engineering and Distributed Environments">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Data Engineering and Distributed Environments</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../data-engineering/database-fundamentals.html" class="pagination-link" aria-label="Database Fundamentals">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

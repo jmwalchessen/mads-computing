@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cloud</title>
+<title>7&nbsp; Cloud Computing – MADS Computing</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,11 +24,14 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../data-engineering/distributed-data.html" rel="next">
+<link href="../data-engineering/text-search.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -38,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-c8ad9e5dbd60b7b70b38521ab19b7da4.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-57255bc51a02dad1602480f616b5f366.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-6f38e4423a0fc8c74639ed0d4e7bec09.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -68,24 +71,152 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
+<link rel="stylesheet" href="../style.css">
 </head>
 
-<body class="fullcontent quarto-light">
+<body class="nav-sidebar floating quarto-light">
 
 <div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/cloud.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">MADS Computing</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../data-engineering.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Engineering and Distributed Environments</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/data-pipeline.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The Data Pipeline</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/database-fundamentals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Database Fundamentals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">SQL Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/advanced-sql.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Advanced SQL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/sql-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Using SQL from Code</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/text-search.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/cloud.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/distributed-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../data-engineering/project.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Project: Data Pipeline</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-olden-days" id="toc-the-olden-days" class="nav-link active" data-scroll-target="#the-olden-days"><span class="header-section-number">7.1</span> The olden days</a></li>
+  <li><a href="#rental-computing" id="toc-rental-computing" class="nav-link" data-scroll-target="#rental-computing"><span class="header-section-number">7.2</span> Rental computing</a></li>
+  <li><a href="#common-products" id="toc-common-products" class="nav-link" data-scroll-target="#common-products"><span class="header-section-number">7.3</span> Common products</a></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../data-engineering.html">Data Engineering and Distributed Environments</a></li><li class="breadcrumb-item"><a href="../data-engineering/cloud.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span id="sec-cloud" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Cloud Computing</span></span></h1>
+</div>
 
 
 
+<div class="quarto-title-meta">
 
-<section id="sec-cloud" class="level1">
-<h1>Cloud Computing</h1>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
 <p>Nowadays, if you work on a large, complex dataset that can’t be analyzed on your laptop, you probably use The Cloud. Companies run their websites from The Cloud, host their databases in The Cloud, and store their files in The Cloud. Giant neural networks are trained by spending millions of dollars in The Cloud.</p>
 <p>So what is The Cloud? Fundamentally, it’s just a computer rented from someone else.</p>
 <div class="quarto-figure quarto-figure-center">
@@ -95,8 +226,8 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <p>But to understand what we’re doing with The Cloud, we should perhaps go back a bit and talk about how you rent computers, and what cloud computing allows us to do.</p>
-<section id="the-olden-days" class="level2">
-<h2 class="anchored" data-anchor-id="the-olden-days">The olden days</h2>
+<section id="the-olden-days" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="the-olden-days"><span class="header-section-number">7.1</span> The olden days</h2>
 <p>Suppose it’s 2005 and you work at a company that runs a large online store. You need:</p>
 <ul>
 <li>Servers to display the website to customers</li>
@@ -135,8 +266,8 @@ ul.task-list li input[type="checkbox"] {
 <p>Soon even more options appeared. Many were based on virtualization: Using special software so that one large server could run several operating systems at the same time, each of which gets a fixed chunk of the disk and memory, and does not have access to the others. This could be more efficient for the data centers. Instead of renting servers of all sizes, to suit different customers, they could buy a bunch of high-end servers with lots of CPUs, lots of memory, and very big disks. Then they could rent out slices of these servers to different customers. These slices were called “virtual private servers”, or VPSs.</p>
 <p>In 2005, then, your company might have chosen to colocate servers, to rent some servers, or to rent some VPSs, depending on its needs. Maybe its core infrastructure was colocated servers, but some servers were rented as needed when new projects started.</p>
 </section>
-<section id="rental-computing" class="level2">
-<h2 class="anchored" data-anchor-id="rental-computing">Rental computing</h2>
+<section id="rental-computing" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="rental-computing"><span class="header-section-number">7.2</span> Rental computing</h2>
 <p>By about 2007, rented servers were maturing into a new category: cloud computing. The name “cloud” came from the ultimate goal: instead of dealing with real physical servers, there’d just be a bunch of computing resources available on-demand, for a fee. If you were drawing a diagram of your system infrastructure, you could just draw a cloud-shaped blob in the middle where the computing goes.</p>
 <p>Cloud computing builds on the rental framework with several additional features:</p>
 <ul>
@@ -149,8 +280,8 @@ ul.task-list li input[type="checkbox"] {
 <p>From about 2010 onward, companies rapidly moved their computing over to The Cloud. It offered many advantages: great flexibility, less hardware maintenance (all handled by the cloud provider), faster setup, greater reliability… and as cloud providers can specialize in developing computing services, they could build more sophisticated services than a company could typically build on its own. Rapidly growing companies could quickly rent more services, or even scale services up and down automatically as needed to meet customer demand.</p>
 <p>There are, of course, disadvantages. Renting a basic server, without any of the fancy services, is much more expensive than just buying one. Different cloud providers offer different services, so once you’ve built a system using one, it’s hard to switch to another. And while it’s nice to automatically rent more servers if your site is suddenly overloaded, it’s <em>also</em> easy to wake up one morning and find a $100,000 bill because one of your services got popular overnight. Or to forget to turn off services you’re not using, and pay for months of “use” you never needed. Anyone at large companies with thousands of cloud servers has stories of systems consuming thousands of dollars a month because someone forgot to turn them off.</p>
 </section>
-<section id="common-products" class="level2">
-<h2 class="anchored" data-anchor-id="common-products">Common products</h2>
+<section id="common-products" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="common-products"><span class="header-section-number">7.3</span> Common products</h2>
 <p>There are several major cloud providers. Amazon is the most well-known with its Amazon Web Services system, but Microsoft Azure and Google Cloud are competing heavily, and there are many other companies offering cloud services, including IBM, Rackspace, Alibaba, and many others.</p>
 <p>Each has its own set of services, but there are common ones available in different forms by many providers:</p>
 <ul>
@@ -161,7 +292,6 @@ ul.task-list li input[type="checkbox"] {
 <p>In recent years, many cloud providers have created products focused on data science and machine learning. Many have products based on Apache Spark; many have deep learning products that can store your trained models and produce predictions on request; some even have point-and-click tools that will fit machine learning models to your data without requiring you to write any code.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -564,6 +694,18 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../data-engineering/text-search.html" class="pagination-link" aria-label="Full Text Search">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Full Text Search</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../data-engineering/distributed-data.html" class="pagination-link" aria-label="Distributed Data and Computation">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Distributed Data and Computation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
