@@ -531,7 +531,7 @@ Out[15]: 2</code></pre>
 <section id="regular-expressions-in-python" class="level3" data-number="6.3.4">
 <h3 data-number="6.3.4" class="anchored" data-anchor-id="regular-expressions-in-python"><span class="header-section-number">6.3.4</span> Regular expressions in Python</h3>
 <p>Besides PostgreSQL, you can do regular expressions in most languages, including Python. In Python they are supported by the <a href="https://docs.python.org/3/library/re.html"><code>re</code> module</a> of the standard library.</p>
-<div id="91454490" class="cell" data-execution_count="1">
+<div id="68697456" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># list all matches</span></span>
@@ -540,14 +540,14 @@ Out[15]: 2</code></pre>
 <pre><code>['dang', 'crud']</code></pre>
 </div>
 </div>
-<div id="39e86e8a" class="cell" data-execution_count="2">
+<div id="e489a77d" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check if entire string matches</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>re.fullmatch(<span class="vs">r"&lt;</span><span class="kw">(</span><span class="pp">[a-zA-Z]</span><span class="op">+</span><span class="kw">)</span><span class="vs">&gt;</span><span class="kw">(</span><span class="dv">.</span><span class="op">*</span><span class="kw">)</span><span class="vs">&lt;/</span><span class="ch">\1</span><span class="vs">&gt;"</span>, <span class="st">"&lt;foo&gt;bar&lt;/foo&gt;"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>&lt;re.Match object; span=(0, 14), match='&lt;foo&gt;bar&lt;/foo&gt;'&gt;</code></pre>
 </div>
 </div>
-<div id="87f47d1b" class="cell" data-execution_count="3">
+<div id="c11c1cdb" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># substitute (replace) text</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>re.sub(<span class="st">"(dang|crud)"</span>, <span class="vs">r"</span><span class="ch">\1</span><span class="vs">!!!"</span>, <span class="st">"dAnG ReCruDeSCeNts!"</span>,</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>       flags<span class="op">=</span>re.IGNORECASE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

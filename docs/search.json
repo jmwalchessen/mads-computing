@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "MADS Computing",
     "section": "",
-    "text": "Preface\nThis site contains lecture notes and materials for the data engineering and computing sequence of the Master of Science in Applied Data Science program, including the courses:\n\n36-614 Data Engineering and Distributed Environments\n36-615 Software for Large-Scale Data\n36-616 Computational Methods for Statistics\n\nThese courses are primarily for students in the MADS program. Other students will only be admitted with the instructor’s permission.",
+    "text": "Preface\nThis site contains lecture notes and materials for the data engineering and computing sequence of the Master of Science in Applied Data Science program.\nThis course is primarily for students in the MADS program. Other students will only be admitted with the instructor’s permission.",
     "crumbs": [
       "Preface"
     ]
@@ -24,7 +24,7 @@
     "href": "data-engineering.html#basic-information",
     "title": "Data Engineering and Distributed Environments",
     "section": "",
-    "text": "Fall 2024, mini 2\nMonday and Wednesday, 9:30-10:50am\nWean 4709\nInstructor: Alex Reinhart\nTA: Anna Rosengart\nOffice hours:\n\nAnna: Tuesdays 1-2pm, FMS Interview Room 2\nAlex: Fridays 1:30-2:30pm, Baker 232K",
+    "text": "Fall 2025, mini 2\nMonday and Wednesday, 9:30-10:50am\nTBA\nInstructor: Julia Walchessen\nTA: Anna Rosengart\nOffice hours:\n\nAnna: TBA\nJulia: Monday/Wednesday 11:00-12:00, Baker 129E",
     "crumbs": [
       "Data Engineering and Distributed Environments"
     ]
