@@ -102,7 +102,7 @@ students see material and then take short quizzes. We'll start by looking at the
 `events` table, which records every time a student interacted with some element
 of the system, such as a quiz item. @tbl-events-sample shows a few example rows.
 
-| id | time                | persona | element | latency | score | feedback           |
+| id | moment               | persona | element | latency | score | feedback           |
 |----|---------------------|---------|---------|---------|-------|--------------------|
 | 17 | 2015-07-11 09:42:11 |    3271 |   97863 |   329.4 |   240 | Consider...        |
 | 18 | 2015-07-11 09:48:37 |    3271 |   97864 |   411.9 |  1000 |                    |
